@@ -1,12 +1,26 @@
 import { z } from 'zod'
-import validator from 'validator'
+
+// Simple email normalization (no external dependency)
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase()
+}
+
+// Simple HTML escape (no external dependency)
+function escapeInput(val: string): string {
+  return val
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
 
 export const schemas = {
   email: z
     .string()
     .email('Invalid email address')
     .max(255, 'Email too long')
-    .transform(val => validator.normalizeEmail(val) || val),
+    .transform(val => normalizeEmail(val)),
 
   password: z
     .string()
@@ -21,7 +35,7 @@ export const schemas = {
     .string()
     .min(2, 'Name too short')
     .max(100, 'Name too long')
-    .transform(val => validator.escape(val)),
+    .transform(val => escapeInput(val)),
 
   phone: z
     .string()
@@ -31,11 +45,11 @@ export const schemas = {
   hometown: z
     .string()
     .max(100, 'Hometown too long')
-    .transform(val => validator.escape(val))
+    .transform(val => escapeInput(val))
     .optional(),
 
   membershipRequest: z.object({
-    email: z.string().email('Invalid email'),
+    email: z.string().email('Invalid email').transform(val => normalizeEmail(val)),
     name: z.string().min(2, 'Name too short').max(100, 'Name too long'),
     phone: z.string().max(20).optional(),
     hometown: z.string().max(100).optional(),

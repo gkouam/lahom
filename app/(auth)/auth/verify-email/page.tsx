@@ -1,42 +1,28 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [message, setMessage] = useState('')
+  const error = searchParams.get('error')
 
-  useEffect(() => {
-    if (!token) {
-      setStatus('error')
-      setMessage('No verification token provided')
-      return
+  // If there's a token, the user clicked the email link but arrived at the page
+  // instead of the API. Redirect them to the API endpoint.
+  if (token) {
+    if (typeof window !== 'undefined') {
+      window.location.href = `/api/auth/verify-email?token=${token}`
     }
-
-    fetch(`/api/auth/verify-email?token=${token}`)
-      .then(async (res) => {
-        if (res.redirected) {
-          window.location.href = res.url
-          return
-        }
-        const data = await res.json()
-        if (res.ok) {
-          setStatus('success')
-          setMessage('Email verified successfully!')
-        } else {
-          setStatus('error')
-          setMessage(data.error || 'Verification failed')
-        }
-      })
-      .catch(() => {
-        setStatus('error')
-        setMessage('Network error')
-      })
-  }, [token])
+    return (
+      <div className="w-full max-w-md">
+        <div className="rounded-xl p-8 shadow-lg text-center" style={{ background: 'white' }}>
+          <p>Verifying your email...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full max-w-md">
@@ -45,24 +31,18 @@ function VerifyEmailContent() {
           Email Verification
         </h1>
 
-        {status === 'loading' && <p>Verifying your email...</p>}
-
-        {status === 'success' && (
-          <>
-            <div className="mb-4 p-3 rounded-lg" style={{ background: '#E8F5E9', color: '#2E7D32' }}>
-              {message}
-            </div>
-            <Link href="/auth/signin" className="font-semibold" style={{ color: 'var(--gold)' }}>
-              Sign in to your account
-            </Link>
-          </>
-        )}
-
-        {status === 'error' && (
+        {error ? (
           <>
             <div className="mb-4 p-3 rounded-lg" style={{ background: '#FDECEA', color: '#B71C1C' }}>
-              {message}
+              {error}
             </div>
+            <Link href="/auth/signin" style={{ color: 'var(--gold)' }}>Back to sign in</Link>
+          </>
+        ) : (
+          <>
+            <p className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
+              Check your email for a verification link.
+            </p>
             <Link href="/auth/signin" style={{ color: 'var(--gold)' }}>Back to sign in</Link>
           </>
         )}

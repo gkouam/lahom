@@ -5,11 +5,13 @@ const navLinks = document.getElementById('navLinks');
 if (navToggle && navLinks) {
   navToggle.addEventListener('click', () => {
     navLinks.classList.toggle('open');
+    navToggle.classList.toggle('active');
   });
 
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
+      navToggle.classList.remove('active');
     });
   });
 }
@@ -76,3 +78,84 @@ const secObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 sections.forEach(s => secObserver.observe(s));
+
+// ═══ LANGUAGE TOGGLE (FR/EN) ═══
+let currentLang = localStorage.getItem('lang') || 'en';
+const langToggle = document.getElementById('langToggle');
+
+function applyLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-lang-en][data-lang-fr]').forEach(el => {
+    const text = el.getAttribute('data-lang-' + lang);
+    if (text !== null) el.innerHTML = text;
+  });
+
+  // Update the hero eyebrow (has child diamonds)
+  const eyebrow = document.querySelector('.hero-eyebrow');
+  if (eyebrow) {
+    const eyebrowText = eyebrow.getAttribute('data-lang-' + lang);
+    if (eyebrowText) {
+      eyebrow.innerHTML = '<span class="eyebrow-diamond"></span> ' + eyebrowText + ' <span class="eyebrow-diamond"></span>';
+    }
+  }
+
+  if (langToggle) langToggle.textContent = lang === 'en' ? 'FR' : 'EN';
+}
+
+if (langToggle) {
+  langToggle.addEventListener('click', () => {
+    applyLang(currentLang === 'en' ? 'fr' : 'en');
+  });
+}
+
+// Apply saved language on load
+if (currentLang !== 'en') applyLang(currentLang);
+
+// ═══ EMAIL FORM VALIDATION ═══
+const joinEmail = document.getElementById('joinEmail');
+const joinBtn = document.getElementById('joinBtn');
+const joinMsg = document.getElementById('joinMsg');
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function setJoinMsg(text, type) {
+  if (!joinMsg) return;
+  joinMsg.textContent = text;
+  joinMsg.className = 'join-msg ' + type;
+}
+
+if (joinBtn && joinEmail) {
+  joinBtn.addEventListener('click', () => {
+    const val = joinEmail.value.trim();
+    joinEmail.classList.remove('error', 'success');
+
+    if (!val) {
+      joinEmail.classList.add('error');
+      setJoinMsg(currentLang === 'fr' ? 'Veuillez entrer votre adresse e-mail.' : 'Please enter your email address.', 'error');
+      return;
+    }
+    if (!validateEmail(val)) {
+      joinEmail.classList.add('error');
+      setJoinMsg(currentLang === 'fr' ? 'Veuillez entrer une adresse e-mail valide.' : 'Please enter a valid email address.', 'error');
+      return;
+    }
+
+    joinEmail.classList.add('success');
+    setJoinMsg(currentLang === 'fr' ? 'Merci ! Nous vous contacterons bientôt.' : 'Thank you! We\'ll be in touch soon.', 'success');
+    joinEmail.value = '';
+    setTimeout(() => {
+      joinEmail.classList.remove('success');
+      setJoinMsg('', '');
+    }, 4000);
+  });
+
+  joinEmail.addEventListener('input', () => {
+    joinEmail.classList.remove('error', 'success');
+    if (joinMsg) joinMsg.textContent = '';
+  });
+}

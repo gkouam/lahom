@@ -149,6 +149,22 @@ nav {
 
 .nav-cta:hover { background: var(--gold-bright) !important; }
 
+/* Language toggle */
+.lang-toggle {
+  background: rgba(212,160,23,0.12);
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+  margin-right: 8px;
+}
+.lang-toggle:hover { background: var(--gold); color: var(--night); }
+
 .nav-hamburger {
   display: none;
   width: 44px; height: 44px;
@@ -554,6 +570,49 @@ nav {
   font-size: 0.84rem;
   color: var(--muted);
   line-height: 1.5;
+}
+
+/* ═══ BAHAM LOCATION ACCENT ═══ */
+.baham-location {
+  background: linear-gradient(135deg, #FDF8EF 0%, #F5E6C8 100%);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 48px 0;
+}
+
+.baham-location-inner {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.baham-map-svg {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.baham-map-svg svg { width: 100%; height: auto; }
+
+.baham-location-text h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.baham-location-text p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+@media (max-width: 768px) {
+  .baham-location-inner { flex-direction: column; text-align: center; gap: 24px; }
+  .baham-map-svg { width: 160px; }
+  .baham-location-text p { max-width: 100%; }
 }
 
 /* ═══ CULTURE SHOWCASE ═══ */
@@ -974,9 +1033,58 @@ nav {
 
 .join-form button:hover { background: var(--gold-bright); transform: translateY(-2px); }
 
+.join-form input.error { border-color: var(--wine-bright); }
+.join-form input.success { border-color: #25D366; }
+
+.join-msg {
+  font-size: 0.85rem;
+  min-height: 1.2em;
+  margin-bottom: 12px;
+  transition: opacity 0.3s;
+}
+.join-msg.error { color: var(--clay-warm); }
+.join-msg.success { color: #25D366; }
+
 .join-small {
   font-size: 0.78rem !important;
   opacity: 0.4 !important;
+}
+
+/* ═══ WHATSAPP ═══ */
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.4rem;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  transition: background 0.3s, transform 0.2s;
+}
+.btn-whatsapp:hover { background: #1EBE57; transform: translateY(-2px); }
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  z-index: 90;
+  width: 60px; height: 60px;
+  background: #25D366;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 24px rgba(37,211,102,0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: waFloat 3s ease-in-out infinite;
+}
+.whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+
+@keyframes waFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 /* ═══ FOOTER ═══ */
@@ -1141,16 +1249,38 @@ footer {
     position: absolute;
     top: calc(100% + 8px);
     right: 16px; left: 16px;
-    display: none;
+    display: flex;
     flex-direction: column;
     background: rgba(26,18,8,0.96);
     border: 1px solid rgba(212,160,23,0.15);
     border-radius: 14px;
     overflow: hidden;
     box-shadow: var(--shadow);
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: max-height 0.35s ease, opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
   }
 
-  .nav-links.open { display: flex; }
+  .nav-links.open {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Hamburger to X animation */
+  .nav-hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .nav-hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
 
   .nav-links a {
     padding: 14px 20px;

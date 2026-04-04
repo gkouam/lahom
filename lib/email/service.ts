@@ -9,7 +9,7 @@ const getResend = () => {
   return resend
 }
 
-const FROM_EMAIL = 'Baham Dallas <onboarding@resend.dev>'
+const FROM_EMAIL = 'Baham Dallas <noreply@send.lahomdfw.org>'
 const APP_NAME = 'Baham Bamiléké Dallas'
 
 export const emailService = {

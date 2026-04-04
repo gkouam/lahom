@@ -3,10 +3,10 @@
 import { useLanguage } from '@/lib/i18n/context'
 
 const leaders = [
-  { initial: 'F', title: "The Fon's Representative", role: 'Royal Delegate' },
-  { initial: 'P', title: 'Community President', role: 'Executive Leadership' },
-  { initial: 'S', title: 'Secretary General', role: 'Administration' },
-  { initial: 'T', title: 'Treasurer', role: 'Financial Stewardship' },
+  { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu' },
+  { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam' },
+  { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domley' },
+  { initial: 'T', title: 'Treasurer', role: 'Mr. Francis Tebang' },
 ]
 
 export default function LeadershipSection() {

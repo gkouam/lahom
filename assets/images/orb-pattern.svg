@@ -1,0 +1,23 @@
+<svg width="360" height="360" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="180" cy="180" r="162" stroke="#D3A24F" stroke-width="1.8" opacity="0.6"/>
+  <circle cx="180" cy="180" r="128" stroke="#8B4F22" stroke-width="1.2" opacity="0.65"/>
+  <circle cx="180" cy="180" r="84" stroke="#395240" stroke-width="1.2" opacity="0.65"/>
+  <circle cx="180" cy="180" r="40" fill="#23170F"/>
+  <circle cx="180" cy="180" r="18" fill="#F4EBDC"/>
+  <g opacity="0.75" stroke-linecap="round">
+    <path d="M180 10V56" stroke="#8B4F22" stroke-width="2"/>
+    <path d="M180 304V350" stroke="#8B4F22" stroke-width="2"/>
+    <path d="M10 180H56" stroke="#8B4F22" stroke-width="2"/>
+    <path d="M304 180H350" stroke="#8B4F22" stroke-width="2"/>
+    <path d="M58 58L91 91" stroke="#395240" stroke-width="2"/>
+    <path d="M269 269L302 302" stroke="#395240" stroke-width="2"/>
+    <path d="M58 302L91 269" stroke="#395240" stroke-width="2"/>
+    <path d="M269 91L302 58" stroke="#395240" stroke-width="2"/>
+  </g>
+  <g opacity="0.55" stroke="#D3A24F" stroke-width="1.4">
+    <path d="M180 68L193 89L217 93L201 111L205 135L180 123L155 135L159 111L143 93L167 89L180 68Z"/>
+    <path d="M180 237L193 258L217 262L201 280L205 304L180 292L155 304L159 280L143 262L167 258L180 237Z"/>
+    <path d="M68 180L89 167L93 143L111 159L135 155L123 180L135 205L111 201L93 217L89 193L68 180Z"/>
+    <path d="M237 180L258 167L262 143L280 159L304 155L292 180L304 205L280 201L262 217L258 193L237 180Z"/>
+  </g>
+</svg>

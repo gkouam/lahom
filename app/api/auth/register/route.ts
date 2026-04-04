@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       console.error('Registration error:', message, error)
-      return NextResponse.json({ error: 'Failed to create account', detail: process.env.NODE_ENV === 'development' ? message : undefined }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to create account' }, { status: 500 })
     }
   })
 }

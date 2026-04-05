@@ -20,7 +20,6 @@ export default function VerifyEmailRequiredPage() {
       })
       setSent(true)
     } catch {
-      // Still show sent to prevent enumeration
       setSent(true)
     } finally {
       setLoading(false)
@@ -30,7 +29,7 @@ export default function VerifyEmailRequiredPage() {
   return (
     <div className="w-full max-w-md">
       <div className="rounded-xl p-8 shadow-lg text-center" style={{ background: 'white' }}>
-        <h1 className="text-2xl font-bold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+        <h1 className="text-2xl font-bold mb-4" style={{ fontFamily: 'var(--serif)', color: 'var(--night)' }}>
           Verify Your Email
         </h1>
         <p className="text-sm mb-6" style={{ color: 'var(--muted)' }}>
@@ -48,8 +47,7 @@ export default function VerifyEmailRequiredPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border text-sm"
-              style={{ borderColor: '#E0D5C7' }}
+              className="auth-input"
               placeholder="you@example.com"
             />
             <button

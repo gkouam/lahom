@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="w-full max-w-md">
       <div className="rounded-xl p-8 shadow-lg" style={{ background: 'white' }}>
-        <h1 className="text-2xl font-bold text-center mb-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+        <h1 className="text-2xl font-bold text-center mb-2" style={{ fontFamily: 'var(--serif)', color: 'var(--night)' }}>
           Reset Password
         </h1>
 
@@ -66,15 +66,14 @@ export default function ForgotPasswordPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-lg border text-sm"
-                style={{ borderColor: '#E0D5C7' }}
+                className="auth-input"
                 placeholder="you@example.com"
               />
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full py-3 rounded-lg font-semibold text-sm"
-                style={{ background: 'var(--gold, #D4A017)', color: 'var(--night)', opacity: loading ? 0.7 : 1 }}
+                style={{ background: 'var(--gold)', color: 'var(--night)', opacity: loading ? 0.7 : 1 }}
               >
                 {loading ? 'Sending...' : 'Send Reset Link'}
               </button>

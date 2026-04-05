@@ -5,7 +5,7 @@ import { useLanguage } from '@/lib/i18n/context'
 const leaders = [
   { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu' },
   { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam' },
-  { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domley' },
+  { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu' },
   { initial: 'T', title: 'Treasurer', role: 'Mr. Francis Tebang' },
 ]
 

@@ -18,6 +18,12 @@ enum RequestStatus {
   REJECTED
 }
 
+enum AccountStatus {
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
@@ -25,7 +31,8 @@ model User {
   emailVerified DateTime?
   name          String?
   phone         String?
-  role          Role      @default(MEMBER)
+  role          Role           @default(MEMBER)
+  accountStatus AccountStatus  @default(PENDING_APPROVAL)
   hometown      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

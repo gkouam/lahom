@@ -125,6 +125,93 @@ export const emailService = {
     }
   },
 
+  async sendAdminNewRegistration(userName: string, userEmail: string) {
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL
+      if (!adminEmail) {
+        console.error('ADMIN_EMAIL not configured')
+        return { success: false, error: 'Admin email not configured' }
+      }
+
+      const resendClient = getResend()
+      if (!resendClient) {
+        console.log('Email not configured. New registration:', userEmail)
+        return { success: true, data: null }
+      }
+
+      const adminUrl = `${process.env.NEXTAUTH_URL}/admin/members`
+
+      const { data, error } = await resendClient.emails.send({
+        from: FROM_EMAIL,
+        to: adminEmail,
+        subject: `New member registration — ${userName}`,
+        html: `
+          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
+            <h1 style="color: #1A1A1A;">New Member Registration</h1>
+            <p>A new user has registered and is awaiting your approval:</p>
+            <table style="margin: 20px 0; font-size: 14px;">
+              <tr><td style="padding: 4px 16px 4px 0; color: #666;"><strong>Name:</strong></td><td>${userName}</td></tr>
+              <tr><td style="padding: 4px 16px 4px 0; color: #666;"><strong>Email:</strong></td><td>${userEmail}</td></tr>
+            </table>
+            <p style="text-align: center; margin: 32px 0;">
+              <a href="${adminUrl}" style="background-color: #D4A017; color: #1A1A1A; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Review in Admin Panel</a>
+            </p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
+            <p style="font-size: 12px; color: #999;">${APP_NAME}</p>
+          </div>
+        `,
+        text: `New member registration:\n\nName: ${userName}\nEmail: ${userEmail}\n\nReview at: ${adminUrl}`,
+      })
+
+      if (error) {
+        console.error('Failed to send admin notification:', error)
+        return { success: false, error }
+      }
+      return { success: true, data }
+    } catch (error) {
+      console.error('Admin notification email error:', error)
+      return { success: false, error }
+    }
+  },
+
+  async sendAccountApproved(email: string, name: string) {
+    try {
+      const resendClient = getResend()
+      if (!resendClient) {
+        console.log('Email not configured. Approval for:', email)
+        return { success: true, data: null }
+      }
+
+      const loginUrl = `${process.env.NEXTAUTH_URL}/auth/signin`
+
+      const { data, error } = await resendClient.emails.send({
+        from: FROM_EMAIL,
+        to: email,
+        subject: `Welcome to ${APP_NAME} — Account Approved!`,
+        html: `
+          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
+            <h1 style="color: #1A1A1A;">Welcome, ${name}!</h1>
+            <p>Great news — your account has been approved by a community admin. You now have full access to the Baham Bamiléké Dallas platform.</p>
+            <p style="text-align: center; margin: 32px 0;">
+              <a href="${loginUrl}" style="background-color: #D4A017; color: #1A1A1A; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Sign In Now</a>
+            </p>
+            <p><strong>"Nkam si lah" — Unity is Strength</strong></p>
+          </div>
+        `,
+        text: `Welcome, ${name}!\n\nYour account has been approved. Sign in at: ${loginUrl}\n\n"Nkam si lah" — Unity is Strength`,
+      })
+
+      if (error) {
+        console.error('Failed to send approval email:', error)
+        return { success: false, error }
+      }
+      return { success: true, data }
+    } catch (error) {
+      console.error('Approval email error:', error)
+      return { success: false, error }
+    }
+  },
+
   async sendJoinConfirmation(email: string, name: string) {
     try {
       const resendClient = getResend()

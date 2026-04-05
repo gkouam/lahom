@@ -36,8 +36,11 @@ export async function middleware(request: NextRequest) {
         }
       } else {
         const emailVerified = token.emailVerified as Date | null
+        const accountStatus = token.accountStatus as string
         if (!emailVerified) {
           response = NextResponse.redirect(new URL('/auth/verify-email-required', request.url))
+        } else if (accountStatus !== 'APPROVED') {
+          response = NextResponse.redirect(new URL('/auth/pending-approval', request.url))
         } else {
           response = NextResponse.next()
         }

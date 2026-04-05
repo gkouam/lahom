@@ -80,6 +80,7 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             name: user.name,
             role: user.role,
+            accountStatus: user.accountStatus,
           }
         } catch (error) {
           if (error instanceof Error && error.message.includes('Account temporarily locked')) {
@@ -108,13 +109,16 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name
         token.role = (user as any).role
 
+        token.accountStatus = (user as any).accountStatus || 'PENDING_APPROVAL'
+
         if (prisma && user.email) {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { email: user.email },
-              select: { emailVerified: true },
+              select: { emailVerified: true, accountStatus: true },
             })
             token.emailVerified = dbUser?.emailVerified || null
+            token.accountStatus = dbUser?.accountStatus || 'PENDING_APPROVAL'
           } catch {
             token.emailVerified = null
           }
@@ -128,10 +132,11 @@ export const authOptions: NextAuthOptions = {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { email: token.email as string },
-              select: { emailVerified: true, role: true },
+              select: { emailVerified: true, role: true, accountStatus: true },
             })
             token.emailVerified = dbUser?.emailVerified || null
             token.role = dbUser?.role || 'MEMBER'
+            token.accountStatus = dbUser?.accountStatus || 'PENDING_APPROVAL'
             token.emailVerifiedLastCheck = Date.now()
           } catch {}
         }
@@ -146,6 +151,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name as string || ''
         session.user.role = token.role as string || 'MEMBER'
         session.user.emailVerified = token.emailVerified as Date | null
+        session.user.accountStatus = token.accountStatus as string || 'PENDING_APPROVAL'
       }
       return session
     },

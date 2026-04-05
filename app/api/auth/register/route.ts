@@ -56,6 +56,11 @@ export async function POST(request: NextRequest) {
         console.error('Failed to send verification email:', err)
       })
 
+      // Notify admin of new registration
+      emailService.sendAdminNewRegistration(user.name || 'Unknown', user.email!).catch(err => {
+        console.error('Failed to send admin notification:', err)
+      })
+
       return NextResponse.json({
         message: 'Account created. Please check your email to verify your account.',
         user: { id: user.id, email: user.email, name: user.name },

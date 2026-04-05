@@ -35,7 +35,7 @@ export default function Footer() {
             <h4>Connect</h4>
             <ul>
               <li><a href="#">Facebook</a></li>
-              <li><a href="#">WhatsApp Group</a></li>
+              <li><a href="https://chat.whatsapp.com/FdXvBZ537ZdFfJvENDernh" target="_blank" rel="noopener">WhatsApp Group</a></li>
               <li><a href="#">Instagram</a></li>
               <li><a href="#">YouTube</a></li>
             </ul>

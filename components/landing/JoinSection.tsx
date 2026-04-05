@@ -64,7 +64,7 @@ export default function JoinSection() {
         {msg.text && <div className={`join-msg ${msg.type}`}>{msg.text}</div>}
         <p className="join-small" dangerouslySetInnerHTML={{ __html: t('join.contact') }} />
         <a
-          href="https://wa.me/16143271497?text=Hello%2C%20I%20want%20to%20join%20the%20Baham%20community"
+          href="https://chat.whatsapp.com/FdXvBZ537ZdFfJvENDernh"
           className="btn btn-whatsapp"
           target="_blank"
           rel="noopener"

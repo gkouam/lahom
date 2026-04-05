@@ -6,7 +6,7 @@ const leaders = [
   { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu' },
   { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam' },
   { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu' },
-  { initial: 'T', title: 'Treasurer', role: 'Mr. Francis Tebang' },
+  { initial: 'T', title: 'Treasurer', role: 'Mr Francis TEBANG TE BUH TAGNE TEBUWAH', image: '/images/treasurer-tebang.jpg' },
 ]
 
 export default function LeadershipSection() {
@@ -26,7 +26,20 @@ export default function LeadershipSection() {
           {leaders.map((leader, i) => (
             <div key={i} className={`leader-card fade-in${delays[i]}`}>
               <div className="leader-ring">
-                <div className="leader-initial">{leader.initial}</div>
+                {leader.image ? (
+                  <img
+                    src={leader.image}
+                    alt={leader.role}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius: '50%',
+                    }}
+                  />
+                ) : (
+                  <div className="leader-initial">{leader.initial}</div>
+                )}
               </div>
               <h4>{leader.title}</h4>
               <span className="leader-role">{leader.role}</span>

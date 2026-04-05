@@ -4,7 +4,7 @@ import { useLanguage } from '@/lib/i18n/context'
 
 const leaders = [
   { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu' },
-  { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam', image: '/images/vp-kouam.jpg' },
+  { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam', image: '/images/vp-kouam.jpg', imagePosition: 'center 30%' },
   { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu' },
   { initial: 'T', title: 'Treasurer', role: 'Mr Francis TEBANG TE BUH TAGNE TEBUWAH', image: '/images/treasurer-tebang.jpg' },
 ]
@@ -34,7 +34,7 @@ export default function LeadershipSection() {
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
-                      objectPosition: 'center 15%',
+                      objectPosition: leader.imagePosition || 'center 15%',
                       borderRadius: '50%',
                     }}
                   />

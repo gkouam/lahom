@@ -5,7 +5,7 @@ import { useLanguage } from '@/lib/i18n/context'
 const leaders = [
   { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu' },
   { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam', image: '/images/vp-kouam.jpg', imagePosition: 'center 30%' },
-  { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu', image: '/images/secretary-domleu.jpg', imagePosition: 'center 20%' },
+  { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu', image: '/images/secretary-domleu.jpg', imagePosition: 'center 15%' },
   { initial: 'T', title: 'Treasurer', role: 'Mr Francis TEBANG TE BUH TAGNE TEBUWAH', image: '/images/treasurer-tebang.jpg' },
 ]
 

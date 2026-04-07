@@ -2069,10 +2069,30 @@ footer {
   .admin-stats-row { grid-template-columns: repeat(2, 1fr); }
   .admin-table th:nth-child(3),
   .admin-table td:nth-child(3) { display: none; }
+  .admin-table th:nth-child(5),
+  .admin-table td:nth-child(5) { display: none; }
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .admin-table { min-width: 500px; }
+  .admin-below-table { grid-template-columns: 1fr !important; }
+  .topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .topbar-left h1 { font-size: 1.4rem; }
+  .admin-filter-row { flex-direction: column; align-items: stretch !important; }
+  .admin-filter-row > div:first-child { flex-wrap: wrap; }
+  .admin-search { max-width: 100%; }
+  .pending-actions-card { padding: 18px; }
+  .stat-icon-circle { width: 38px; height: 38px; }
+  .stat-icon-circle svg { width: 17px; height: 17px; }
 }
 
 @media (max-width: 480px) {
   .admin-stats-row { grid-template-columns: 1fr; }
+  .admin-table th:nth-child(2),
+  .admin-table td:nth-child(2) { display: none; }
+  .admin-table { min-width: 320px; }
+  .topbar-left h1 { font-size: 1.2rem; }
+  .admin-mobile-nav { gap: 4px; }
+  .admin-mobile-nav a,
+  .admin-mobile-nav button { font-size: 0.72rem; padding: 5px 8px; }
 }
 
 /* ── Sidebar User Card ── */
@@ -2881,11 +2901,35 @@ footer {
   .dash-main-inner { padding: 20px 16px 32px; }
   .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
   .dash-content-grid { grid-template-columns: 1fr; }
-  .topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .topbar-left h1 { font-size: 1.3rem; }
+  .stat-icon-circle { width: 38px; height: 38px; }
+  .stat-icon-circle svg { width: 17px; height: 17px; }
+  .event-item { gap: 10px; padding: 12px 0; }
+  .event-date-badge { width: 42px; height: 46px; }
+  .event-date-badge .event-day { font-size: 1.1rem; }
+  .quick-action-btn { padding: 12px 14px; }
+  .membership-status-card { padding: 20px; }
+  .activity-row { gap: 10px; }
+  .dash-content-card-body { padding: 14px 16px 16px; }
+  .dash-content-card-header { padding: 14px 16px 12px; }
 }
 
 @media (max-width: 480px) {
   .dash-stats-row { grid-template-columns: 1fr; }
+  .topbar-left h1 { font-size: 1.15rem; }
+  .dash-mobile-nav { gap: 4px; }
+  .dash-mobile-nav a,
+  .dash-mobile-nav button { font-size: 0.72rem; padding: 5px 8px; }
+  .dash-stat-card { padding: 16px; }
+  .dash-stat-card .stat-value { font-size: 1.5rem; }
+  .quick-action-btn { padding: 10px 12px; font-size: 0.82rem; }
+  .quick-action-btn .qa-icon { width: 32px; height: 32px; border-radius: 6px; }
+  .quick-action-btn .qa-icon svg { width: 16px; height: 16px; }
+  .activity-avatar { width: 28px; height: 28px; font-size: 0.7rem; }
+  .activity-text { font-size: 0.8rem; }
+  .activity-time { font-size: 0.68rem; }
+  .event-item .event-info h4 { font-size: 0.84rem; }
+  .event-item .event-info p { font-size: 0.72rem; }
 }
 
 /* ══════════════════════════════════════════════════════

@@ -201,7 +201,7 @@ export default function AdminMembersPage() {
       </div>
 
       {/* Filters + Search */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+      <div className="admin-filter-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
         <div style={{ display: 'flex', gap: '4px' }}>
           {(['all', 'PENDING_APPROVAL', 'APPROVED', 'REJECTED'] as const).map(f => (
             <button
@@ -329,7 +329,7 @@ export default function AdminMembersPage() {
       </div>
 
       {/* Activity Log + Admin Tools */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '20px', marginTop: '24px' }}>
+      <div className="admin-below-table" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '20px', marginTop: '24px' }}>
         {/* Recent Activity Log */}
         <div style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)', overflow: 'hidden' }}>
           <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

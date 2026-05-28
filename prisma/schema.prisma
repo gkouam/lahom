@@ -9,7 +9,23 @@ datasource db {
 
 enum Role {
   MEMBER
-  ADMIN
+  SUPER_ADMIN
+}
+
+enum Permission {
+  MANAGE_MEMBERS
+  VIEW_MEMBERS
+  MANAGE_FINANCES
+  MANAGE_MEETINGS
+  MANAGE_EVENTS
+  MANAGE_PERMISSIONS
+}
+
+enum FinancialStanding {
+  NEW
+  GOOD_STANDING
+  BEHIND
+  EXEMPT
 }
 
 enum RequestStatus {
@@ -34,12 +50,84 @@ model User {
   role          Role           @default(MEMBER)
   accountStatus AccountStatus  @default(PENDING_APPROVAL)
   hometown      String?
+  officerTitle  String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  rsvps         Rsvp[]
-  announcements Announcement[]
-  auditLogs     AuditLog[]
+  rsvps              Rsvp[]
+  announcements      Announcement[]
+  auditLogs          AuditLog[]
+  userPermissions    UserPermission[]          @relation("UserHeldPermissions")
+  grantedPermissions UserPermission[]          @relation("PermissionGrantedBy")
+  financialStatus    MemberFinancialStatus?    @relation("MemberStatus")
+  statusUpdates      MemberFinancialStatus[]   @relation("StatusUpdatedBy")
+  contributions      Contribution[]            @relation("MemberContributions")
+  recordedContribs   Contribution[]            @relation("ContribRecordedBy")
+  meetingNotes       MeetingNote[]             @relation("MeetingNoteAuthor")
+}
+
+model UserPermission {
+  id         String     @id @default(cuid())
+  userId     String
+  user       User       @relation("UserHeldPermissions", fields: [userId], references: [id], onDelete: Cascade)
+  permission Permission
+
+  grantedById String?
+  grantedBy   User?      @relation("PermissionGrantedBy", fields: [grantedById], references: [id], onDelete: SetNull)
+  createdAt   DateTime   @default(now())
+
+  @@unique([userId, permission])
+  @@index([userId])
+}
+
+model MemberFinancialStatus {
+  id               String            @id @default(cuid())
+  userId           String            @unique
+  user             User              @relation("MemberStatus", fields: [userId], references: [id], onDelete: Cascade)
+
+  standing         FinancialStanding @default(NEW)
+  totalContributed Decimal           @default(0) @db.Decimal(10, 2)
+  notes            String?
+
+  lastUpdatedById  String?
+  lastUpdatedBy    User?             @relation("StatusUpdatedBy", fields: [lastUpdatedById], references: [id], onDelete: SetNull)
+  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime          @default(now())
+
+  @@index([standing])
+}
+
+model Contribution {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation("MemberContributions", fields: [userId], references: [id], onDelete: Cascade)
+
+  amount       Decimal  @db.Decimal(10, 2)
+  date         DateTime
+  method       String?
+  description  String?
+
+  recordedById String
+  recordedBy   User     @relation("ContribRecordedBy", fields: [recordedById], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@index([userId, date])
+}
+
+model MeetingNote {
+  id        String   @id @default(cuid())
+  title     String
+  titleFr   String?
+  body      String
+  bodyFr    String?
+  date      DateTime
+
+  authorId  String
+  author    User     @relation("MeetingNoteAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
 }
 
 model Event {

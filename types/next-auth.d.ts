@@ -9,12 +9,16 @@ declare module 'next-auth' {
       role: string
       emailVerified: Date | null
       accountStatus: string
+      permissions: string[]
+      officerTitle?: string | null
     }
   }
 
   interface User {
     role?: string
     accountStatus?: string
+    permissions?: string[]
+    officerTitle?: string | null
   }
 }
 
@@ -25,5 +29,8 @@ declare module 'next-auth/jwt' {
     emailVerified: Date | null
     accountStatus: string
     emailVerifiedLastCheck?: number
+    permissions: string[]
+    permissionsLastCheck?: number
+    officerTitle?: string | null
   }
 }

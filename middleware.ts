@@ -29,7 +29,9 @@ export async function middleware(request: NextRequest) {
       if (!token) {
         response = NextResponse.redirect(new URL(protectedRoutes[matchedRoute], request.url))
       } else if (matchedRoute === '/admin') {
-        if (token.role !== 'ADMIN') {
+        const isSuperAdmin = (token.role === 'SUPER_ADMIN')
+        const hasPerms = (Array.isArray(token.permissions) && token.permissions.length > 0)
+        if (!(isSuperAdmin || hasPerms)) {
           response = NextResponse.redirect(new URL('/', request.url))
         } else {
           response = NextResponse.next()

@@ -1,24 +1,33 @@
-import { PrismaClient, Role } from '@prisma/client'
+import { PrismaClient, Role, Permission } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // Create admin user
   const adminPassword = await bcrypt.hash('Admin123!@#', 12)
   const admin = await prisma.user.upsert({
     where: { email: 'admin@baham-dallas.org' },
-    update: {},
+    update: { role: Role.SUPER_ADMIN },
     create: {
       email: 'admin@baham-dallas.org',
       name: 'Admin',
       passwordHash: adminPassword,
       emailVerified: new Date(),
-      role: Role.ADMIN,
+      role: Role.SUPER_ADMIN,
       hometown: 'Baham',
     },
   })
   console.log('Admin user created:', admin.email)
+
+  const allPermissions = Object.values(Permission)
+  for (const permission of allPermissions) {
+    await prisma.userPermission.upsert({
+      where: { userId_permission: { userId: admin.id, permission } },
+      update: {},
+      create: { userId: admin.id, permission, grantedById: admin.id },
+    })
+  }
+  console.log('All permissions granted to admin:', allPermissions.length)
 
   // Create sample events
   const events = [

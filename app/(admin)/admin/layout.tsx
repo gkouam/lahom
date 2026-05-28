@@ -36,7 +36,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="user-avatar-circle">{initial}</div>
           <div className="user-name">{user?.name || 'Admin'}</div>
           <div className="badge-wrap">
-            <span className="user-role-badge">{user?.role || 'ADMIN'}</span>
+            <span className="user-role-badge">{user?.officerTitle || (user?.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Officer')}</span>
           </div>
         </div>
 

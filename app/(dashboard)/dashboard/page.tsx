@@ -6,7 +6,7 @@ import Link from 'next/link'
 export default function DashboardPage() {
   const { data: session } = useSession()
   const user = session?.user
-  const isAdmin = user?.role === 'ADMIN'
+  const hasAdminAccess = (user?.role === 'SUPER_ADMIN') || ((user?.permissions?.length ?? 0) > 0)
   const initial = user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'M'
 
   return (
@@ -36,7 +36,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Portal Switch (if admin) */}
-        {isAdmin && (
+        {hasAdminAccess && (
           <Link href="/admin/members" className="portal-switch-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
@@ -126,7 +126,7 @@ export default function DashboardPage() {
         </Link>
         <div className="dash-mobile-nav">
           <Link href="/dashboard" className="active">Home</Link>
-          {isAdmin && <Link href="/admin/members">Admin</Link>}
+          {hasAdminAccess && <Link href="/admin/members">Admin</Link>}
           <button onClick={() => signOut({ callbackUrl: '/' })}>Sign Out</button>
         </div>
       </div>

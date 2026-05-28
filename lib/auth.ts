@@ -108,36 +108,68 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email
         token.name = user.name
         token.role = (user as any).role
-
         token.accountStatus = (user as any).accountStatus || 'PENDING_APPROVAL'
+        token.permissions = []
+
+        token.officerTitle = (user as any).officerTitle || null
 
         if (prisma && user.email) {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { email: user.email },
-              select: { emailVerified: true, accountStatus: true },
+              select: { emailVerified: true, accountStatus: true, officerTitle: true },
             })
             token.emailVerified = dbUser?.emailVerified || null
             token.accountStatus = dbUser?.accountStatus || 'PENDING_APPROVAL'
+            token.officerTitle = dbUser?.officerTitle || null
           } catch {
             token.emailVerified = null
           }
         }
+
+        if (prisma && user.id) {
+          try {
+            const perms = await prisma.userPermission.findMany({
+              where: { userId: user.id },
+              select: { permission: true },
+            })
+            token.permissions = perms.map((p: { permission: string }) => p.permission)
+            token.permissionsLastCheck = Date.now()
+          } catch {
+            token.permissions = []
+          }
+        }
       }
 
-      // Refresh emailVerified hourly
+      // Refresh role/emailVerified/accountStatus hourly
       const lastCheck = token.emailVerifiedLastCheck as number || 0
       if (Date.now() - lastCheck > 60 * 60 * 1000) {
         if (prisma && token.email) {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { email: token.email as string },
-              select: { emailVerified: true, role: true, accountStatus: true },
+              select: { emailVerified: true, role: true, accountStatus: true, officerTitle: true },
             })
             token.emailVerified = dbUser?.emailVerified || null
             token.role = dbUser?.role || 'MEMBER'
             token.accountStatus = dbUser?.accountStatus || 'PENDING_APPROVAL'
+            token.officerTitle = dbUser?.officerTitle || null
             token.emailVerifiedLastCheck = Date.now()
+          } catch {}
+        }
+      }
+
+      // Refresh permissions every 5 minutes
+      const permLastCheck = token.permissionsLastCheck as number || 0
+      if (Date.now() - permLastCheck > 5 * 60 * 1000) {
+        if (prisma && token.id) {
+          try {
+            const perms = await prisma.userPermission.findMany({
+              where: { userId: token.id as string },
+              select: { permission: true },
+            })
+            token.permissions = perms.map((p: { permission: string }) => p.permission)
+            token.permissionsLastCheck = Date.now()
           } catch {}
         }
       }
@@ -152,6 +184,8 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string || 'MEMBER'
         session.user.emailVerified = token.emailVerified as Date | null
         session.user.accountStatus = token.accountStatus as string || 'PENDING_APPROVAL'
+        session.user.permissions = (token.permissions as string[]) || []
+        session.user.officerTitle = (token.officerTitle as string) || null
       }
       return session
     },

@@ -1,13 +1,42 @@
 'use client'
 
+import { useEffect, useState, useCallback } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/i18n/context'
+
+interface MyFinances {
+  standing: string
+  totalContributed: string
+  contributions: {
+    id: string
+    amount: string
+    date: string
+    method: string | null
+    description: string | null
+  }[]
+}
 
 export default function DashboardPage() {
   const { data: session } = useSession()
+  const { t } = useLanguage()
   const user = session?.user
   const hasAdminAccess = (user?.role === 'SUPER_ADMIN') || ((user?.permissions?.length ?? 0) > 0)
   const initial = user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'M'
+
+  const [finances, setFinances] = useState<MyFinances | null>(null)
+
+  const fetchFinances = useCallback(async () => {
+    try {
+      const res = await fetch('/api/member/finances')
+      if (res.ok) {
+        const data = await res.json()
+        setFinances(data)
+      }
+    } catch {}
+  }, [])
+
+  useEffect(() => { fetchFinances() }, [fetchFinances])
 
   return (
     <div className="dash-layout">
@@ -184,8 +213,8 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <div>
-                  <div className="stat-label">Dues Paid</div>
-                  <div className="stat-value">$150</div>
+                  <div className="stat-label">{t('finances.duesPaid')}</div>
+                  <div className="stat-value">${finances?.totalContributed || '0.00'}</div>
                 </div>
               </div>
             </div>
@@ -336,11 +365,48 @@ export default function DashboardPage() {
               <div className="membership-status-card">
                 <div className="status-indicator">
                   <div className="green-dot" />
-                  <span>Active Member</span>
+                  <span>{t(`finances.standing.${finances?.standing || 'NEW'}`)}</span>
                 </div>
-                <h3>Membership Status</h3>
-                <p>Your dues are current through Q2 2026. Next payment due July 1, 2026.</p>
+                <h3>{t('finances.standingLabel')}</h3>
+                <p>{t('finances.totalContributed')}: ${finances?.totalContributed || '0.00'}</p>
               </div>
+            </div>
+          </div>
+
+          {/* My Contributions */}
+          <div className="dash-content-card">
+            <div className="dash-content-card-header">
+              <h3>{t('finances.myContributions')}</h3>
+            </div>
+            <div className="dash-content-card-body">
+              {!finances || finances.contributions.length === 0 ? (
+                <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted)', fontSize: '0.88rem' }}>
+                  {t('finances.noContributions')}
+                </div>
+              ) : (
+                <div className="admin-table-wrap">
+                  <table className="admin-table" style={{ marginBottom: 0 }}>
+                    <thead>
+                      <tr>
+                        <th>{t('finances.date')}</th>
+                        <th>{t('finances.amount')}</th>
+                        <th>{t('finances.method')}</th>
+                        <th>{t('finances.description')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {finances.contributions.slice(0, 10).map(c => (
+                        <tr key={c.id}>
+                          <td style={{ fontSize: '0.82rem' }}>{new Date(c.date).toLocaleDateString()}</td>
+                          <td style={{ fontWeight: 700, fontSize: '0.82rem' }}>${c.amount}</td>
+                          <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.method || '—'}</td>
+                          <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.description || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
 

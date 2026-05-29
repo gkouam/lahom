@@ -104,6 +104,24 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'auth.noAccount': { en: 'Don\'t have an account?', fr: 'Pas de compte ?' },
   'auth.hasAccount': { en: 'Already have an account?', fr: 'Déjà un compte ?' },
 
+  // Finances (member-facing)
+  'finances.dues': { en: 'Dues', fr: 'Cotisations' },
+  'finances.duesPaid': { en: 'Dues Paid', fr: 'Cotisations Payées' },
+  'finances.totalContributed': { en: 'Total Contributed', fr: 'Total Cotisé' },
+  'finances.myContributions': { en: 'My Contributions', fr: 'Mes Cotisations' },
+  'finances.standing': { en: 'Standing', fr: 'Situation' },
+  'finances.standingLabel': { en: 'Financial Standing', fr: 'Situation Financière' },
+  'finances.amount': { en: 'Amount', fr: 'Montant' },
+  'finances.date': { en: 'Date', fr: 'Date' },
+  'finances.method': { en: 'Method', fr: 'Mode' },
+  'finances.description': { en: 'Description', fr: 'Description' },
+  'finances.noContributions': { en: 'No contributions recorded yet.', fr: 'Aucune cotisation enregistrée.' },
+  'finances.viewAll': { en: 'View All', fr: 'Voir Tout' },
+  'finances.standing.GOOD_STANDING': { en: 'Good Standing', fr: 'En règle' },
+  'finances.standing.BEHIND': { en: 'Behind', fr: 'À régulariser' },
+  'finances.standing.NEW': { en: 'New Member', fr: 'Nouveau membre' },
+  'finances.standing.EXEMPT': { en: 'Exempt', fr: 'Dispensé' },
+
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },
   'form.emailInvalid': { en: 'Please enter a valid email address.', fr: 'Veuillez entrer une adresse e-mail valide.' },

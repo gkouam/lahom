@@ -76,6 +76,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Members
             <span className="nav-badge">2</span>
           </Link>
+          {(user?.role === 'SUPER_ADMIN' || user?.permissions?.includes('MANAGE_PERMISSIONS')) && (
+            <Link
+              href="/admin/permissions"
+              className={pathname?.includes('/permissions') ? 'active' : ''}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Permissions
+            </Link>
+          )}
           <Link
             href="/admin/members"
             className=""

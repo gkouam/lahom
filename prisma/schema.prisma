@@ -116,9 +116,9 @@ model Contribution {
 
 model MeetingNote {
   id        String   @id @default(cuid())
-  title     String
+  title     String?
   titleFr   String?
-  body      String
+  body      String?
   bodyFr    String?
   date      DateTime
 

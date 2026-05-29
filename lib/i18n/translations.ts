@@ -122,6 +122,25 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'finances.standing.NEW': { en: 'New Member', fr: 'Nouveau membre' },
   'finances.standing.EXEMPT': { en: 'Exempt', fr: 'Dispensé' },
 
+  // Meeting Notes
+  'meetings.title': { en: 'Meeting Notes', fr: 'Comptes Rendus' },
+  'meetings.recentTitle': { en: 'Recent Meeting Notes', fr: 'Comptes Rendus Récents' },
+  'meetings.viewAll': { en: 'View All', fr: 'Voir Tout' },
+  'meetings.noNotes': { en: 'No meeting notes yet.', fr: 'Aucun compte rendu pour le moment.' },
+  'meetings.date': { en: 'Date', fr: 'Date' },
+  'meetings.author': { en: 'Author', fr: 'Auteur' },
+  'meetings.readMore': { en: 'Read More', fr: 'Lire la Suite' },
+  'meetings.backToList': { en: 'Back to Meeting Notes', fr: 'Retour aux Comptes Rendus' },
+  'meetings.fallback.enOnly': {
+    en: 'French translation not available — English version shown below.',
+    fr: 'Traduction française non disponible — version anglaise ci-dessous.',
+  },
+  'meetings.fallback.frOnly': {
+    en: 'English translation not available — French version shown below.',
+    fr: 'Traduction anglaise non disponible — version française ci-dessous.',
+  },
+  'meetings.contentUnavailable': { en: 'Content unavailable.', fr: 'Contenu non disponible.' },
+
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },
   'form.emailInvalid': { en: 'Please enter a valid email address.', fr: 'Veuillez entrer une adresse e-mail valide.' },

@@ -17,14 +17,25 @@ interface MyFinances {
   }[]
 }
 
+interface MeetingNoteSummary {
+  id: string
+  title: string | null
+  titleFr: string | null
+  body: string | null
+  bodyFr: string | null
+  date: string
+  author: { name: string | null }
+}
+
 export default function DashboardPage() {
   const { data: session } = useSession()
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
   const user = session?.user
   const hasAdminAccess = (user?.role === 'SUPER_ADMIN') || ((user?.permissions?.length ?? 0) > 0)
   const initial = user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'M'
 
   const [finances, setFinances] = useState<MyFinances | null>(null)
+  const [recentNotes, setRecentNotes] = useState<MeetingNoteSummary[]>([])
 
   const fetchFinances = useCallback(async () => {
     try {
@@ -36,7 +47,17 @@ export default function DashboardPage() {
     } catch {}
   }, [])
 
-  useEffect(() => { fetchFinances() }, [fetchFinances])
+  const fetchRecentNotes = useCallback(async () => {
+    try {
+      const res = await fetch('/api/meetings')
+      if (res.ok) {
+        const data = await res.json()
+        setRecentNotes((data.notes || []).slice(0, 3))
+      }
+    } catch {}
+  }, [])
+
+  useEffect(() => { fetchFinances(); fetchRecentNotes() }, [fetchFinances, fetchRecentNotes])
 
   return (
     <div className="dash-layout">
@@ -108,12 +129,14 @@ export default function DashboardPage() {
             </svg>
             Dues
           </Link>
-          <Link href="/dashboard" className="">
+          <Link href="/dashboard/meetings" className="">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
+              <line x1="16" x2="8" y1="13" y2="13" />
+              <line x1="16" x2="8" y1="17" y2="17" />
             </svg>
-            Documents
+            {t('meetings.title')}
           </Link>
           <Link href="/dashboard" className="">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -409,6 +432,63 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
+
+          {/* Recent Meeting Notes */}
+          {recentNotes.length > 0 && (
+            <div className="dash-content-card">
+              <div className="dash-content-card-header">
+                <h3>{t('meetings.recentTitle')}</h3>
+                <Link href="/dashboard/meetings">{t('meetings.viewAll')}</Link>
+              </div>
+              <div className="dash-content-card-body">
+                {recentNotes.map(note => {
+                  const hasEn = !!(note.title && note.body)
+                  const hasFr = !!(note.titleFr && note.bodyFr)
+                  let noteTitle: string
+                  let noteBody: string
+                  let fallbackKey: string | null = null
+
+                  if (lang === 'fr' && hasFr) {
+                    noteTitle = note.titleFr!
+                    noteBody = note.bodyFr!
+                  } else if (lang === 'en' && hasEn) {
+                    noteTitle = note.title!
+                    noteBody = note.body!
+                  } else if (hasEn) {
+                    noteTitle = note.title!
+                    noteBody = note.body!
+                    fallbackKey = 'meetings.fallback.enOnly'
+                  } else if (hasFr) {
+                    noteTitle = note.titleFr!
+                    noteBody = note.bodyFr!
+                    fallbackKey = 'meetings.fallback.frOnly'
+                  } else {
+                    noteTitle = t('meetings.contentUnavailable')
+                    noteBody = ''
+                  }
+
+                  return (
+                    <div key={note.id} style={{ padding: '12px 0', borderBottom: '1px solid var(--line)' }}>
+                      {fallbackKey && (
+                        <div style={{ fontSize: '0.7rem', color: '#856404', fontStyle: 'italic', marginBottom: '4px' }}>
+                          {t(fallbackKey)}
+                        </div>
+                      )}
+                      <div style={{ fontSize: '0.72rem', color: 'var(--muted)', marginBottom: '4px' }}>
+                        {new Date(note.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      </div>
+                      <h4 style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--night)', marginBottom: '4px' }}>
+                        {noteTitle}
+                      </h4>
+                      <p style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.4', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                        {noteBody}
+                      </p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Recent Community Activity */}
           <div className="dash-content-card">

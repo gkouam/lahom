@@ -48,21 +48,6 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'events.label': { en: 'Upcoming Events', fr: 'Événements à Venir' },
   'events.title': { en: 'Gathering Our<br><i>Community</i>', fr: 'Rassembler Notre<br><i>Communauté</i>' },
   'events.btn': { en: 'View All Events →', fr: 'Voir Tous les Événements →' },
-  'events.festival.title': { en: 'Annual Baham Cultural Festival', fr: 'Festival Culturel Annuel de Baham' },
-  'events.festival.desc': {
-    en: 'A full day of traditional dance, music, food, and celebration of our Bamiléké heritage with families from across Texas.',
-    fr: 'Une journée entière de danse traditionnelle, musique, cuisine et célébration de notre patrimoine Bamiléké avec des familles de tout le Texas.',
-  },
-  'events.meeting.title': { en: 'Monthly Community Meeting', fr: 'Réunion Mensuelle Communautaire' },
-  'events.meeting.desc': {
-    en: 'Our monthly assembly — discussing community needs, planning events, and connecting with fellow Baham members.',
-    fr: 'Notre assemblée mensuelle — discussion des besoins communautaires, planification d\'événements et connexion avec les membres Baham.',
-  },
-  'events.workshop.title': { en: 'Youth Heritage Workshop', fr: 'Atelier Patrimoine Jeunesse' },
-  'events.workshop.desc': {
-    en: 'Teaching our children the Ghomala\' language, traditional dances, and the history of the Baham chieftaincy.',
-    fr: 'Enseigner à nos enfants la langue Ghomala\', les danses traditionnelles et l\'histoire de la chefferie de Baham.',
-  },
 
   // Gallery
   'gallery.label': { en: 'Photo Gallery', fr: 'Galerie Photo' },
@@ -140,6 +125,28 @@ export const translations: Record<string, { en: string; fr: string }> = {
     fr: 'Traduction anglaise non disponible — version française ci-dessous.',
   },
   'meetings.contentUnavailable': { en: 'Content unavailable.', fr: 'Contenu non disponible.' },
+
+  // Events (member-facing)
+  'eventsPage.title': { en: 'Events', fr: 'Événements' },
+  'eventsPage.upcoming': { en: 'Upcoming Events', fr: 'Événements à Venir' },
+  'eventsPage.past': { en: 'Past Events', fr: 'Événements Passés' },
+  'eventsPage.viewPast': { en: 'View past events', fr: 'Voir les événements passés' },
+  'eventsPage.hidePast': { en: 'Hide past events', fr: 'Masquer les événements passés' },
+  'eventsPage.viewAll': { en: 'View All', fr: 'Voir Tout' },
+  'eventsPage.noUpcoming': { en: 'No upcoming events.', fr: 'Aucun événement à venir.' },
+  'eventsPage.noPast': { en: 'No past events.', fr: 'Aucun événement passé.' },
+  'eventsPage.rsvp.going': { en: 'Going', fr: 'J\'y serai' },
+  'eventsPage.rsvp.maybe': { en: 'Maybe', fr: 'Peut-être' },
+  'eventsPage.rsvp.notGoing': { en: 'Not Going', fr: 'Absent' },
+  'eventsPage.full': { en: 'Event Full', fr: 'Complet' },
+  'eventsPage.spotsGoing': { en: 'going', fr: 'présents' },
+  'eventsPage.capacityOf': { en: 'of', fr: 'sur' },
+  'eventsPage.whoGoing': { en: 'Going', fr: 'Présents' },
+  'eventsPage.whoMaybe': { en: 'Maybe', fr: 'Peut-être' },
+  'eventsPage.whoNotGoing': { en: 'Not Going', fr: 'Absents' },
+  'eventsPage.noResponses': { en: 'No responses yet.', fr: 'Aucune réponse pour le moment.' },
+  'eventsPage.seeWho': { en: 'See who\'s coming', fr: 'Voir qui vient' },
+  'eventsPage.hideWho': { en: 'Hide attendees', fr: 'Masquer les participants' },
 
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },

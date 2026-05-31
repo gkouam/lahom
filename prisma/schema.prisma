@@ -40,6 +40,12 @@ enum AccountStatus {
   REJECTED
 }
 
+enum RsvpResponse {
+  GOING
+  MAYBE
+  NOT_GOING
+}
+
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
@@ -132,7 +138,7 @@ model MeetingNote {
 
 model Event {
   id            String   @id @default(cuid())
-  title         String
+  title         String?
   titleFr       String?
   description   String?
   descriptionFr String?
@@ -140,6 +146,7 @@ model Event {
   time          String?
   location      String?
   color         String   @default("red")
+  capacity      Int?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -147,13 +154,15 @@ model Event {
 }
 
 model Rsvp {
-  id      String @id @default(cuid())
-  userId  String
-  eventId String
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  id       String       @id @default(cuid())
+  userId   String
+  eventId  String
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event    Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  response RsvpResponse @default(GOING)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, eventId])
 }

@@ -27,6 +27,21 @@ interface MeetingNoteSummary {
   author: { name: string | null }
 }
 
+interface UpcomingEvent {
+  id: string
+  title: string | null
+  titleFr: string | null
+  description: string | null
+  descriptionFr: string | null
+  date: string
+  time: string | null
+  location: string | null
+  capacity: number | null
+  counts: { going: number; maybe: number; notGoing: number }
+  capacityFull: boolean
+  myRsvp: 'GOING' | 'MAYBE' | 'NOT_GOING' | null
+}
+
 export default function DashboardPage() {
   const { data: session } = useSession()
   const { lang, t } = useLanguage()
@@ -36,6 +51,8 @@ export default function DashboardPage() {
 
   const [finances, setFinances] = useState<MyFinances | null>(null)
   const [recentNotes, setRecentNotes] = useState<MeetingNoteSummary[]>([])
+  const [events, setEvents] = useState<UpcomingEvent[]>([])
+  const [rsvpBusy, setRsvpBusy] = useState<string | null>(null)
 
   const fetchFinances = useCallback(async () => {
     try {
@@ -57,7 +74,40 @@ export default function DashboardPage() {
     } catch {}
   }, [])
 
-  useEffect(() => { fetchFinances(); fetchRecentNotes() }, [fetchFinances, fetchRecentNotes])
+  const fetchEvents = useCallback(async () => {
+    try {
+      const res = await fetch('/api/events')
+      if (res.ok) {
+        const data = await res.json()
+        setEvents((data.upcoming || []).slice(0, 3))
+      }
+    } catch {}
+  }, [])
+
+  useEffect(() => { fetchFinances(); fetchRecentNotes(); fetchEvents() }, [fetchFinances, fetchRecentNotes, fetchEvents])
+
+  const setRsvp = async (eventId: string, response: 'GOING' | 'MAYBE' | 'NOT_GOING', current: string | null) => {
+    setRsvpBusy(eventId)
+    try {
+      const res = current === response
+        ? await fetch(`/api/events/${eventId}/rsvp`, { method: 'DELETE' })
+        : await fetch(`/api/events/${eventId}/rsvp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ response }),
+          })
+      if (res.ok) fetchEvents()
+    } catch {}
+    finally { setRsvpBusy(null) }
+  }
+
+  const eventTitle = (e: UpcomingEvent) => {
+    const hasEn = !!(e.title && e.description)
+    const hasFr = !!(e.titleFr && e.descriptionFr)
+    if (lang === 'fr' && hasFr) return e.titleFr!
+    if (lang === 'en' && hasEn) return e.title!
+    return e.title || e.titleFr || ''
+  }
 
   return (
     <div className="dash-layout">
@@ -105,14 +155,14 @@ export default function DashboardPage() {
             </svg>
             Dashboard
           </Link>
-          <Link href="/dashboard" className="">
+          <Link href="/dashboard/events" className="">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
               <line x1="16" x2="16" y1="2" y2="6" />
               <line x1="8" x2="8" y1="2" y2="6" />
               <line x1="3" x2="21" y1="10" y2="10" />
             </svg>
-            Events
+            {t('eventsPage.title')}
           </Link>
           <Link href="/dashboard" className="">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -222,8 +272,8 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <div>
-                  <div className="stat-label">Upcoming Events</div>
-                  <div className="stat-value">3</div>
+                  <div className="stat-label">{t('eventsPage.upcoming')}</div>
+                  <div className="stat-value">{events.length}</div>
                 </div>
               </div>
             </div>
@@ -278,40 +328,54 @@ export default function DashboardPage() {
             {/* Upcoming Events */}
             <div className="dash-content-card">
               <div className="dash-content-card-header">
-                <h3>Upcoming Events</h3>
-                <a href="#">View All</a>
+                <h3>{t('eventsPage.upcoming')}</h3>
+                <Link href="/dashboard/events">{t('eventsPage.viewAll')}</Link>
               </div>
               <div className="dash-content-card-body">
-                <div className="event-item">
-                  <div className="event-date-badge">
-                    <span className="event-month">Apr</span>
-                    <span className="event-day">19</span>
+                {events.length === 0 ? (
+                  <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted)', fontSize: '0.88rem' }}>
+                    {t('eventsPage.noUpcoming')}
                   </div>
-                  <div className="event-info">
-                    <h4>Community General Assembly</h4>
-                    <p>Dallas Community Center, 2:00 PM</p>
-                  </div>
-                </div>
-                <div className="event-item">
-                  <div className="event-date-badge">
-                    <span className="event-month">May</span>
-                    <span className="event-day">10</span>
-                  </div>
-                  <div className="event-info">
-                    <h4>Cultural Heritage Celebration</h4>
-                    <p>Richardson Civic Center, 5:00 PM</p>
-                  </div>
-                </div>
-                <div className="event-item">
-                  <div className="event-date-badge">
-                    <span className="event-month">Jun</span>
-                    <span className="event-day">7</span>
-                  </div>
-                  <div className="event-info">
-                    <h4>Youth Mentorship Workshop</h4>
-                    <p>Plano Library Hall, 10:00 AM</p>
-                  </div>
-                </div>
+                ) : (
+                  events.map(e => {
+                    const d = new Date(e.date)
+                    const month = d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' })
+                    const day = d.getDate()
+                    const full = e.capacityFull && e.myRsvp !== 'GOING'
+                    const rsvpBtn = (response: 'GOING' | 'MAYBE' | 'NOT_GOING', labelKey: string, activeBg: string) => {
+                      const active = e.myRsvp === response
+                      const disabled = rsvpBusy === e.id || (response === 'GOING' && full)
+                      return (
+                        <button onClick={() => setRsvp(e.id, response, e.myRsvp)} disabled={disabled}
+                          style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, cursor: disabled ? 'default' : 'pointer', border: active ? 'none' : '1px solid var(--line)', background: active ? activeBg : 'white', color: active ? 'white' : (disabled ? 'var(--muted)' : 'var(--night)'), opacity: disabled && !active ? 0.5 : 1 }}>
+                          {t(labelKey)}
+                        </button>
+                      )
+                    }
+                    return (
+                      <div key={e.id} className="event-item" style={{ flexWrap: 'wrap' }}>
+                        <div className="event-date-badge">
+                          <span className="event-month">{month}</span>
+                          <span className="event-day">{day}</span>
+                        </div>
+                        <div className="event-info" style={{ flex: 1, minWidth: '160px' }}>
+                          <h4>{eventTitle(e)}</h4>
+                          <p>
+                            {[e.location, e.time].filter(Boolean).join(', ')}
+                            {e.capacity !== null && (
+                              <> · {full ? t('eventsPage.full') : `${e.counts.going} ${t('eventsPage.capacityOf')} ${e.capacity}`}</>
+                            )}
+                          </p>
+                        </div>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', width: '100%', marginTop: '8px' }}>
+                          {rsvpBtn('GOING', 'eventsPage.rsvp.going', 'var(--forest, #2D6A4F)')}
+                          {rsvpBtn('MAYBE', 'eventsPage.rsvp.maybe', 'var(--gold, #D4A017)')}
+                          {rsvpBtn('NOT_GOING', 'eventsPage.rsvp.notGoing', 'var(--muted, #777)')}
+                        </div>
+                      </div>
+                    )
+                  })
+                )}
               </div>
             </div>
 

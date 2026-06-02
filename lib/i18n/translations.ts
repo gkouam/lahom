@@ -147,6 +147,43 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'eventsPage.noResponses': { en: 'No responses yet.', fr: 'Aucune réponse pour le moment.' },
   'eventsPage.seeWho': { en: 'See who\'s coming', fr: 'Voir qui vient' },
   'eventsPage.hideWho': { en: 'Hide attendees', fr: 'Masquer les participants' },
+  'eventsPage.rsvpFailed': { en: 'Failed to update RSVP', fr: 'Échec de la mise à jour de la réponse' },
+  'common.networkError': { en: 'Network error', fr: 'Erreur réseau' },
+
+  // Member dashboard chrome
+  'dash.welcome': { en: 'Welcome back,', fr: 'Bon retour,' },
+  'dash.motto': { en: '"Nkam si lah" — Unity is Strength', fr: '"Nkam si lah" — L\'Union fait la Force' },
+  'dash.memberPortal': { en: 'Member Portal', fr: 'Espace Membre' },
+  'dash.switchAdmin': { en: 'Switch to Admin Portal', fr: 'Passer au Portail Admin' },
+  'dash.home': { en: 'Home', fr: 'Accueil' },
+  'dash.admin': { en: 'Admin', fr: 'Admin' },
+  'dash.notifications': { en: 'Notifications', fr: 'Notifications' },
+  'dash.settings': { en: 'Settings', fr: 'Paramètres' },
+  'dash.statMembers': { en: 'Active Members', fr: 'Membres Actifs' },
+  'dash.statAttended': { en: 'Events Attended', fr: 'Événements Suivis' },
+  'dash.quickActions': { en: 'Quick Actions', fr: 'Actions Rapides' },
+  'dash.qa.viewContributions': { en: 'View My Contributions', fr: 'Voir Mes Cotisations' },
+  'dash.qa.rsvp': { en: 'RSVP to Events', fr: 'Répondre aux Événements' },
+  'dash.qa.contact': { en: 'Contact Leadership', fr: 'Contacter la Direction' },
+
+  // Community activity feed
+  'activity.title': { en: 'Community Activity', fr: 'Activité de la Communauté' },
+  'activity.empty': { en: 'No recent activity.', fr: 'Aucune activité récente.' },
+  'activity.viewMore': { en: 'View more', fr: 'Voir plus' },
+  'activity.viewLess': { en: 'View less', fr: 'Voir moins' },
+  'activity.you': { en: 'You', fr: 'Vous' },
+  'activity.community': { en: 'Community', fr: 'Communauté' },
+  'activity.meetingNote': { en: 'New meeting note: {title}', fr: 'Nouveau compte-rendu : {title}' },
+  'activity.eventCreated': { en: 'New event: {title} ({date})', fr: 'Nouvel événement : {title} ({date})' },
+  'activity.eventFilling': { en: '{title} is filling up — {n} spots left', fr: '{title} se remplit — {n} places restantes' },
+  'activity.rsvp': { en: 'You RSVPed “{response}” to {title}', fr: 'Vous avez répondu « {response} » à {title}' },
+  'activity.contribution': { en: '${amount} recorded toward your contributions ({date})', fr: '{amount} $ enregistré pour vos cotisations ({date})' },
+  'activity.newMember': { en: 'Welcome to {name}!', fr: 'Bienvenue à {name} !' },
+  'activity.spotsLeft': { en: '{n} spots left', fr: '{n} places restantes' },
+  'activity.spotLeft': { en: '{n} spot left', fr: '{n} place restante' },
+
+  // Relative time
+  'time.now': { en: 'just now', fr: 'à l\'instant' },
 
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },

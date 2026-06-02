@@ -86,9 +86,9 @@ export default function MemberEventsPage() {
         if (openRosterId === eventId) loadRoster(eventId)
       } else {
         const d = await res.json()
-        setError(d.error || 'Failed to update RSVP')
+        setError(d.error || t('eventsPage.rsvpFailed'))
       }
-    } catch { setError('Network error') }
+    } catch { setError(t('common.networkError')) }
     finally { setBusyId(null) }
   }
 

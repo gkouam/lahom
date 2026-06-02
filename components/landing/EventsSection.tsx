@@ -29,8 +29,6 @@ export default function EventsSection() {
       .finally(() => setLoaded(true))
   }, [])
 
-  const delays = ['', ' fd1', ' fd2']
-
   const resolve = (e: PublicEvent) => {
     const hasEn = !!(e.title && e.description)
     const hasFr = !!(e.titleFr && e.descriptionFr)
@@ -59,13 +57,13 @@ export default function EventsSection() {
           </p>
         ) : (
           <div className="events-grid">
-            {events.slice(0, 3).map((event, i) => {
+            {events.slice(0, 3).map((event) => {
               const { title, desc, fallback } = resolve(event)
               const d = new Date(event.date)
               const day = d.getDate()
               const month = d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' })
               return (
-                <article key={event.id} className={`event-card fade-in${delays[i] || ''}`}>
+                <article key={event.id} className="event-card">
                   <div className={`ev-top ev-${event.color}`} style={{ position: 'relative' }}>
                     <div className="ev-pattern-fill"></div>
                     <div className="ev-date">

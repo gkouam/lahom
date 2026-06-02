@@ -10,6 +10,9 @@ const getResend = () => {
 }
 
 const FROM_EMAIL = 'Baham Dallas <noreply@send.lahomdfw.org>'
+// Replies to transactional mail reach a real, monitored inbox (forwarded to the
+// community leads) rather than the unattended noreply@ sending address.
+const REPLY_TO = 'info@lahomdfw.org'
 const APP_NAME = 'Baham Bamiléké Dallas'
 
 export const emailService = {
@@ -23,6 +26,7 @@ export const emailService = {
 
       const { data, error } = await resendClient.emails.send({
         from: FROM_EMAIL,
+        replyTo: REPLY_TO,
         to: email,
         subject: `Welcome to ${APP_NAME}!`,
         html: `
@@ -57,6 +61,7 @@ export const emailService = {
 
       const { data, error } = await resendClient.emails.send({
         from: FROM_EMAIL,
+        replyTo: REPLY_TO,
         to: email,
         subject: 'Verify your email — Baham Bamiléké Dallas',
         html: `
@@ -98,6 +103,7 @@ export const emailService = {
 
       const { data, error } = await resendClient.emails.send({
         from: FROM_EMAIL,
+        replyTo: REPLY_TO,
         to: email,
         subject: 'Reset your password — Baham Bamiléké Dallas',
         html: `
@@ -143,6 +149,7 @@ export const emailService = {
 
       const { data, error } = await resendClient.emails.send({
         from: FROM_EMAIL,
+        replyTo: REPLY_TO,
         to: adminEmail,
         subject: `New member registration — ${userName}`,
         html: `
@@ -186,6 +193,7 @@ export const emailService = {
 
       const { data, error } = await resendClient.emails.send({
         from: FROM_EMAIL,
+        replyTo: REPLY_TO,
         to: email,
         subject: `Welcome to ${APP_NAME} — Account Approved!`,
         html: `
@@ -222,6 +230,7 @@ export const emailService = {
 
       const { data, error } = await resendClient.emails.send({
         from: FROM_EMAIL,
+        replyTo: REPLY_TO,
         to: email,
         subject: 'Thank you for your interest — Baham Bamiléké Dallas',
         html: `

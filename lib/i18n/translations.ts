@@ -70,8 +70,8 @@ export const translations: Record<string, { en: string; fr: string }> = {
   },
   'join.btn': { en: 'Join Now', fr: 'Rejoindre' },
   'join.contact': {
-    en: 'Or contact us at <strong>info@baham-dallas.org</strong> · (469) 555-BHAM',
-    fr: 'Ou contactez-nous à <strong>info@baham-dallas.org</strong> · (469) 555-BHAM',
+    en: 'Or contact us at <strong>info@lahomdfw.org</strong> · (469) 555-BHAM',
+    fr: 'Ou contactez-nous à <strong>info@lahomdfw.org</strong> · (469) 555-BHAM',
   },
   'join.whatsapp': { en: 'Chat on WhatsApp', fr: 'Discuter sur WhatsApp' },
 

@@ -196,7 +196,7 @@ DATABASE_URL=postgresql://...
 NEXTAUTH_URL=https://lahomdfw.org
 NEXTAUTH_SECRET=<openssl rand -base64 32>
 RESEND_API_KEY=re_...
-ADMIN_EMAIL=admin@baham-dallas.org
+ADMIN_EMAIL=admin@lahomdfw.org
 ```
 
 ## Getting Started
@@ -210,7 +210,7 @@ npx tsx prisma/seed.ts     # Seed admin user + sample events
 npm run dev                # http://localhost:3000
 ```
 
-Default admin: `admin@baham-dallas.org` / `Admin123!@#`
+Default admin: `admin@lahomdfw.org` / `Admin123!@#`
 
 ## Deployment
 

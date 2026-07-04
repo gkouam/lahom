@@ -220,6 +220,28 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'admin.messages': { en: 'Messages', fr: 'Messages' },
   'admin.signOut': { en: 'Sign Out', fr: 'Déconnexion' },
 
+  // Admin reports
+  'reports.title': { en: 'Reports', fr: 'Rapports' },
+  'reports.subtitle': { en: 'Community health at a glance', fr: 'La santé de la communauté en un coup d\'œil' },
+  'reports.period.ytd': { en: 'YTD', fr: 'Année' },
+  'reports.period.12mo': { en: '12 mo', fr: '12 mois' },
+  'reports.period.all': { en: 'All time', fr: 'Tout' },
+  'reports.exportCsv': { en: 'Export CSV', fr: 'Exporter CSV' },
+  'reports.stat.activeMembers': { en: 'Active Members', fr: 'Membres Actifs' },
+  'reports.stat.duesCollected': { en: 'Dues Collected', fr: 'Cotisations Perçues' },
+  'reports.stat.avgAttendance': { en: 'Avg. Event Attendance', fr: 'Présence Moy. aux Événements' },
+  'reports.stat.behindOnDues': { en: 'Behind on Dues', fr: 'En Retard de Cotisation' },
+  'reports.chart.membership': { en: 'Membership Growth', fr: 'Croissance des Membres' },
+  'reports.chart.contributions': { en: 'Contributions / Month', fr: 'Cotisations / Mois' },
+  'reports.table.title': { en: 'Event Attendance', fr: 'Présence aux Événements' },
+  'reports.table.event': { en: 'Event', fr: 'Événement' },
+  'reports.table.date': { en: 'Date', fr: 'Date' },
+  'reports.table.rsvpd': { en: 'RSVP’d', fr: 'Inscrits' },
+  'reports.table.attended': { en: 'Attended', fr: 'Présents' },
+  'reports.table.turnout': { en: 'Turnout', fr: 'Taux' },
+  'reports.noEvents': { en: 'No events in this period.', fr: 'Aucun événement sur cette période.' },
+  'reports.loading': { en: 'Loading reports…', fr: 'Chargement des rapports…' },
+
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },
   'form.emailInvalid': { en: 'Please enter a valid email address.', fr: 'Veuillez entrer une adresse e-mail valide.' },

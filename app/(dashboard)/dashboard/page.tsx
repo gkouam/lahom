@@ -305,7 +305,7 @@ export default function DashboardPage() {
           {/* TopBar */}
           <div className="topbar">
             <div className="topbar-left">
-              <h1>{t('dash.welcome')} <span style={{ color: 'var(--gold)' }}>{user?.name || 'Member'}</span></h1>
+              <h1>{t('dash.welcome')} <span style={{ color: 'var(--gold-ink)' }}>{user?.name || 'Member'}</span></h1>
               <p>{t('dash.motto')}</p>
             </div>
             <div className="topbar-actions">
@@ -413,7 +413,7 @@ export default function DashboardPage() {
                       const disabled = rsvpBusy === e.id || (response === 'GOING' && full)
                       return (
                         <button onClick={() => setRsvp(e.id, response, e.myRsvp)} disabled={disabled}
-                          style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, cursor: disabled ? 'default' : 'pointer', border: active ? 'none' : '1px solid var(--line)', background: active ? activeBg : 'white', color: active ? 'white' : (disabled ? 'var(--muted)' : 'var(--night)'), opacity: disabled && !active ? 0.5 : 1 }}>
+                          style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: disabled ? 'default' : 'pointer', border: active ? 'none' : '1px solid var(--line)', background: active ? activeBg : 'white', color: active ? 'white' : (disabled ? 'var(--muted)' : 'var(--night)'), opacity: disabled && !active ? 0.5 : 1 }}>
                           {t(labelKey)}
                         </button>
                       )
@@ -586,11 +586,11 @@ export default function DashboardPage() {
                   return (
                     <div key={note.id} style={{ padding: '12px 0', borderBottom: '1px solid var(--line)' }}>
                       {fallbackKey && (
-                        <div style={{ fontSize: '0.7rem', color: '#856404', fontStyle: 'italic', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '0.75rem', color: '#856404', fontStyle: 'italic', marginBottom: '4px' }}>
                           {t(fallbackKey)}
                         </div>
                       )}
-                      <div style={{ fontSize: '0.72rem', color: 'var(--muted)', marginBottom: '4px' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '4px' }}>
                         {new Date(note.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                       </div>
                       <h4 style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--night)', marginBottom: '4px' }}>

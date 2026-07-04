@@ -62,7 +62,7 @@ export default function VerifyEmailRequiredPage() {
         )}
 
         <p className="text-sm mt-6">
-          <Link href="/auth/signin" style={{ color: 'var(--gold)' }}>Back to sign in</Link>
+          <Link href="/auth/signin" style={{ color: 'var(--gold-ink)' }}>Back to sign in</Link>
         </p>
       </div>
     </div>

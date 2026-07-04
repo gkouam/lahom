@@ -34,14 +34,14 @@ function VerifyEmailContent() {
             <div className="mb-4 p-3 rounded-lg text-sm" style={{ background: '#FDECEA', color: '#B71C1C' }}>
               {error}
             </div>
-            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold)' }}>Back to sign in</Link>
+            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold-ink)' }}>Back to sign in</Link>
           </>
         ) : (
           <>
             <p className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
               Check your email for a verification link.
             </p>
-            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold)' }}>Back to sign in</Link>
+            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold-ink)' }}>Back to sign in</Link>
           </>
         )}
       </div>

@@ -78,7 +78,7 @@ export default function AdminMembersPage() {
     }
     const s = styles[status] || styles.PENDING_APPROVAL
     return (
-      <span style={{ background: s.bg, color: s.color, padding: '3px 12px', borderRadius: '100px', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.04em' }}>
+      <span style={{ background: s.bg, color: s.color, padding: '3px 12px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.04em' }}>
         {status === 'PENDING_APPROVAL' ? 'Pending' : status.charAt(0) + status.slice(1).toLowerCase()}
       </span>
     )
@@ -267,7 +267,7 @@ export default function AdminMembersPage() {
                 <td style={{ color: 'var(--muted)' }}>
                   {member.email}
                   {!member.emailVerified && (
-                    <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--wine-bright)', fontWeight: 600 }}>
+                    <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--wine-bright)', fontWeight: 600 }}>
                       Not verified
                     </span>
                   )}
@@ -334,7 +334,7 @@ export default function AdminMembersPage() {
         <div style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)', overflow: 'hidden' }}>
           <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--night)' }}>Recent Activity</h3>
-            <span style={{ fontSize: '0.78rem', color: 'var(--gold)', fontWeight: 600 }}>View All</span>
+            <span style={{ fontSize: '0.78rem', color: 'var(--gold-ink)', fontWeight: 600 }}>View All</span>
           </div>
           <div style={{ padding: '8px 20px 16px' }}>
             <div className="activity-row">

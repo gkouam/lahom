@@ -10,6 +10,7 @@
   --gold: #D4A017;
   --gold-bright: #E8B82A;
   --gold-dim: rgba(212,160,23,0.15);
+  --gold-ink: #9A7410;
   --clay: #8B4F22;
   --clay-warm: #C1694F;
   --forest: #1B4332;
@@ -112,7 +113,7 @@ nav {
 }
 
 .nav-brand-text span {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(245,230,200,0.5);
@@ -156,7 +157,7 @@ nav {
   border: 1.5px solid var(--gold);
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -362,7 +363,7 @@ nav {
   align-items: center;
   gap: 8px;
   color: rgba(212,160,23,0.45);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
@@ -413,15 +414,15 @@ nav {
 
 .sec-label {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-ink);
   font-weight: 600;
   margin-bottom: 12px;
 }
 
-.sec-label.gold { color: var(--gold); }
+.sec-label.gold { color: var(--gold-ink); }
 
 .sec-title {
   font-family: var(--serif);
@@ -515,7 +516,7 @@ nav {
   padding: 5px 12px;
   background: rgba(26,18,8,0.7);
   color: var(--cream);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 600;
@@ -669,7 +670,7 @@ nav {
   display: inline-block;
   background: var(--gold);
   color: var(--night);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -747,7 +748,7 @@ nav {
 }
 
 .symbol small {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--clay);
   font-weight: 600;
   text-transform: uppercase;
@@ -822,7 +823,7 @@ nav {
 
 .ev-mo {
   display: block;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 700;
@@ -904,7 +905,7 @@ nav {
   padding: 5px 12px;
   background: rgba(26,18,8,0.65);
   color: var(--cream);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 600;
@@ -1131,7 +1132,7 @@ footer {
 .fc-gold { width: 16px; height: 11px; background: #FCD116; border-radius: 2px; }
 
 .footer-col h4 {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--gold);
@@ -1161,7 +1162,7 @@ footer {
   opacity: 0.35;
 }
 
-.footer-credits { font-size: 0.7rem; }
+.footer-credits { font-size: 0.75rem; }
 
 /* ═══ LIGHTBOX ═══ */
 .lightbox {
@@ -1440,7 +1441,7 @@ footer {
   transition: color 0.2s;
 }
 
-.auth-nav-home:hover { color: var(--gold); }
+.auth-nav-home:hover { color: var(--gold-ink); }
 
 .auth-nav-links {
   display: flex;
@@ -1530,12 +1531,12 @@ footer {
   align-items: center;
 }
 
-.auth-password-toggle:hover { color: var(--gold); }
+.auth-password-toggle:hover { color: var(--gold-ink); }
 
 /* ── Field Group ── */
 .auth-field-group {
   font-family: var(--sans);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1577,7 +1578,7 @@ footer {
   }
 
   .auth-panel-title { font-size: 1.2rem; margin-bottom: 2px; }
-  .auth-panel-subtitle { font-size: 0.7rem; margin-bottom: 0; }
+  .auth-panel-subtitle { font-size: 0.75rem; margin-bottom: 0; }
   .auth-panel-motto { display: none; }
   .auth-panel .kente-bar { display: none; }
   .auth-panel-tagline { display: none; }
@@ -1646,7 +1647,7 @@ footer {
 
 .admin-sidebar-brand span {
   display: block;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(245,230,200,0.45);
@@ -1875,7 +1876,7 @@ footer {
 .admin-table th {
   text-align: left;
   padding: 12px 16px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -2092,7 +2093,7 @@ footer {
   .topbar-left h1 { font-size: 1.2rem; }
   .admin-mobile-nav { gap: 4px; }
   .admin-mobile-nav a,
-  .admin-mobile-nav button { font-size: 0.72rem; padding: 5px 8px; }
+  .admin-mobile-nav button { font-size: 0.75rem; padding: 5px 8px; }
 }
 
 /* ── Sidebar User Card ── */
@@ -2131,7 +2132,7 @@ footer {
   display: block;
   text-align: center;
   margin-top: 6px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2185,7 +2186,7 @@ footer {
 .nav-badge {
   background: var(--wine-bright);
   color: white;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 700;
   min-width: 18px;
   height: 18px;
@@ -2240,7 +2241,7 @@ footer {
 
 .topbar-actions button:hover {
   border-color: var(--gold);
-  color: var(--gold);
+  color: var(--gold-ink);
   box-shadow: var(--shadow-sm);
 }
 
@@ -2417,7 +2418,7 @@ footer {
 }
 
 .activity-row .activity-time {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--muted);
   white-space: nowrap;
 }
@@ -2426,7 +2427,7 @@ footer {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 100px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
@@ -2461,11 +2462,11 @@ footer {
 }
 
 .event-date-badge .event-month {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 
 .event-date-badge .event-day {
@@ -2643,7 +2644,7 @@ footer {
 
 .dash-sidebar-brand span {
   display: block;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(245,230,200,0.45);
@@ -2828,7 +2829,7 @@ footer {
 .dash-content-card-header a {
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 
 .dash-content-card-body {
@@ -2919,17 +2920,17 @@ footer {
   .topbar-left h1 { font-size: 1.15rem; }
   .dash-mobile-nav { gap: 4px; }
   .dash-mobile-nav a,
-  .dash-mobile-nav button { font-size: 0.72rem; padding: 5px 8px; }
+  .dash-mobile-nav button { font-size: 0.75rem; padding: 5px 8px; }
   .dash-stat-card { padding: 16px; }
   .dash-stat-card .stat-value { font-size: 1.5rem; }
   .quick-action-btn { padding: 10px 12px; font-size: 0.82rem; }
   .quick-action-btn .qa-icon { width: 32px; height: 32px; border-radius: 6px; }
   .quick-action-btn .qa-icon svg { width: 16px; height: 16px; }
-  .activity-avatar { width: 28px; height: 28px; font-size: 0.7rem; }
+  .activity-avatar { width: 28px; height: 28px; font-size: 0.75rem; }
   .activity-text { font-size: 0.8rem; }
-  .activity-time { font-size: 0.68rem; }
+  .activity-time { font-size: 0.75rem; }
   .event-item .event-info h4 { font-size: 0.84rem; }
-  .event-item .event-info p { font-size: 0.72rem; }
+  .event-item .event-info p { font-size: 0.75rem; }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -3069,7 +3070,7 @@ footer {
   display: inline-block;
   padding: 3px 12px;
   border-radius: 100px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -3162,7 +3163,7 @@ footer {
 }
 
 .dash-card-body a:hover {
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 
 .dash-card-body a svg {
@@ -3226,7 +3227,7 @@ footer {
 }
 
 .dash-status-label {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--muted);
 }
 
@@ -3236,4 +3237,9 @@ footer {
   .dash-welcome h1 { font-size: 1.5rem; }
   .dash-welcome-inner { padding: 28px 16px; }
   .dash-cards { padding: 20px 16px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-img, .hero-geo, .ticker-inner, .whatsapp-float, .scroll-bar { animation: none !important; }
+  * { transition-duration: 0.01ms !important; }
 }

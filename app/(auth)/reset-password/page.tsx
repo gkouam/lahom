@@ -50,7 +50,7 @@ function ResetPasswordContent() {
     return (
       <div className="text-center p-8">
         <p>Invalid reset link.</p>
-        <Link href="/forgot-password" style={{ color: 'var(--gold)' }}>Request a new one</Link>
+        <Link href="/forgot-password" style={{ color: 'var(--gold-ink)' }}>Request a new one</Link>
       </div>
     )
   }
@@ -65,7 +65,7 @@ function ResetPasswordContent() {
         {done ? (
           <div className="text-center">
             <p className="mb-4 text-sm" style={{ color: 'var(--muted)' }}>Password reset successfully!</p>
-            <Link href="/auth/signin" className="font-semibold" style={{ color: 'var(--gold)' }}>Sign in</Link>
+            <Link href="/auth/signin" className="font-semibold" style={{ color: 'var(--gold-ink)' }}>Sign in</Link>
           </div>
         ) : (
           <>

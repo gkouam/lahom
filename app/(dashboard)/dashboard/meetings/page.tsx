@@ -91,7 +91,7 @@ export default function MeetingsPage() {
               <div style={{ padding: '24px' }}>
                 <button
                   onClick={() => setSelectedId(null)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold)', fontSize: '0.82rem', fontWeight: 600, marginBottom: '16px', padding: 0 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold-ink)', fontSize: '0.82rem', fontWeight: 600, marginBottom: '16px', padding: 0 }}
                 >
                   &larr; {t('meetings.backToList')}
                 </button>
@@ -163,7 +163,7 @@ export default function MeetingsPage() {
                         <div style={{
                           padding: '6px 10px',
                           borderRadius: '6px',
-                          fontSize: '0.72rem',
+                          fontSize: '0.75rem',
                           marginBottom: '10px',
                           background: '#FFF3CD',
                           color: '#856404',
@@ -183,7 +183,7 @@ export default function MeetingsPage() {
                       <p style={{ fontSize: '0.85rem', color: 'var(--muted)', lineHeight: '1.5', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                         {body}
                       </p>
-                      <span style={{ fontSize: '0.78rem', color: 'var(--gold)', fontWeight: 600, marginTop: '8px', display: 'inline-block' }}>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--gold-ink)', fontWeight: 600, marginTop: '8px', display: 'inline-block' }}>
                         {t('meetings.readMore')} &rarr;
                       </span>
                     </div>
@@ -194,7 +194,7 @@ export default function MeetingsPage() {
           )}
 
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
-            <Link href="/dashboard" style={{ color: 'var(--gold)', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}>
+            <Link href="/dashboard" style={{ color: 'var(--gold-ink)', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}>
               &larr; {t('auth.dashboard')}
             </Link>
           </div>

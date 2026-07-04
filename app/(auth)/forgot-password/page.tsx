@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
             <p className="mb-4 text-sm" style={{ color: 'var(--muted)' }}>
               If an account exists with that email, we sent you a password reset link. Check your inbox.
             </p>
-            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold)' }}>
+            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold-ink)' }}>
               Back to sign in
             </Link>
           </div>
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
             </form>
 
             <p className="text-center text-sm mt-4">
-              <Link href="/auth/signin" style={{ color: 'var(--gold)' }}>Back to sign in</Link>
+              <Link href="/auth/signin" style={{ color: 'var(--gold-ink)' }}>Back to sign in</Link>
             </p>
           </>
         )}

@@ -104,7 +104,7 @@ function SignInContent() {
           </div>
 
           <div className="text-right">
-            <Link href="/forgot-password" className="text-sm" style={{ color: 'var(--gold)' }}>
+            <Link href="/forgot-password" className="text-sm" style={{ color: 'var(--gold-ink)' }}>
               Forgot password?
             </Link>
           </div>
@@ -121,7 +121,7 @@ function SignInContent() {
 
         <p className="text-center text-sm mt-6" style={{ color: 'var(--muted)' }}>
           Don&apos;t have an account?{' '}
-          <Link href="/auth/signup" style={{ color: 'var(--gold)', fontWeight: 600 }}>
+          <Link href="/auth/signup" style={{ color: 'var(--gold-ink)', fontWeight: 600 }}>
             Create one
           </Link>
         </p>

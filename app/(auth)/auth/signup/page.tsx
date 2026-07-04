@@ -128,7 +128,7 @@ export default function SignUpPage() {
 
         <p className="text-center text-sm mt-6" style={{ color: 'var(--muted)' }}>
           Already have an account?{' '}
-          <Link href="/auth/signin" style={{ color: 'var(--gold)', fontWeight: 600 }}>
+          <Link href="/auth/signin" style={{ color: 'var(--gold-ink)', fontWeight: 600 }}>
             Sign in
           </Link>
         </p>

@@ -200,7 +200,7 @@ export default function MeetingsPage() {
           </h3>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Date</label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Date</label>
             <input
               type="date"
               value={formDate}
@@ -212,7 +212,7 @@ export default function MeetingsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '16px' }}>
             {/* English */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Title (English)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Title (English)</label>
               <input
                 type="text"
                 value={formTitle}
@@ -220,7 +220,7 @@ export default function MeetingsPage() {
                 placeholder="Meeting title in English"
                 style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', boxSizing: 'border-box' }}
               />
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Body (English)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Body (English)</label>
               <textarea
                 value={formBody}
                 onChange={e => setFormBody(e.target.value)}
@@ -231,7 +231,7 @@ export default function MeetingsPage() {
             </div>
             {/* French */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Titre (Français)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Titre (Français)</label>
               <input
                 type="text"
                 value={formTitleFr}
@@ -239,7 +239,7 @@ export default function MeetingsPage() {
                 placeholder="Titre de la réunion en français"
                 style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', boxSizing: 'border-box' }}
               />
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Contenu (Français)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Contenu (Français)</label>
               <textarea
                 value={formBodyFr}
                 onChange={e => setFormBodyFr(e.target.value)}
@@ -322,7 +322,7 @@ export default function MeetingsPage() {
                         const lang = langIndicator(note)
                         const s = LANG_BADGE_STYLES[lang]
                         return (
-                          <span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700 }}>
+                          <span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700 }}>
                             {lang}
                           </span>
                         )
@@ -337,14 +337,14 @@ export default function MeetingsPage() {
                     <td style={{ textAlign: 'right' }}>
                       {deleteConfirm === note.id ? (
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.72rem', color: '#8B2020' }}>Delete?</span>
-                          <button onClick={() => deleteNote(note.id)} disabled={deleting} style={{ padding: '3px 10px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer' }}>{deleting ? '...' : 'Yes'}</button>
-                          <button onClick={() => setDeleteConfirm(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>No</button>
+                          <span style={{ fontSize: '0.75rem', color: '#8B2020' }}>Delete?</span>
+                          <button onClick={() => deleteNote(note.id)} disabled={deleting} style={{ padding: '3px 10px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>{deleting ? '...' : 'Yes'}</button>
+                          <button onClick={() => setDeleteConfirm(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>No</button>
                         </div>
                       ) : (
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                          <button onClick={() => startEdit(note)} style={{ padding: '3px 10px', background: 'var(--gold-dim)', color: 'var(--night)', border: '1px solid rgba(212,160,23,0.3)', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Edit</button>
-                          <button onClick={() => setDeleteConfirm(note.id)} style={{ padding: '3px 10px', background: '#FFF0F0', color: '#8B2020', border: '1px solid #E8AAAA', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Delete</button>
+                          <button onClick={() => startEdit(note)} style={{ padding: '3px 10px', background: 'var(--gold-dim)', color: 'var(--night)', border: '1px solid rgba(212,160,23,0.3)', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Edit</button>
+                          <button onClick={() => setDeleteConfirm(note.id)} style={{ padding: '3px 10px', background: '#FFF0F0', color: '#8B2020', border: '1px solid #E8AAAA', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Delete</button>
                         </div>
                       )}
                     </td>

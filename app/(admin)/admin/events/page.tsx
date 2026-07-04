@@ -199,17 +199,17 @@ export default function EventsAdminPage() {
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Date</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Date</label>
               <input type="date" value={fDate} onChange={e => setFDate(e.target.value)}
                 style={{ padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem' }} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Time</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Time</label>
               <input type="text" value={fTime} onChange={e => setFTime(e.target.value)} placeholder="3PM – 6PM"
                 style={{ padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', width: '140px' }} />
             </div>
             <div style={{ flex: 1, minWidth: '160px' }}>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Location</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Location</label>
               <input type="text" value={fLocation} onChange={e => setFLocation(e.target.value)} placeholder="Dallas Community Center"
                 style={{ padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', width: '100%', boxSizing: 'border-box' }} />
             </div>
@@ -217,14 +217,14 @@ export default function EventsAdminPage() {
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Color</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Color</label>
               <select value={fColor} onChange={e => setFColor(e.target.value)}
                 style={{ padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem' }}>
                 {COLORS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Capacity (optional)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Capacity (optional)</label>
               <input type="number" min="1" step="1" value={fCapacity} onChange={e => setFCapacity(e.target.value)} placeholder="No limit"
                 style={{ padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', width: '120px' }} />
             </div>
@@ -232,18 +232,18 @@ export default function EventsAdminPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Title (English)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Title (English)</label>
               <input type="text" value={fTitle} onChange={e => setFTitle(e.target.value)} placeholder="Event title in English"
                 style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', boxSizing: 'border-box' }} />
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Description (English)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Description (English)</label>
               <textarea value={fDesc} onChange={e => setFDesc(e.target.value)} placeholder="Event description in English..." rows={5}
                 style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', resize: 'vertical', boxSizing: 'border-box' }} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Titre (Français)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Titre (Français)</label>
               <input type="text" value={fTitleFr} onChange={e => setFTitleFr(e.target.value)} placeholder="Titre de l'événement en français"
                 style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', boxSizing: 'border-box' }} />
-              <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Description (Français)</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px', marginTop: '12px' }}>Description (Français)</label>
               <textarea value={fDescFr} onChange={e => setFDescFr(e.target.value)} placeholder="Description de l'événement en français..." rows={5}
                 style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', resize: 'vertical', boxSizing: 'border-box' }} />
             </div>
@@ -294,7 +294,7 @@ export default function EventsAdminPage() {
                       <tr style={past ? { opacity: 0.6 } : undefined}>
                         <td style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{new Date(e.date).toLocaleDateString()}</td>
                         <td style={{ fontSize: '0.82rem', fontWeight: 600, maxWidth: '260px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayTitle(e)}</td>
-                        <td><span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700 }}>{lang}</span></td>
+                        <td><span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700 }}>{lang}</span></td>
                         <td style={{ fontSize: '0.82rem' }}>
                           {e.capacity === null ? <span style={{ color: 'var(--muted)' }}>—</span> : (
                             <span style={{ color: e.capacityFull ? '#8B2020' : 'var(--night)', fontWeight: e.capacityFull ? 700 : 400 }}>
@@ -308,15 +308,15 @@ export default function EventsAdminPage() {
                         <td style={{ textAlign: 'right' }}>
                           {deleteConfirm === e.id ? (
                             <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', alignItems: 'center' }}>
-                              <span style={{ fontSize: '0.72rem', color: '#8B2020' }}>Delete?</span>
-                              <button onClick={() => deleteEvent(e.id)} disabled={deleting} style={{ padding: '3px 10px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer' }}>{deleting ? '...' : 'Yes'}</button>
-                              <button onClick={() => setDeleteConfirm(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>No</button>
+                              <span style={{ fontSize: '0.75rem', color: '#8B2020' }}>Delete?</span>
+                              <button onClick={() => deleteEvent(e.id)} disabled={deleting} style={{ padding: '3px 10px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>{deleting ? '...' : 'Yes'}</button>
+                              <button onClick={() => setDeleteConfirm(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>No</button>
                             </div>
                           ) : (
                             <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                              <button onClick={() => toggleRoster(e.id)} style={{ padding: '3px 10px', background: '#EEF2FF', color: '#3730A3', border: '1px solid #C7D2FE', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>{rosterFor === e.id ? 'Hide' : 'Roster'}</button>
-                              <button onClick={() => startEdit(e)} style={{ padding: '3px 10px', background: 'var(--gold-dim)', color: 'var(--night)', border: '1px solid rgba(212,160,23,0.3)', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Edit</button>
-                              <button onClick={() => setDeleteConfirm(e.id)} style={{ padding: '3px 10px', background: '#FFF0F0', color: '#8B2020', border: '1px solid #E8AAAA', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Delete</button>
+                              <button onClick={() => toggleRoster(e.id)} style={{ padding: '3px 10px', background: '#EEF2FF', color: '#3730A3', border: '1px solid #C7D2FE', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>{rosterFor === e.id ? 'Hide' : 'Roster'}</button>
+                              <button onClick={() => startEdit(e)} style={{ padding: '3px 10px', background: 'var(--gold-dim)', color: 'var(--night)', border: '1px solid rgba(212,160,23,0.3)', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Edit</button>
+                              <button onClick={() => setDeleteConfirm(e.id)} style={{ padding: '3px 10px', background: '#FFF0F0', color: '#8B2020', border: '1px solid #E8AAAA', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Delete</button>
                             </div>
                           )}
                         </td>

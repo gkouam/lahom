@@ -198,7 +198,7 @@ export default function FinancesPage() {
   const standingBadge = (standing: string) => {
     const s = STANDING_STYLES[standing] || STANDING_STYLES.NEW
     return (
-      <span style={{ background: s.bg, color: s.color, padding: '3px 12px', borderRadius: '100px', fontSize: '0.72rem', fontWeight: 700 }}>
+      <span style={{ background: s.bg, color: s.color, padding: '3px 12px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700 }}>
         {s.label}
       </span>
     )
@@ -261,7 +261,7 @@ export default function FinancesPage() {
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--night)' }}>{m.name || '—'}</div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.email}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.email}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   {standingBadge(m.standing)}
@@ -285,7 +285,7 @@ export default function FinancesPage() {
               </h3>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '12px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Standing</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Standing</label>
                   <select
                     value={editStanding}
                     onChange={e => setEditStanding(e.target.value)}
@@ -306,7 +306,7 @@ export default function FinancesPage() {
                 </button>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Treasurer Notes (private)</label>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Treasurer Notes (private)</label>
                 <textarea
                   value={editNotes}
                   onChange={e => setEditNotes(e.target.value)}
@@ -322,22 +322,22 @@ export default function FinancesPage() {
               <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--night)', marginBottom: '16px' }}>Record Contribution</h3>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Amount ($)</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Amount ($)</label>
                   <input type="number" step="0.01" min="0.01" value={newAmount} onChange={e => setNewAmount(e.target.value)}
                     style={{ padding: '6px 10px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', width: '100px' }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Date</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Date</label>
                   <input type="date" value={newDate} onChange={e => setNewDate(e.target.value)}
                     style={{ padding: '6px 10px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem' }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Method</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Method</label>
                   <input type="text" value={newMethod} onChange={e => setNewMethod(e.target.value)} placeholder="Cash, Zelle..."
                     style={{ padding: '6px 10px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', width: '120px' }} />
                 </div>
                 <div style={{ flex: 1, minWidth: '120px' }}>
-                  <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Description</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '4px' }}>Description</label>
                   <input type="text" value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Q2 2026 dues"
                     style={{ padding: '6px 10px', border: '1px solid var(--line)', borderRadius: '6px', fontSize: '0.82rem', width: '100%' }} />
                 </div>
@@ -379,8 +379,8 @@ export default function FinancesPage() {
                             <td><input type="text" value={editDesc} onChange={e => setEditDesc(e.target.value)} style={{ padding: '4px 6px', border: '1px solid var(--line)', borderRadius: '4px', fontSize: '0.78rem', width: '120px' }} /></td>
                             <td style={{ textAlign: 'right' }}>
                               <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                                <button onClick={saveEdit} disabled={editSaving} style={{ padding: '3px 10px', background: 'var(--gold)', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer' }}>{editSaving ? '...' : 'Save'}</button>
-                                <button onClick={() => setEditingId(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Cancel</button>
+                                <button onClick={saveEdit} disabled={editSaving} style={{ padding: '3px 10px', background: 'var(--gold)', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>{editSaving ? '...' : 'Save'}</button>
+                                <button onClick={() => setEditingId(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Cancel</button>
                               </div>
                             </td>
                           </tr>
@@ -393,14 +393,14 @@ export default function FinancesPage() {
                             <td style={{ textAlign: 'right' }}>
                               {deleteConfirm === c.id ? (
                                 <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                  <span style={{ fontSize: '0.72rem', color: '#8B2020' }}>Delete?</span>
-                                  <button onClick={() => deleteContribution(c.id)} disabled={deleting} style={{ padding: '3px 10px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer' }}>{deleting ? '...' : 'Yes'}</button>
-                                  <button onClick={() => setDeleteConfirm(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>No</button>
+                                  <span style={{ fontSize: '0.75rem', color: '#8B2020' }}>Delete?</span>
+                                  <button onClick={() => deleteContribution(c.id)} disabled={deleting} style={{ padding: '3px 10px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>{deleting ? '...' : 'Yes'}</button>
+                                  <button onClick={() => setDeleteConfirm(null)} style={{ padding: '3px 10px', background: '#eee', color: '#555', border: 'none', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>No</button>
                                 </div>
                               ) : (
                                 <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                                  <button onClick={() => startEdit(c)} style={{ padding: '3px 10px', background: 'var(--gold-dim)', color: 'var(--night)', border: '1px solid rgba(212,160,23,0.3)', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Edit</button>
-                                  <button onClick={() => setDeleteConfirm(c.id)} style={{ padding: '3px 10px', background: '#FFF0F0', color: '#8B2020', border: '1px solid #E8AAAA', borderRadius: '4px', fontSize: '0.72rem', cursor: 'pointer' }}>Delete</button>
+                                  <button onClick={() => startEdit(c)} style={{ padding: '3px 10px', background: 'var(--gold-dim)', color: 'var(--night)', border: '1px solid rgba(212,160,23,0.3)', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Edit</button>
+                                  <button onClick={() => setDeleteConfirm(c.id)} style={{ padding: '3px 10px', background: '#FFF0F0', color: '#8B2020', border: '1px solid #E8AAAA', borderRadius: '4px', fontSize: '0.75rem', cursor: 'pointer' }}>Delete</button>
                                 </div>
                               )}
                             </td>

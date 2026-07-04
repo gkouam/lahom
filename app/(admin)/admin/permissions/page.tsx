@@ -228,7 +228,7 @@ export default function PermissionsPage() {
               <th>Member</th>
               <th>Officer Title</th>
               {ALL_PERMISSIONS.map(p => (
-                <th key={p} style={{ textAlign: 'center', fontSize: '0.72rem', padding: '10px 6px' }}>
+                <th key={p} style={{ textAlign: 'center', fontSize: '0.75rem', padding: '10px 6px' }}>
                   {PERMISSION_LABELS[p]}
                 </th>
               ))}
@@ -249,7 +249,7 @@ export default function PermissionsPage() {
                       </div>
                       <div>
                         <div className="member-name">{user.name || '—'}</div>
-                        <div style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{user.email}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{user.email}</div>
                         {isSuperAdmin && (
                           <span style={{
                             display: 'inline-block',
@@ -258,7 +258,7 @@ export default function PermissionsPage() {
                             color: 'var(--gold-dark, #8B6914)',
                             padding: '1px 8px',
                             borderRadius: '100px',
-                            fontSize: '0.68rem',
+                            fontSize: '0.75rem',
                             fontWeight: 700,
                           }}>Super Admin</span>
                         )}
@@ -292,7 +292,7 @@ export default function PermissionsPage() {
                               color: 'white',
                               border: 'none',
                               borderRadius: '6px',
-                              fontSize: '0.72rem',
+                              fontSize: '0.75rem',
                               fontWeight: 700,
                               cursor: 'pointer',
                               whiteSpace: 'nowrap',
@@ -302,7 +302,7 @@ export default function PermissionsPage() {
                           </button>
                         )}
                       </div>
-                      <span style={{ fontSize: '0.68rem', color: 'var(--muted)', fontStyle: 'italic' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontStyle: 'italic' }}>
                         Display title only — does not grant permissions.
                       </span>
                     </div>

@@ -141,7 +141,7 @@ export default function MemberEventsPage() {
       <div key={e.id} className="dash-content-card" style={isPast ? { opacity: 0.75 } : undefined}>
         <div style={{ padding: '20px' }}>
           {fallback && (
-            <div style={{ padding: '6px 10px', borderRadius: '6px', fontSize: '0.72rem', marginBottom: '10px', background: '#FFF3CD', color: '#856404', fontStyle: 'italic', display: 'inline-block' }}>
+            <div style={{ padding: '6px 10px', borderRadius: '6px', fontSize: '0.75rem', marginBottom: '10px', background: '#FFF3CD', color: '#856404', fontStyle: 'italic', display: 'inline-block' }}>
               {t(fallback)}
             </div>
           )}
@@ -180,7 +180,7 @@ export default function MemberEventsPage() {
 
           {/* Roster toggle */}
           <button onClick={() => toggleRoster(e.id)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold)', fontSize: '0.78rem', fontWeight: 600, padding: 0 }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold-ink)', fontSize: '0.78rem', fontWeight: 600, padding: 0 }}>
             {openRosterId === e.id ? t('eventsPage.hideWho') : t('eventsPage.seeWho')}
           </button>
 
@@ -293,7 +293,7 @@ export default function MemberEventsPage() {
           </div>
 
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
-            <Link href="/dashboard" style={{ color: 'var(--gold)', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}>
+            <Link href="/dashboard" style={{ color: 'var(--gold-ink)', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}>
               &larr; {t('auth.dashboard')}
             </Link>
           </div>

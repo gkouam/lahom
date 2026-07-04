@@ -71,14 +71,14 @@ export default function EventsSection() {
                       <span className="ev-mo">{month}</span>
                     </div>
                     {event.isFull && (
-                      <span style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(139,32,32,0.92)', color: 'white', padding: '4px 12px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.02em' }}>
+                      <span style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(139,32,32,0.92)', color: 'white', padding: '4px 12px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.02em' }}>
                         {t('eventsPage.full')}
                       </span>
                     )}
                   </div>
                   <div className="ev-body">
                     {fallback && (
-                      <p style={{ fontSize: '0.7rem', color: '#856404', fontStyle: 'italic', marginBottom: '6px' }}>
+                      <p style={{ fontSize: '0.75rem', color: '#856404', fontStyle: 'italic', marginBottom: '6px' }}>
                         {t(fallback)}
                       </p>
                     )}

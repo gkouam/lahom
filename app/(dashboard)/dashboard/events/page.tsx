@@ -193,7 +193,7 @@ export default function MemberEventsPage() {
                   ['eventsPage.whoNotGoing', roster.notGoing],
                 ] as const).map(([labelKey, list]) => (
                   <div key={labelKey}>
-                    <div style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--night)', marginBottom: '6px' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--night)', marginBottom: '6px' }}>
                       {t(labelKey)} ({list.length})
                     </div>
                     {list.length === 0 ? (

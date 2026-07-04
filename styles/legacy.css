@@ -1806,7 +1806,7 @@ footer {
   height: 20px;
 }
 
-.stat-icon-circle.gold { background: var(--gold-dim); color: var(--gold); }
+.stat-icon-circle.gold { background: var(--gold-dim); color: var(--gold-ink); }
 .stat-icon-circle.amber { background: rgba(245,158,11,0.12); color: #F59E0B; }
 .stat-icon-circle.green { background: rgba(45,106,79,0.12); color: var(--forest-mid); }
 .stat-icon-circle.red { background: rgba(164,36,59,0.12); color: var(--wine-bright); }
@@ -2300,7 +2300,7 @@ footer {
   height: 18px;
 }
 
-.quick-action-btn .qa-icon.gold { background: var(--gold-dim); color: var(--gold); }
+.quick-action-btn .qa-icon.gold { background: var(--gold-dim); color: var(--gold-ink); }
 .quick-action-btn .qa-icon.green { background: rgba(45,106,79,0.12); color: var(--forest-mid); }
 .quick-action-btn .qa-icon.clay { background: rgba(139,79,34,0.12); color: var(--clay); }
 .quick-action-btn .qa-icon.wine { background: rgba(164,36,59,0.1); color: var(--wine-bright); }
@@ -2525,7 +2525,7 @@ footer {
 .admin-tools-btn svg {
   width: 18px;
   height: 18px;
-  color: var(--gold);
+  color: var(--gold-ink);
   flex-shrink: 0;
 }
 
@@ -3139,7 +3139,7 @@ footer {
 .dash-card-header svg {
   width: 20px;
   height: 20px;
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 
 .dash-card-header h3 {

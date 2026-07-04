@@ -217,9 +217,7 @@ export default function MemberEventsPage() {
 
   if (loading) {
     return (
-      <div className="dash-layout">
-        <main className="dash-main">
-          <div className="dash-main-inner">
+      <div>
             <div style={{ textAlign: 'center', padding: '80px 24px', color: 'var(--muted)' }}>
               <svg width="40" height="40" viewBox="0 0 44 44" fill="none" style={{ margin: '0 auto 16px', opacity: 0.3 }}>
                 <path d="M22 2L42 22L22 42L2 22Z" stroke="var(--gold, #D4A017)" strokeWidth="1.6" />
@@ -228,15 +226,11 @@ export default function MemberEventsPage() {
               <p>{t('eventsPage.title')}...</p>
             </div>
           </div>
-        </main>
-      </div>
     )
   }
 
   return (
-    <div className="dash-layout">
-      <main className="dash-main">
-        <div className="dash-main-inner">
+    <div>
           <div className="topbar">
             <div className="topbar-left">
               <h1>{t('eventsPage.title')}</h1>
@@ -298,7 +292,5 @@ export default function MemberEventsPage() {
             </Link>
           </div>
         </div>
-      </main>
-    </div>
   )
 }

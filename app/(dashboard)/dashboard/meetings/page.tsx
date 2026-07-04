@@ -58,9 +58,7 @@ export default function MeetingsPage() {
 
   if (loading) {
     return (
-      <div className="dash-layout">
-        <main className="dash-main">
-          <div className="dash-main-inner">
+      <div>
             <div style={{ textAlign: 'center', padding: '80px 24px', color: 'var(--muted)' }}>
               <svg width="40" height="40" viewBox="0 0 44 44" fill="none" style={{ margin: '0 auto 16px', opacity: 0.3 }}>
                 <path d="M22 2L42 22L22 42L2 22Z" stroke="var(--gold, #D4A017)" strokeWidth="1.6" />
@@ -69,8 +67,6 @@ export default function MeetingsPage() {
               <p>{t('meetings.title')}...</p>
             </div>
           </div>
-        </main>
-      </div>
     )
   }
 
@@ -78,9 +74,7 @@ export default function MeetingsPage() {
   if (selectedNote) {
     const { title, body, fallback } = resolveContent(selectedNote, lang)
     return (
-      <div className="dash-layout">
-        <main className="dash-main">
-          <div className="dash-main-inner">
+      <div>
             <div className="topbar">
               <div className="topbar-left">
                 <h1>{t('meetings.title')}</h1>
@@ -125,16 +119,12 @@ export default function MeetingsPage() {
               </div>
             </div>
           </div>
-        </main>
-      </div>
     )
   }
 
   // List view
   return (
-    <div className="dash-layout">
-      <main className="dash-main">
-        <div className="dash-main-inner">
+    <div>
           <div className="topbar">
             <div className="topbar-left">
               <h1>{t('meetings.title')}</h1>
@@ -199,7 +189,5 @@ export default function MeetingsPage() {
             </Link>
           </div>
         </div>
-      </main>
-    </div>
   )
 }

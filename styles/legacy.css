@@ -565,6 +565,17 @@ nav {
   font-weight: 700;
   color: var(--forest);
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.value-diamond {
+  width: 7px;
+  height: 7px;
+  background: var(--gold-ink);
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 
 .value-card p {
@@ -967,6 +978,7 @@ nav {
   color: var(--forest-mid);
   font-weight: 600;
   letter-spacing: 0.04em;
+  text-wrap: balance;
 }
 
 /* ═══ JOIN / CTA ═══ */

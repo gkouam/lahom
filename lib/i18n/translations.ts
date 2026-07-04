@@ -28,6 +28,28 @@ export const translations: Record<string, { en: string; fr: string }> = {
     fr: 'Le peuple Baham est l\'une des fières chefferies de la nation Bamiléké dans la Région de l\'Ouest du Cameroun. Reconnus pour notre art sophistiqué, notre gouvernance hiérarchique sous le Fon (chef) et nos expressions culturelles vibrantes, nous avons porté ces traditions à travers les océans pour bâtir une communauté à Dallas, Texas.',
   },
 
+  // Heritage value cards
+  'heritage.value1.title': { en: 'Royal Tradition', fr: 'Tradition Royale' },
+  'heritage.value1.desc': {
+    en: 'Honoring the Fon and our ancestral governance — a legacy of wisdom and leadership.',
+    fr: 'Honorer le Fon et notre gouvernance ancestrale — un héritage de sagesse et de leadership.',
+  },
+  'heritage.value2.title': { en: 'Unity (Nkam)', fr: 'Unité (Nkam)' },
+  'heritage.value2.desc': {
+    en: 'Coming together as one family across borders, supporting each other in the diaspora.',
+    fr: 'Nous rassembler comme une seule famille au-delà des frontières, nous soutenant dans la diaspora.',
+  },
+  'heritage.value3.title': { en: 'Cultural Preservation', fr: 'Préservation Culturelle' },
+  'heritage.value3.desc': {
+    en: 'Keeping our language, dance, music, and art alive for the next generation.',
+    fr: 'Faire vivre notre langue, nos danses, notre musique et notre art pour la prochaine génération.',
+  },
+  'heritage.value4.title': { en: 'Community Impact', fr: 'Impact Communautaire' },
+  'heritage.value4.desc': {
+    en: 'Building bridges between our Cameroon roots and our American home.',
+    fr: 'Bâtir des ponts entre nos racines camerounaises et notre foyer américain.',
+  },
+
   // Baham Location
   'location.label': { en: 'Our Homeland', fr: 'Notre Patrie' },
   'location.title': { en: 'Baham — Heart of the<br>Cameroon Grassfields', fr: 'Baham — Cœur des<br>Grassfields du Cameroun' },

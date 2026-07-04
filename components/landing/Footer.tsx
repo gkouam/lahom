@@ -26,18 +26,12 @@ export default function Footer() {
             <h4>Community</h4>
             <ul>
               <li><a href="#join">Become a Member</a></li>
-              <li><a href="#">Donate</a></li>
-              <li><a href="#">Youth Programs</a></li>
-              <li><a href="#">Volunteer</a></li>
             </ul>
           </div>
           <div className="footer-col">
             <h4>Connect</h4>
             <ul>
-              <li><a href="#">Facebook</a></li>
               <li><a href="https://chat.whatsapp.com/FdXvBZ537ZdFfJvENDernh" target="_blank" rel="noopener">WhatsApp Group</a></li>
-              <li><a href="#">Instagram</a></li>
-              <li><a href="#">YouTube</a></li>
             </ul>
           </div>
         </div>

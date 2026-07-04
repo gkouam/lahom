@@ -6,7 +6,7 @@ const leaders = [
   { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu', image: '/images/president-wassu.jpg', imagePosition: 'center 20%' },
   { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam', image: '/images/vp-kouam.jpg', imagePosition: 'center 30%' },
   { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu', image: '/images/secretary-domleu.jpg', imagePosition: 'center 15%' },
-  { initial: 'T', title: 'Treasurer', role: 'Mr. Francis TEBANG TE BUH TAGNE TEBUWAH', image: '/images/treasurer-tebang.jpg' },
+  { initial: 'T', title: 'Treasurer', role: 'Mr. Francis Tebang Te Buh Tagne Tebuwah', image: '/images/treasurer-tebang.jpg' },
 ]
 
 export default function LeadershipSection() {

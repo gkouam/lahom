@@ -41,22 +41,12 @@ export default function HeritageSection() {
             <p>{t('heritage.desc')}</p>
 
             <div className="heritage-values">
-              <div className="value-card">
-                <h4>◆ Royal Tradition</h4>
-                <p>Honoring the Fon and our ancestral governance — a legacy of wisdom and leadership.</p>
-              </div>
-              <div className="value-card">
-                <h4>◆ Unity (Nkam)</h4>
-                <p>Coming together as one family across borders, supporting each other in the diaspora.</p>
-              </div>
-              <div className="value-card">
-                <h4>◆ Cultural Preservation</h4>
-                <p>Keeping our language, dance, music, and art alive for the next generation.</p>
-              </div>
-              <div className="value-card">
-                <h4>◆ Community Impact</h4>
-                <p>Building bridges between our Cameroon roots and our American home.</p>
-              </div>
+              {[1, 2, 3, 4].map(n => (
+                <div className="value-card" key={n}>
+                  <h4><span className="value-diamond" aria-hidden="true" />{t(`heritage.value${n}.title`)}</h4>
+                  <p>{t(`heritage.value${n}.desc`)}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

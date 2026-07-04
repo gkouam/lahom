@@ -85,8 +85,24 @@ export default function EventsSection() {
                     <h3>{title}</h3>
                     <p>{desc}</p>
                     <div className="ev-meta">
-                      {event.location && <span>📍 {event.location}</span>}
-                      {event.time && <span>🕐 {event.time}</span>}
+                      {event.location && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                            <circle cx="12" cy="10" r="3" />
+                          </svg>
+                          {event.location}
+                        </span>
+                      )}
+                      {event.time && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          {event.time}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </article>

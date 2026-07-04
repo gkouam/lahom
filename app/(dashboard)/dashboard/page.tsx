@@ -617,9 +617,13 @@ export default function DashboardPage() {
             <div className="dash-content-card-header">
               <h3>{t('activity.title')}</h3>
               {activity.length > 5 && (
-                <a href="#" onClick={(e) => { e.preventDefault(); setShowAllActivity(v => !v) }}>
+                <button
+                  type="button"
+                  onClick={() => setShowAllActivity(v => !v)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold-ink)', fontSize: '0.78rem', fontWeight: 600, padding: 0 }}
+                >
                   {showAllActivity ? t('activity.viewLess') : t('activity.viewMore')}
-                </a>
+                </button>
               )}
             </div>
             <div className="dash-content-card-body">

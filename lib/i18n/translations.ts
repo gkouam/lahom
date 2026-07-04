@@ -242,6 +242,31 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'reports.noEvents': { en: 'No events in this period.', fr: 'Aucun événement sur cette période.' },
   'reports.loading': { en: 'Loading reports…', fr: 'Chargement des rapports…' },
 
+  // Admin messages
+  'messages.title': { en: 'Messages', fr: 'Messages' },
+  'messages.subtitle': { en: 'Membership requests and inquiries', fr: 'Demandes d\'adhésion et messages' },
+  'messages.filter.all': { en: 'All', fr: 'Tous' },
+  'messages.filter.unread': { en: 'Unread', fr: 'Non lus' },
+  'messages.filter.join': { en: 'Join requests', fr: 'Demandes d\'adhésion' },
+  'messages.joinRequest': { en: 'Join request', fr: 'Demande d\'adhésion' },
+  'messages.empty': { en: 'No messages.', fr: 'Aucun message.' },
+  'messages.selectPrompt': { en: 'Select a message to read.', fr: 'Sélectionnez un message à lire.' },
+  'messages.loading': { en: 'Loading messages…', fr: 'Chargement des messages…' },
+  'messages.email': { en: 'Email', fr: 'E-mail' },
+  'messages.phone': { en: 'Phone', fr: 'Téléphone' },
+  'messages.hometown': { en: 'Hometown', fr: 'Ville d\'origine' },
+  'messages.noMessage': { en: 'No message provided.', fr: 'Aucun message fourni.' },
+  'messages.callout': {
+    en: 'Approving marks this request as approved so you can invite the person to register at the sign-up page. It does not create an account automatically.',
+    fr: 'Approuver marque cette demande comme approuvée afin que vous puissiez inviter la personne à s\'inscrire. Cela ne crée pas de compte automatiquement.',
+  },
+  'messages.approve': { en: 'Approve & Invite', fr: 'Approuver & Inviter' },
+  'messages.decline': { en: 'Decline', fr: 'Refuser' },
+  'messages.replyByEmail': { en: 'Reply by Email', fr: 'Répondre par E-mail' },
+  'messages.status.PENDING': { en: 'Pending', fr: 'En attente' },
+  'messages.status.APPROVED': { en: 'Approved', fr: 'Approuvé' },
+  'messages.status.REJECTED': { en: 'Declined', fr: 'Refusé' },
+
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },
   'form.emailInvalid': { en: 'Please enter a valid email address.', fr: 'Veuillez entrer une adresse e-mail valide.' },

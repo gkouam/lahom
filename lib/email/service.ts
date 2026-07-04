@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { renderEmail, paragraph, divider } from './templates'
 
 let resend: Resend | null = null
 
@@ -15,40 +16,10 @@ const FROM_EMAIL = 'Baham Dallas <noreply@send.lahomdfw.org>'
 const REPLY_TO = 'info@lahomdfw.org'
 const APP_NAME = 'Baham Bamiléké Dallas'
 
+// Member-facing emails are bilingual (English first, then French) because no
+// per-user language preference is stored. Admin-facing mail stays English.
+
 export const emailService = {
-  async sendWelcomeEmail(email: string, name: string) {
-    try {
-      const resendClient = getResend()
-      if (!resendClient) {
-        console.error('Email service not configured')
-        return { success: false, error: 'Email service not configured' }
-      }
-
-      const { data, error } = await resendClient.emails.send({
-        from: FROM_EMAIL,
-        replyTo: REPLY_TO,
-        to: email,
-        subject: `Welcome to ${APP_NAME}!`,
-        html: `
-          <h1>Welcome, ${name}!</h1>
-          <p>Thank you for joining the ${APP_NAME} community.</p>
-          <p>Together we preserve our Baham heritage and strengthen our community in the Dallas–Fort Worth metroplex.</p>
-          <p><strong>"Nkam si lah" — Unity is Strength</strong></p>
-        `,
-        text: `Welcome, ${name}!\n\nThank you for joining the ${APP_NAME} community.\n\nTogether we preserve our Baham heritage and strengthen our community in the Dallas–Fort Worth metroplex.\n\n"Nkam si lah" — Unity is Strength`,
-      })
-
-      if (error) {
-        console.error('Failed to send welcome email:', error)
-        return { success: false, error }
-      }
-      return { success: true, data }
-    } catch (error) {
-      console.error('Welcome email error:', error)
-      return { success: false, error }
-    }
-  },
-
   async sendVerificationEmail(email: string, name: string, verificationToken: string) {
     try {
       const verificationLink = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`
@@ -63,21 +34,18 @@ export const emailService = {
         from: FROM_EMAIL,
         replyTo: REPLY_TO,
         to: email,
-        subject: 'Verify your email — Baham Bamiléké Dallas',
-        html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
-            <h1 style="color: #1A1A1A;">Welcome to Baham Bamiléké Dallas, ${name}!</h1>
-            <p>Please verify your email address by clicking the button below:</p>
-            <p style="text-align: center; margin: 32px 0;">
-              <a href="${verificationLink}" style="background-color: #D4A017; color: #1A1A1A; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Verify Email</a>
-            </p>
-            <p style="font-size: 14px; color: #666;">Or copy this link: ${verificationLink}</p>
-            <p style="font-size: 14px; color: #666;">This link expires in 24 hours.</p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
-            <p style="font-size: 12px; color: #999;">"Nkam si lah" — Unity is Strength</p>
-          </div>
-        `,
-        text: `Welcome to Baham Bamiléké Dallas, ${name}!\n\nPlease verify your email: ${verificationLink}\n\nThis link expires in 24 hours.`,
+        subject: 'Verify your email · Vérifiez votre e-mail — Baham Dallas',
+        html: renderEmail({
+          preheader: 'Confirm your email to activate your account · Confirmez votre e-mail pour activer votre compte',
+          title: `Welcome, ${name}! · Bienvenue, ${name}&nbsp;!`,
+          bodyHtml:
+            paragraph(`Please verify your email address to finish setting up your ${APP_NAME} account. This link expires in 24 hours.`) +
+            divider() +
+            paragraph(`Veuillez vérifier votre adresse e-mail pour terminer la création de votre compte ${APP_NAME}. Ce lien expire dans 24&nbsp;heures.`),
+          cta: { label: "Verify Email · Vérifier l'e-mail", url: verificationLink },
+          footnoteHtml: `Or copy this link / Ou copiez ce lien&nbsp;: ${verificationLink}`,
+        }),
+        text: `Welcome, ${name}!\n\nPlease verify your email to finish setting up your ${APP_NAME} account (expires in 24 hours):\n${verificationLink}\n\n---\n\nBienvenue, ${name} !\n\nVeuillez vérifier votre adresse e-mail pour terminer la création de votre compte ${APP_NAME} (expire dans 24 heures) :\n${verificationLink}`,
       })
 
       if (error) {
@@ -105,19 +73,18 @@ export const emailService = {
         from: FROM_EMAIL,
         replyTo: REPLY_TO,
         to: email,
-        subject: 'Reset your password — Baham Bamiléké Dallas',
-        html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
-            <h1 style="color: #1A1A1A;">Password Reset</h1>
-            <p>Hi ${name}, we received a request to reset your password.</p>
-            <p style="text-align: center; margin: 32px 0;">
-              <a href="${resetLink}" style="background-color: #D4A017; color: #1A1A1A; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Reset Password</a>
-            </p>
-            <p style="font-size: 14px; color: #666;">Or copy this link: ${resetLink}</p>
-            <p style="font-size: 14px; color: #666;">This link expires in 1 hour. If you didn't request this, ignore this email.</p>
-          </div>
-        `,
-        text: `Password Reset\n\nHi ${name}, reset your password here: ${resetLink}\n\nThis link expires in 1 hour.`,
+        subject: 'Reset your password · Réinitialisez votre mot de passe — Baham Dallas',
+        html: renderEmail({
+          preheader: 'Password reset link (expires in 1 hour) · Lien de réinitialisation (expire dans 1 heure)',
+          title: 'Password reset · Réinitialisation du mot de passe',
+          bodyHtml:
+            paragraph(`Hi ${name}, we received a request to reset your password. This link expires in 1 hour. If you didn't request this, you can safely ignore this email.`) +
+            divider() +
+            paragraph(`Bonjour ${name}, nous avons reçu une demande de réinitialisation de votre mot de passe. Ce lien expire dans 1&nbsp;heure. Si vous n'êtes pas à l'origine de cette demande, ignorez simplement ce message.`),
+          cta: { label: 'Reset Password · Réinitialiser', url: resetLink },
+          footnoteHtml: `Or copy this link / Ou copiez ce lien&nbsp;: ${resetLink}`,
+        }),
+        text: `Password reset\n\nHi ${name}, reset your password here (expires in 1 hour):\n${resetLink}\n\nIf you didn't request this, ignore this email.\n\n---\n\nRéinitialisation du mot de passe\n\nBonjour ${name}, réinitialisez votre mot de passe ici (expire dans 1 heure) :\n${resetLink}\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez ce message.`,
       })
 
       if (error) {
@@ -152,21 +119,14 @@ export const emailService = {
         replyTo: REPLY_TO,
         to: adminEmail,
         subject: `New member registration — ${userName}`,
-        html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
-            <h1 style="color: #1A1A1A;">New Member Registration</h1>
-            <p>A new user has registered and is awaiting your approval:</p>
-            <table style="margin: 20px 0; font-size: 14px;">
-              <tr><td style="padding: 4px 16px 4px 0; color: #666;"><strong>Name:</strong></td><td>${userName}</td></tr>
-              <tr><td style="padding: 4px 16px 4px 0; color: #666;"><strong>Email:</strong></td><td>${userEmail}</td></tr>
-            </table>
-            <p style="text-align: center; margin: 32px 0;">
-              <a href="${adminUrl}" style="background-color: #D4A017; color: #1A1A1A; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Review in Admin Panel</a>
-            </p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
-            <p style="font-size: 12px; color: #999;">${APP_NAME}</p>
-          </div>
-        `,
+        html: renderEmail({
+          preheader: `${userName} registered and is awaiting approval`,
+          title: 'New member registration',
+          bodyHtml:
+            paragraph('A new user has registered and is awaiting your approval:') +
+            paragraph(`<strong>Name:</strong> ${userName}<br><strong>Email:</strong> ${userEmail}`),
+          cta: { label: 'Review in Admin Panel', url: adminUrl },
+        }),
         text: `New member registration:\n\nName: ${userName}\nEmail: ${userEmail}\n\nReview at: ${adminUrl}`,
       })
 
@@ -195,18 +155,17 @@ export const emailService = {
         from: FROM_EMAIL,
         replyTo: REPLY_TO,
         to: email,
-        subject: `Welcome to ${APP_NAME} — Account Approved!`,
-        html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
-            <h1 style="color: #1A1A1A;">Welcome, ${name}!</h1>
-            <p>Great news — your account has been approved by a community admin. You now have full access to the Baham Bamiléké Dallas platform.</p>
-            <p style="text-align: center; margin: 32px 0;">
-              <a href="${loginUrl}" style="background-color: #D4A017; color: #1A1A1A; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Sign In Now</a>
-            </p>
-            <p><strong>"Nkam si lah" — Unity is Strength</strong></p>
-          </div>
-        `,
-        text: `Welcome, ${name}!\n\nYour account has been approved. Sign in at: ${loginUrl}\n\n"Nkam si lah" — Unity is Strength`,
+        subject: 'Account approved · Compte approuvé — Baham Dallas',
+        html: renderEmail({
+          preheader: 'Your account is approved — you can sign in now · Votre compte est approuvé — connectez-vous',
+          title: `Welcome, ${name}! · Bienvenue, ${name}&nbsp;!`,
+          bodyHtml:
+            paragraph(`Great news — your account has been approved by a community admin. You now have full access to the ${APP_NAME} member portal.`) +
+            divider() +
+            paragraph(`Bonne nouvelle — votre compte a été approuvé par un administrateur de la communauté. Vous avez maintenant pleinement accès à l'espace membre ${APP_NAME}.`),
+          cta: { label: 'Sign In · Se connecter', url: loginUrl },
+        }),
+        text: `Welcome, ${name}!\n\nYour account has been approved. Sign in at: ${loginUrl}\n\n---\n\nBienvenue, ${name} !\n\nVotre compte a été approuvé. Connectez-vous sur : ${loginUrl}`,
       })
 
       if (error) {
@@ -232,16 +191,16 @@ export const emailService = {
         from: FROM_EMAIL,
         replyTo: REPLY_TO,
         to: email,
-        subject: 'Thank you for your interest — Baham Bamiléké Dallas',
-        html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto;">
-            <h1 style="color: #1A1A1A;">Thank you, ${name}!</h1>
-            <p>We received your membership request for the Baham Bamiléké Community of Dallas.</p>
-            <p>A community leader will review your request and reach out to you soon.</p>
-            <p><strong>"Nkam si lah" — Unity is Strength</strong></p>
-          </div>
-        `,
-        text: `Thank you, ${name}!\n\nWe received your membership request. A community leader will reach out soon.\n\n"Nkam si lah" — Unity is Strength`,
+        subject: 'We received your request · Demande bien reçue — Baham Dallas',
+        html: renderEmail({
+          preheader: 'A community leader will review your request soon · Un responsable examinera votre demande bientôt',
+          title: `Thank you, ${name}! · Merci, ${name}&nbsp;!`,
+          bodyHtml:
+            paragraph('We received your membership request for the Baham Bamiléké Community of Dallas. A community leader will review it and reach out to you soon.') +
+            divider() +
+            paragraph("Nous avons bien reçu votre demande d'adhésion à la Communauté Baham Bamiléké de Dallas. Un responsable de la communauté l'examinera et vous contactera bientôt."),
+        }),
+        text: `Thank you, ${name}!\n\nWe received your membership request. A community leader will reach out soon.\n\n---\n\nMerci, ${name} !\n\nNous avons bien reçu votre demande d'adhésion. Un responsable vous contactera bientôt.`,
       })
 
       if (error) {

@@ -185,6 +185,19 @@ export const translations: Record<string, { en: string; fr: string }> = {
   // Relative time
   'time.now': { en: 'just now', fr: 'à l\'instant' },
 
+  // Admin chrome
+  'admin.controlPanel': { en: 'Control Panel', fr: 'Panneau de Contrôle' },
+  'admin.switchToMember': { en: 'Switch to Member Portal', fr: 'Passer à l\'Espace Membre' },
+  'admin.portal': { en: 'Portal', fr: 'Portail' },
+  'admin.members': { en: 'Members', fr: 'Membres' },
+  'admin.permissions': { en: 'Permissions', fr: 'Permissions' },
+  'admin.finances': { en: 'Finances', fr: 'Finances' },
+  'admin.meetings': { en: 'Meetings', fr: 'Réunions' },
+  'admin.events': { en: 'Events', fr: 'Événements' },
+  'admin.reports': { en: 'Reports', fr: 'Rapports' },
+  'admin.messages': { en: 'Messages', fr: 'Messages' },
+  'admin.signOut': { en: 'Sign Out', fr: 'Déconnexion' },
+
   // Form validation
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },
   'form.emailInvalid': { en: 'Please enter a valid email address.', fr: 'Veuillez entrer une adresse e-mail valide.' },

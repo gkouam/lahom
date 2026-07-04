@@ -85,9 +85,9 @@ function interpolate(template: string, params: Record<string, string>): string {
 // Membership-status dot color (green-only dot was misleading for BEHIND).
 const STANDING_DOT: Record<string, string> = {
   GOOD_STANDING: '#2D6A4F',
-  NEW: '#777',
-  BEHIND: '#D4A017',
-  EXEMPT: '#0C5460',
+  NEW: '#6D5C4A',
+  BEHIND: '#9A7410',
+  EXEMPT: '#1B4332',
 }
 
 export default function DashboardPage() {
@@ -309,14 +309,13 @@ export default function DashboardPage() {
               <p>{t('dash.motto')}</p>
             </div>
             <div className="topbar-actions">
-              <button title={t('dash.notifications')}>
+              <button title={t('dash.notifications')} aria-label={t('dash.notifications')}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                   <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                 </svg>
-                <span className="notification-dot" />
               </button>
-              <button title={t('dash.settings')}>
+              <button title={t('dash.settings')} aria-label={t('dash.settings')}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="3" />
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
@@ -357,9 +356,9 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-            <div className="dash-stat-card blue">
+            <div className="dash-stat-card clay">
               <div className="stat-card-inner">
-                <div className="stat-icon-circle blue">
+                <div className="stat-icon-circle clay">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
@@ -373,9 +372,9 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-            <div className="dash-stat-card clay">
+            <div className="dash-stat-card wine">
               <div className="stat-card-inner">
-                <div className="stat-icon-circle clay">
+                <div className="stat-icon-circle wine">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
@@ -408,12 +407,19 @@ export default function DashboardPage() {
                     const month = d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' })
                     const day = d.getDate()
                     const full = e.capacityFull && e.myRsvp !== 'GOING'
-                    const rsvpBtn = (response: 'GOING' | 'MAYBE' | 'NOT_GOING', labelKey: string, activeBg: string) => {
+                    const rsvpBtn = (response: 'GOING' | 'MAYBE' | 'NOT_GOING', labelKey: string) => {
                       const active = e.myRsvp === response
                       const disabled = rsvpBusy === e.id || (response === 'GOING' && full)
+                      const variant = active
+                        ? response === 'GOING'
+                          ? { background: 'var(--forest-mid)', color: 'white', border: 'none' }
+                          : response === 'MAYBE'
+                            ? { background: 'transparent', color: 'var(--ink)', border: '2px solid var(--gold)' }
+                            : { background: 'var(--muted)', color: 'white', border: 'none' }
+                        : { background: 'white', color: disabled ? 'var(--muted)' : 'var(--night)', border: '1px solid var(--line)' }
                       return (
                         <button onClick={() => setRsvp(e.id, response, e.myRsvp)} disabled={disabled}
-                          style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: disabled ? 'default' : 'pointer', border: active ? 'none' : '1px solid var(--line)', background: active ? activeBg : 'white', color: active ? 'white' : (disabled ? 'var(--muted)' : 'var(--night)'), opacity: disabled && !active ? 0.5 : 1 }}>
+                          style={{ minHeight: '44px', padding: '0 20px', borderRadius: '10px', fontSize: '0.8125rem', fontWeight: 700, cursor: disabled ? 'default' : 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: disabled && !active ? 0.5 : 1, ...variant }}>
                           {t(labelKey)}
                         </button>
                       )
@@ -434,9 +440,9 @@ export default function DashboardPage() {
                           </p>
                         </div>
                         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', width: '100%', marginTop: '8px' }}>
-                          {rsvpBtn('GOING', 'eventsPage.rsvp.going', 'var(--forest, #2D6A4F)')}
-                          {rsvpBtn('MAYBE', 'eventsPage.rsvp.maybe', 'var(--gold, #D4A017)')}
-                          {rsvpBtn('NOT_GOING', 'eventsPage.rsvp.notGoing', 'var(--muted, #777)')}
+                          {rsvpBtn('GOING', 'eventsPage.rsvp.going')}
+                          {rsvpBtn('MAYBE', 'eventsPage.rsvp.maybe')}
+                          {rsvpBtn('NOT_GOING', 'eventsPage.rsvp.notGoing')}
                         </div>
                       </div>
                     )
@@ -627,8 +633,28 @@ export default function DashboardPage() {
                   const message = activityMessage(it)
                   const row = (
                     <>
-                      <div className="activity-avatar" title={personal ? t('activity.you') : t('activity.community')}>
-                        {personal ? '👤' : '🏘️'}
+                      <div
+                        className="activity-avatar"
+                        title={personal ? t('activity.you') : t('activity.community')}
+                        aria-hidden="true"
+                        style={{
+                          width: '36px',
+                          height: '36px',
+                          background: personal ? 'rgba(212,160,23,0.15)' : 'rgba(45,106,79,0.12)',
+                          color: personal ? 'var(--gold-ink)' : 'var(--forest-mid)',
+                        }}
+                      >
+                        {personal ? (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                          </svg>
+                        )}
                       </div>
                       <div style={{ flex: 1 }}>
                         <div className="activity-text">{message}</div>

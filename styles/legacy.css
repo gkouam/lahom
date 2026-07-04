@@ -2767,8 +2767,8 @@ footer {
 
 .dash-stat-card.gold::before { background: var(--gold); }
 .dash-stat-card.green::before { background: var(--forest-mid); }
-.dash-stat-card.blue::before { background: #3B82F6; }
 .dash-stat-card.clay::before { background: var(--clay); }
+.dash-stat-card.wine::before { background: var(--wine-bright); }
 
 .dash-stat-card .stat-card-inner {
   display: flex;
@@ -2793,8 +2793,8 @@ footer {
   line-height: 1;
 }
 
-.stat-icon-circle.blue { background: rgba(59,130,246,0.12); color: #3B82F6; }
 .stat-icon-circle.clay { background: rgba(139,79,34,0.12); color: var(--clay); }
+.stat-icon-circle.wine { background: rgba(164,36,59,0.1); color: var(--wine-bright); }
 
 /* ── Dashboard Content Grid ── */
 .dash-content-grid {

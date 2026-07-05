@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run lint:type-floor && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint && npm run lint:type-floor",
+    "lint:type-floor": "bash scripts/check-type-floor.sh",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts"

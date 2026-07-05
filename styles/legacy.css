@@ -3575,6 +3575,28 @@ footer {
   .dash-mobile-header .header-action svg { width: 18px; height: 18px; }
 }
 
+/* ═══ MOBILE: global ergonomics ═══ */
+@media (max-width: 767px) {
+  /* 1rem inputs stop iOS zoom-on-focus; 46px comfortable touch height */
+  .auth-input,
+  .join-form input,
+  .admin-search input {
+    font-size: 1rem;
+    min-height: 46px;
+  }
+
+  /* Language toggle up to a 44px tap target */
+  .lang-toggle {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lightbox { padding: 12px; }
+}
+
 /* ═══ REDUCED MOTION ═══ */
 @media (prefers-reduced-motion: reduce) {
   .hero-bg-img,

@@ -28,6 +28,7 @@
   --container: min(1240px, calc(100vw - 48px));
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

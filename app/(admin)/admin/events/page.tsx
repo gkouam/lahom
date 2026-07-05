@@ -43,7 +43,7 @@ function isValidPair(d: { title: string; description: string; titleFr: string; d
 
 const LANG_BADGE: Record<string, { bg: string; color: string }> = {
   'EN': { bg: '#D1ECF1', color: '#0C5460' },
-  'FR': { bg: '#FFF3CD', color: '#856404' },
+  'FR': { bg: '#FFF3CD', color: 'var(--gold-ink)' },
   'EN+FR': { bg: '#D4EDDA', color: '#155724' },
 }
 
@@ -249,7 +249,7 @@ export default function EventsAdminPage() {
             </div>
           </div>
 
-          <div style={{ padding: '10px 14px', borderRadius: '8px', fontSize: '0.78rem', marginBottom: '16px', background: valid ? '#D4EDDA' : '#FFF3CD', color: valid ? '#155724' : '#856404' }}>
+          <div style={{ padding: '10px 14px', borderRadius: '8px', fontSize: '0.78rem', marginBottom: '16px', background: valid ? '#D4EDDA' : '#FFF3CD', color: valid ? '#155724' : 'var(--gold-ink)' }}>
             {valid ? 'At least one complete language pair filled.' : 'Fill at least one complete language pair (title + description). The other is optional — members will see what\'s available.'}
           </div>
 

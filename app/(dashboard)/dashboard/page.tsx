@@ -494,7 +494,7 @@ export default function DashboardPage() {
                   return (
                     <div key={note.id} style={{ padding: '12px 0', borderBottom: '1px solid var(--line)' }}>
                       {fallbackKey && (
-                        <div style={{ fontSize: '0.75rem', color: '#856404', fontStyle: 'italic', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--gold-ink)', fontStyle: 'italic', marginBottom: '4px' }}>
                           {t(fallbackKey)}
                         </div>
                       )}

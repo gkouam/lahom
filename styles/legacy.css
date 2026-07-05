@@ -2438,7 +2438,7 @@ footer {
 }
 
 .activity-badge.approved { background: #D4EDDA; color: #155724; }
-.activity-badge.pending { background: #FFF3CD; color: #856404; }
+.activity-badge.pending { background: #FFF3CD; color: var(--gold-ink); }
 .activity-badge.new { background: rgba(212,160,23,0.15); color: var(--clay); }
 
 /* ── Event Item ── */

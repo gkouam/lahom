@@ -72,7 +72,7 @@ export default function AdminMembersPage() {
 
   const statusBadge = (status: string) => {
     const styles: Record<string, { bg: string; color: string }> = {
-      PENDING_APPROVAL: { bg: '#FFF3CD', color: '#856404' },
+      PENDING_APPROVAL: { bg: '#FFF3CD', color: 'var(--gold-ink)' },
       APPROVED: { bg: '#D4EDDA', color: '#155724' },
       REJECTED: { bg: '#F8D7DA', color: '#721C24' },
     }

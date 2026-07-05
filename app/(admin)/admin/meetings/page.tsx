@@ -47,7 +47,7 @@ function pairStatus(data: { title: string; body: string; titleFr: string; bodyFr
 
 const LANG_BADGE_STYLES: Record<string, { bg: string; color: string }> = {
   'EN': { bg: '#D1ECF1', color: '#0C5460' },
-  'FR': { bg: '#FFF3CD', color: '#856404' },
+  'FR': { bg: '#FFF3CD', color: 'var(--gold-ink)' },
   'EN+FR': { bg: '#D4EDDA', color: '#155724' },
 }
 
@@ -257,7 +257,7 @@ export default function MeetingsPage() {
             fontSize: '0.78rem',
             marginBottom: '16px',
             background: valid ? '#D4EDDA' : '#FFF3CD',
-            color: valid ? '#155724' : '#856404',
+            color: valid ? '#155724' : 'var(--gold-ink)',
           }}>
             {status}
           </div>

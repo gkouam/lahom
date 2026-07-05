@@ -97,7 +97,7 @@ export default function MeetingsPage() {
                     fontSize: '0.78rem',
                     marginBottom: '16px',
                     background: '#FFF3CD',
-                    color: '#856404',
+                    color: 'var(--gold-ink)',
                     fontStyle: 'italic',
                   }}>
                     {t(fallback)}
@@ -156,7 +156,7 @@ export default function MeetingsPage() {
                           fontSize: '0.75rem',
                           marginBottom: '10px',
                           background: '#FFF3CD',
-                          color: '#856404',
+                          color: 'var(--gold-ink)',
                           fontStyle: 'italic',
                           display: 'inline-block',
                         }}>

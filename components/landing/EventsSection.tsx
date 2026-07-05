@@ -78,7 +78,7 @@ export default function EventsSection() {
                   </div>
                   <div className="ev-body">
                     {fallback && (
-                      <p style={{ fontSize: '0.75rem', color: '#856404', fontStyle: 'italic', marginBottom: '6px' }}>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--gold-ink)', fontStyle: 'italic', marginBottom: '6px' }}>
                         {t(fallback)}
                       </p>
                     )}

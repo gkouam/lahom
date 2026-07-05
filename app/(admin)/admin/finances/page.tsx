@@ -23,7 +23,7 @@ interface Contribution {
 
 const STANDING_STYLES: Record<string, { bg: string; color: string; label: string }> = {
   GOOD_STANDING: { bg: '#D4EDDA', color: '#155724', label: 'Good Standing' },
-  BEHIND: { bg: '#FFF3CD', color: '#856404', label: 'Behind' },
+  BEHIND: { bg: '#FFF3CD', color: 'var(--gold-ink)', label: 'Behind' },
   NEW: { bg: '#E8E8E8', color: '#555', label: 'New' },
   EXEMPT: { bg: '#D1ECF1', color: '#0C5460', label: 'Exempt' },
 }

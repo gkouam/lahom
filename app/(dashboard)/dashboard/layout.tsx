@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from '@/lib/i18n/context'
+import MobileTabBar, { MobileTab } from '@/components/MobileTabBar'
 
 // Shared member-portal shell: sidebar + mobile bar wrap every /dashboard/*
 // page (mirrors the admin portal's shared layout).
@@ -18,6 +19,55 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const isHome = pathname === '/dashboard'
   const isEvents = pathname?.startsWith('/dashboard/events') ?? false
   const isMeetings = pathname?.startsWith('/dashboard/meetings') ?? false
+
+  const memberTabs: MobileTab[] = [
+    {
+      href: '/dashboard',
+      labelKey: 'dash.home',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="7" height="9" x="3" y="3" rx="1" />
+          <rect width="7" height="5" x="14" y="3" rx="1" />
+          <rect width="7" height="9" x="14" y="12" rx="1" />
+          <rect width="7" height="5" x="3" y="16" rx="1" />
+        </svg>
+      ),
+    },
+    {
+      href: '/dashboard/events',
+      labelKey: 'eventsPage.title',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+          <line x1="16" x2="16" y1="2" y2="6" />
+          <line x1="8" x2="8" y1="2" y2="6" />
+          <line x1="3" x2="21" y1="10" y2="10" />
+        </svg>
+      ),
+    },
+    {
+      href: '/dashboard/meetings',
+      labelKey: 'meetings.title',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" x2="8" y1="13" y2="13" />
+          <line x1="16" x2="8" y1="17" y2="17" />
+        </svg>
+      ),
+    },
+    {
+      href: '/dashboard#my-contributions',
+      labelKey: 'finances.dues',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      ),
+    },
+  ]
 
   return (
     <div className="dash-layout">
@@ -97,22 +147,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      {/* Mobile Top Bar */}
-      <div className="dash-mobile-bar">
+      {/* Mobile compact header */}
+      <header className="dash-mobile-header mobile-only">
         <div className="kente-bar" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px' }} />
-        <Link href="/dashboard" className="dash-mobile-brand" style={{ textDecoration: 'none' }}>
-          <svg width="24" height="24" viewBox="0 0 44 44" fill="none">
-            <path d="M22 2L42 22L22 42L2 22Z" stroke="var(--gold, #D4A017)" strokeWidth="1.6" />
-            <circle cx="22" cy="22" r="3.5" fill="var(--gold, #D4A017)" />
-          </svg>
-          Baham Portal
-        </Link>
-        <div className="dash-mobile-nav">
-          <Link href="/dashboard" className={isHome ? 'active' : ''}>{t('dash.home')}</Link>
-          {hasAdminAccess && <Link href="/admin/members">{t('dash.admin')}</Link>}
-          <button onClick={() => signOut({ callbackUrl: '/' })}>{t('auth.signout')}</button>
+        <div className="header-avatar" aria-hidden="true">{initial}</div>
+        <div className="header-welcome">
+          <small>{t('dash.welcome')}</small>
+          <strong>{user?.name || 'Member'}</strong>
         </div>
-      </div>
+        {hasAdminAccess && (
+          <Link href="/admin/members" className="header-action" aria-label={t('dash.admin')}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+            </svg>
+          </Link>
+        )}
+        <button className="header-action" onClick={() => signOut({ callbackUrl: '/' })} aria-label={t('auth.signout')}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </header>
 
       {/* Main Content */}
       <main className="dash-main">
@@ -120,6 +177,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </div>
       </main>
+
+      <MobileTabBar tabs={memberTabs} />
     </div>
   )
 }

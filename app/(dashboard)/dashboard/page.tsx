@@ -204,8 +204,8 @@ export default function DashboardPage() {
 
   return (
     <>
-          {/* TopBar */}
-          <div className="topbar">
+          {/* TopBar (desktop; the layout's compact header covers mobile) */}
+          <div className="topbar desktop-only">
             <div className="topbar-left">
               <h1>{t('dash.welcome')} <span style={{ color: 'var(--gold-ink)' }}>{user?.name || 'Member'}</span></h1>
               <p>{t('dash.motto')}</p>

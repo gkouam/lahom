@@ -3214,13 +3214,13 @@ footer {
 }
 
 /* ═══ MOBILE: visibility utilities ═══ */
-@media (max-width: 767px) { .desktop-only { display: none !important; } }
-@media (min-width: 768px) { .mobile-only { display: none !important; } }
+@media (max-width: 768px) { .desktop-only { display: none !important; } }
+@media (min-width: 769px) { .mobile-only { display: none !important; } }
 
 /* ═══ MOBILE: bottom tab bar ═══ */
 .mobile-tab-bar { display: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .mobile-tab-bar {
     position: fixed;
     bottom: 0;
@@ -3304,7 +3304,7 @@ footer {
 }
 
 /* ═══ MOBILE: landing page polish ═══ */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   /* Hero: no 100vh, no Ken Burns (battery + LCP), stacked full-width buttons */
   .hero { min-height: auto; }
   .hero-content { padding: 96px 20px 48px; }
@@ -3362,7 +3362,7 @@ footer {
 }
 
 /* ═══ MOBILE: card lists replacing tables ═══ */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .member-card-list { display: flex; flex-direction: column; gap: 10px; }
 
   .member-card {
@@ -3454,7 +3454,7 @@ footer {
 /* ═══ MOBILE: admin "More" bottom sheet ═══ */
 .admin-more-overlay { display: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .admin-more-overlay {
     display: block;
     position: fixed;
@@ -3512,7 +3512,7 @@ footer {
 /* ═══ MOBILE: compact member header ═══ */
 .dash-mobile-header { display: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .dash-mobile-header {
     display: flex;
     align-items: center;
@@ -3576,7 +3576,7 @@ footer {
 }
 
 /* ═══ MOBILE: global ergonomics ═══ */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   /* 1rem inputs stop iOS zoom-on-focus; 46px comfortable touch height */
   .auth-input,
   .join-form input,

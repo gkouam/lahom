@@ -144,9 +144,9 @@ export default function AdminMembersPage() {
             </div>
           </div>
         </div>
-        <div className="admin-stat-card amber" onClick={() => setFilter('PENDING_APPROVAL')} style={{ cursor: 'pointer' }}>
+        <div className="admin-stat-card clay" onClick={() => setFilter('PENDING_APPROVAL')} style={{ cursor: 'pointer' }}>
           <div className="stat-card-inner">
-            <div className="stat-icon-circle amber">
+            <div className="stat-icon-circle clay">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />

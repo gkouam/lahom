@@ -226,6 +226,22 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Standing banner (mobile) */}
+          {finances && (
+            <div className="dash-standing-banner">
+              <span className="standing-left">
+                <span
+                  className="standing-dot"
+                  style={{ background: STANDING_DOT[finances.standing] || STANDING_DOT.NEW }}
+                />
+                {t(`finances.standing.${finances.standing}`)}
+              </span>
+              <span className="standing-amount">
+                {interpolate(t('dash.contributed'), { amount: finances.totalContributed })}
+              </span>
+            </div>
+          )}
+
           {/* Stat Cards */}
           <div className="dash-stats-row">
             <div className="dash-stat-card gold">
@@ -408,8 +424,8 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Membership Status */}
-              <div className="membership-status-card">
+              {/* Membership Status (desktop; the mobile banner covers small screens) */}
+              <div className="membership-status-card desktop-only">
                 <div className="status-indicator">
                   <div className="green-dot" style={{ background: STANDING_DOT[finances?.standing || 'NEW'] }} />
                   <span>{t(`finances.standing.${finances?.standing || 'NEW'}`)}</span>

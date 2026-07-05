@@ -24,7 +24,7 @@ export default function StickyJoinCta() {
 
   return (
     <a href="#join" className="sticky-join-cta mobile-only">
-      {t('join.btn')}
+      {t('join.stickyCta')}
     </a>
   )
 }

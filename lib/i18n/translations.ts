@@ -96,6 +96,7 @@ export const translations: Record<string, { en: string; fr: string }> = {
     fr: 'Ou contactez-nous à <strong>info@lahomdfw.org</strong> · (469) 555-BHAM',
   },
   'join.whatsapp': { en: 'Chat on WhatsApp', fr: 'Discuter sur WhatsApp' },
+  'join.stickyCta': { en: 'Join the Community', fr: 'Rejoindre la Communauté' },
 
   // Auth pages
   'auth.signin': { en: 'Sign In', fr: 'Connexion' },
@@ -187,6 +188,7 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'dash.qa.viewContributions': { en: 'View My Contributions', fr: 'Voir Mes Cotisations' },
   'dash.qa.rsvp': { en: 'RSVP to Events', fr: 'Répondre aux Événements' },
   'dash.qa.contact': { en: 'Contact Leadership', fr: 'Contacter la Direction' },
+  'dash.contributed': { en: '${amount} contributed', fr: '{amount} $ cotisés' },
 
   // Community activity feed
   'activity.title': { en: 'Community Activity', fr: 'Activité de la Communauté' },

@@ -49,17 +49,16 @@ export async function POST(request: NextRequest) {
         select: { id: true, email: true, name: true },
       })
 
-      // Create verification token and send email
+      // Create verification token and send email.
+      // Sends MUST be awaited: on Vercel the function is frozen as soon as the
+      // response returns, killing fire-and-forget requests mid-flight (emails
+      // silently never arrived). The service never throws; failures are logged.
       const verificationToken = await createEmailVerificationToken(user.email!)
       const { emailService } = await import('@/lib/email/service')
-      emailService.sendVerificationEmail(user.email!, user.name || '', verificationToken).catch(err => {
-        console.error('Failed to send verification email:', err)
-      })
-
-      // Notify admin of new registration
-      emailService.sendAdminNewRegistration(user.name || 'Unknown', user.email!).catch(err => {
-        console.error('Failed to send admin notification:', err)
-      })
+      await Promise.all([
+        emailService.sendVerificationEmail(user.email!, user.name || '', verificationToken),
+        emailService.sendAdminNewRegistration(user.name || 'Unknown', user.email!),
+      ])
 
       return NextResponse.json({
         message: 'Account created. Please check your email to verify your account.',

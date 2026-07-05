@@ -22,11 +22,10 @@ export async function POST(request: NextRequest) {
         data: { email, name, phone, hometown, message },
       })
 
-      // Send confirmation email (non-blocking)
+      // Send confirmation email. Awaited: Vercel freezes the function once the
+      // response returns, so un-awaited sends are silently dropped.
       const { emailService } = await import('@/lib/email/service')
-      emailService.sendJoinConfirmation(email, name).catch(err => {
-        console.error('Failed to send join confirmation:', err)
-      })
+      await emailService.sendJoinConfirmation(email, name)
 
       return NextResponse.json({
         message: 'Thank you! Your membership request has been submitted.',

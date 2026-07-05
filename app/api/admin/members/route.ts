@@ -48,10 +48,10 @@ export async function PATCH(request: NextRequest) {
   })
 
   if (action === 'approve') {
+    // Awaited: Vercel freezes the function once the response returns, so an
+    // un-awaited send is silently dropped and the member never gets notified.
     const { emailService } = await import('@/lib/email/service')
-    emailService.sendAccountApproved(user.email, user.name || 'Member').catch(err => {
-      console.error('Failed to send approval email:', err)
-    })
+    await emailService.sendAccountApproved(user.email, user.name || 'Member')
   }
 
   return NextResponse.json({ user })

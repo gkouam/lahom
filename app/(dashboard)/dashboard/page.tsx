@@ -431,28 +431,41 @@ export default function DashboardPage() {
                   {t('finances.noContributions')}
                 </div>
               ) : (
-                <div className="admin-table-wrap">
-                  <table className="admin-table" style={{ marginBottom: 0 }}>
-                    <thead>
-                      <tr>
-                        <th>{t('finances.date')}</th>
-                        <th>{t('finances.amount')}</th>
-                        <th>{t('finances.method')}</th>
-                        <th>{t('finances.description')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {finances.contributions.slice(0, 10).map(c => (
-                        <tr key={c.id}>
-                          <td style={{ fontSize: '0.82rem' }}>{new Date(c.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}</td>
-                          <td style={{ fontWeight: 700, fontSize: '0.82rem' }}>${c.amount}</td>
-                          <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.method || '—'}</td>
-                          <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.description || '—'}</td>
+                <>
+                  <div className="admin-table-wrap desktop-only">
+                    <table className="admin-table" style={{ marginBottom: 0 }}>
+                      <thead>
+                        <tr>
+                          <th>{t('finances.date')}</th>
+                          <th>{t('finances.amount')}</th>
+                          <th>{t('finances.method')}</th>
+                          <th>{t('finances.description')}</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {finances.contributions.slice(0, 10).map(c => (
+                          <tr key={c.id}>
+                            <td style={{ fontSize: '0.82rem' }}>{new Date(c.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}</td>
+                            <td style={{ fontWeight: 700, fontSize: '0.82rem' }}>${c.amount}</td>
+                            <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.method || '—'}</td>
+                            <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.description || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mobile-only">
+                    {finances.contributions.slice(0, 10).map(c => (
+                      <div key={c.id} className="contrib-card">
+                        <div>
+                          <div className="contrib-date">{new Date(c.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}</div>
+                          <div className="contrib-desc">{[c.description, c.method].filter(Boolean).join(' · ') || '—'}</div>
+                        </div>
+                        <div className="contrib-amount">${c.amount}</div>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           </div>

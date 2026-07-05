@@ -126,8 +126,8 @@ export default function AdminMembersPage() {
         </div>
       </div>
 
-      {/* Stat Cards */}
-      <div className="admin-stats-row">
+      {/* Stat Cards (desktop; mobile filters via chips below) */}
+      <div className="admin-stats-row desktop-only">
         <div className="admin-stat-card gold" onClick={() => setFilter('all')} style={{ cursor: 'pointer' }}>
           <div className="stat-card-inner">
             <div className="stat-icon-circle gold">
@@ -207,6 +207,7 @@ export default function AdminMembersPage() {
             <button
               key={f}
               onClick={() => setFilter(f)}
+              className={`member-filter-chip${filter === f ? ' active' : ''}`}
               style={{
                 padding: '6px 14px',
                 borderRadius: '6px',
@@ -237,8 +238,8 @@ export default function AdminMembersPage() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="admin-table-wrap">
+      {/* Table (desktop) */}
+      <div className="admin-table-wrap desktop-only">
         <table className="admin-table">
           <thead>
             <tr>
@@ -326,6 +327,62 @@ export default function AdminMembersPage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Card list (mobile) */}
+      <div className="member-card-list mobile-only">
+        {filtered.length === 0 ? (
+          <div className="admin-empty" style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)' }}>
+            <p>No members found{search ? ` matching "${search}"` : ''}.</p>
+          </div>
+        ) : (
+          filtered.map(member => (
+            <div key={member.id} className={`member-card${member.accountStatus === 'PENDING_APPROVAL' ? ' pending' : ''}`}>
+              <div className="member-card-top">
+                <div className="member-avatar gold-bg">{getInitial(member.name, member.email)}</div>
+                <div className="member-card-id">
+                  <div className="member-card-name">{member.name || member.email}</div>
+                  <div className="member-card-meta">
+                    {[member.hometown, `Joined ${new Date(member.createdAt).toLocaleDateString()}`].filter(Boolean).join(' · ')}
+                  </div>
+                  {!member.emailVerified && (
+                    <div style={{ fontSize: '0.75rem', color: 'var(--wine-bright)', fontWeight: 600 }}>Not verified</div>
+                  )}
+                </div>
+                {statusBadge(member.accountStatus)}
+              </div>
+              {member.accountStatus === 'PENDING_APPROVAL' && (
+                <div className="member-card-actions">
+                  <button
+                    className="btn-approve"
+                    onClick={() => handleAction(member.id, 'approve')}
+                    disabled={actionLoading === member.id}
+                  >
+                    {actionLoading === member.id ? '...' : 'Approve'}
+                  </button>
+                  <button
+                    className="btn-reject"
+                    onClick={() => handleAction(member.id, 'reject')}
+                    disabled={actionLoading === member.id}
+                  >
+                    Reject
+                  </button>
+                </div>
+              )}
+              {member.accountStatus === 'REJECTED' && (
+                <div className="member-card-actions" style={{ gridTemplateColumns: '1fr' }}>
+                  <button
+                    className="btn-approve"
+                    onClick={() => handleAction(member.id, 'approve')}
+                    disabled={actionLoading === member.id}
+                  >
+                    {actionLoading === member.id ? '...' : 'Approve'}
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
       {/* Activity Log + Admin Tools */}

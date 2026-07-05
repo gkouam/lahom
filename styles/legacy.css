@@ -2219,6 +2219,16 @@ footer {
   box-shadow: var(--shadow-sm);
 }
 
+/* Text buttons in the topbar (reports period control, Export CSV) opt out
+   of the 40x40 icon-button sizing above. */
+.topbar-actions button.topbar-wide-btn {
+  width: auto;
+  height: auto;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
 .notification-dot {
   position: absolute;
   top: 8px;
@@ -3233,6 +3243,9 @@ footer {
 @media (max-width: 768px) {
   .mobile-tab-bar {
     position: fixed;
+    /* Shield against the bare `nav` element rule used by the landing navbar
+       (it sets top:10px, a gold border-bottom and a backdrop blur). */
+    top: auto;
     bottom: 0;
     left: 0;
     right: 0;
@@ -3242,6 +3255,9 @@ footer {
     grid-auto-columns: 1fr;
     background: var(--night);
     border-top: 2px solid rgba(212,160,23,0.25);
+    border-bottom: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     padding: 8px 8px calc(8px + var(--safe-bottom));
   }
 
@@ -3461,6 +3477,22 @@ footer {
   }
 }
 
+/* ═══ MOBILE: admin mobile bar role badge ═══ */
+/* .user-role-badge is styled only inside .sidebar-user-card; on the mobile
+   bar it rendered unstyled (near-invisible dark text on night). */
+@media (max-width: 768px) {
+  .admin-mobile-bar .user-role-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(212,160,23,0.15);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+}
+
 /* ═══ MOBILE: admin "More" bottom sheet ═══ */
 .admin-more-overlay { display: none; }
 
@@ -3640,6 +3672,17 @@ footer {
     min-height: 44px;
     min-width: 44px;
     padding: 8px 14px;
+  }
+
+  /* Topbar action clusters (e.g. reports period control + export) wrap
+     instead of colliding on narrow screens */
+  .topbar-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .topbar-actions > * {
+    flex-shrink: 0;
   }
 }
 

@@ -104,6 +104,7 @@ export default function ReportsPage() {
                 key={p.key}
                 role="tab"
                 aria-selected={period === p.key}
+                className="topbar-wide-btn"
                 onClick={() => setPeriod(p.key)}
                 style={{
                   padding: '0 14px',
@@ -112,6 +113,7 @@ export default function ReportsPage() {
                   fontWeight: 700,
                   border: 'none',
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
                   background: period === p.key ? 'var(--gold)' : 'transparent',
                   color: period === p.key ? 'var(--night)' : 'var(--muted)',
                 }}
@@ -123,7 +125,8 @@ export default function ReportsPage() {
           <button
             onClick={exportCsv}
             disabled={!data}
-            style={{ minHeight: '44px', padding: '0 20px', background: 'var(--gold)', color: 'var(--night)', border: 'none', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 700, cursor: data ? 'pointer' : 'default' }}
+            className="topbar-wide-btn"
+            style={{ minHeight: '44px', padding: '0 20px', background: 'var(--gold)', color: 'var(--night)', border: 'none', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 700, whiteSpace: 'nowrap', cursor: data ? 'pointer' : 'default' }}
           >
             {t('reports.exportCsv')}
           </button>

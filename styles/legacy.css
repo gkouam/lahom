@@ -3244,7 +3244,17 @@ footer {
   .dash-cards { padding: 20px 16px 32px; }
 }
 
+/* ═══ REDUCED MOTION ═══ */
 @media (prefers-reduced-motion: reduce) {
-  .hero-bg-img, .hero-geo, .ticker-inner, .whatsapp-float, .scroll-bar { animation: none !important; }
-  * { transition-duration: 0.01ms !important; }
+  .hero-bg-img,
+  .hero-geo,
+  .ticker-inner,
+  .whatsapp-float,
+  .scroll-bar {
+    animation: none !important;
+  }
+  .hero-content { animation: none !important; opacity: 1; transform: none; }
+  .fade-in { opacity: 1 !important; transform: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
 }

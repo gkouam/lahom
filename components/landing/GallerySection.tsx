@@ -1,25 +1,45 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLanguage } from '@/lib/i18n/context'
 import Image from 'next/image'
 import Lightbox from './Lightbox'
 
-const galleryItems = [
-  { src: '/images/bamileke-zing-dance.jpg', alt: 'Zing dance ceremony', label: 'Zing Dance Ceremony', cap: 'Traditional Bamiléké Zing Dance Ceremony', className: 'gi-tall' },
-  { src: '/images/baham-museum-architecture.jpg', alt: 'Baham museum', label: 'Royal Museum', cap: 'Royal Museum of Baham — Grassfields Architecture', className: '' },
-  { src: '/images/dallas-skyline.jpg', alt: 'Dallas skyline', label: 'Dallas, Texas', cap: 'Dallas, Texas — Our American Home', className: '' },
-  { src: '/images/bamileke-dressing.jpg', alt: 'Traditional attire', label: 'Traditional Attire', cap: 'Young men in traditional Bamiléké attire', className: '' },
-  { src: '/images/baham-museum-interior.jpg', alt: 'Museum interior', label: 'Sacred Artifacts', cap: 'Inside the Royal Museum of Baham — Sacred Sculptures', className: 'gi-wide' },
+interface GalleryItem {
+  id: string
+  url: string
+  label: string
+  labelFr: string | null
+  caption: string
+  captionFr: string | null
+  span: 'tall' | 'wide' | null
+}
+
+// Shown until the API answers — and kept as the permanent fallback if the
+// gallery table is ever empty, so the landing page can never go blank.
+const fallbackItems: GalleryItem[] = [
+  { id: 'f1', url: '/images/bamileke-zing-dance.jpg', label: 'Zing Dance Ceremony', labelFr: null, caption: 'Traditional Bamiléké Zing Dance Ceremony', captionFr: null, span: 'tall' },
+  { id: 'f2', url: '/images/baham-museum-architecture.jpg', label: 'Royal Museum', labelFr: null, caption: 'Royal Museum of Baham — Grassfields Architecture', captionFr: null, span: null },
+  { id: 'f3', url: '/images/dallas-skyline.jpg', label: 'Dallas, Texas', labelFr: null, caption: 'Dallas, Texas — Our American Home', captionFr: null, span: null },
+  { id: 'f4', url: '/images/bamileke-dressing.jpg', label: 'Traditional Attire', labelFr: null, caption: 'Young men in traditional Bamiléké attire', captionFr: null, span: null },
+  { id: 'f5', url: '/images/baham-museum-interior.jpg', label: 'Sacred Artifacts', labelFr: null, caption: 'Inside the Royal Museum of Baham — Sacred Sculptures', captionFr: null, span: 'wide' },
 ]
 
 export default function GallerySection() {
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
+  const [items, setItems] = useState<GalleryItem[]>(fallbackItems)
   const [lightbox, setLightbox] = useState<{ src: string; alt: string; cap: string } | null>(null)
 
-  const delays = ['', ' fd1', ' fd2', '', ' fd1']
+  useEffect(() => {
+    fetch('/api/public/gallery')
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d?.images?.length) setItems(d.images) })
+      .catch(() => {})
+  }, [])
 
   const closeLightbox = useCallback(() => setLightbox(null), [])
+
+  const pick = (en: string, fr: string | null) => (lang === 'fr' && fr ? fr : en)
 
   return (
     <section className="section gallery-section" id="gallery">
@@ -30,16 +50,21 @@ export default function GallerySection() {
         </div>
 
         <div className="gallery-grid">
-          {galleryItems.map((item, i) => (
-            <button
-              key={i}
-              className={`gallery-item ${item.className} fade-in${delays[i]}`}
-              onClick={() => setLightbox({ src: item.src, alt: item.alt, cap: item.cap })}
-            >
-              <Image src={item.src} alt={item.alt} width={600} height={400} loading="lazy" />
-              <span className="gi-label">{item.label}</span>
-            </button>
-          ))}
+          {items.map(item => {
+            const label = pick(item.label, item.labelFr)
+            const cap = pick(item.caption, item.captionFr)
+            const spanClass = item.span === 'tall' ? 'gi-tall' : item.span === 'wide' ? 'gi-wide' : ''
+            return (
+              <button
+                key={item.id}
+                className={`gallery-item ${spanClass}`}
+                onClick={() => setLightbox({ src: item.url, alt: label, cap })}
+              >
+                <Image src={item.url} alt={label} width={600} height={400} loading="lazy" />
+                <span className="gi-label">{label}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
 

@@ -222,6 +222,7 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'admin.messages': { en: 'Messages', fr: 'Messages' },
   'admin.signOut': { en: 'Sign Out', fr: 'Déconnexion' },
   'admin.more': { en: 'More', fr: 'Plus' },
+  'admin.gallery': { en: 'Gallery', fr: 'Galerie' },
 
   // Admin reports
   'reports.title': { en: 'Reports', fr: 'Rapports' },

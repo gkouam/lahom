@@ -19,6 +19,7 @@ enum Permission {
   MANAGE_MEETINGS
   MANAGE_EVENTS
   MANAGE_PERMISSIONS
+  MANAGE_GALLERY
 }
 
 enum FinancialStanding {
@@ -134,6 +135,22 @@ model MeetingNote {
   updatedAt DateTime @updatedAt
 
   @@index([date])
+}
+
+model GalleryImage {
+  id           String   @id @default(cuid())
+  url          String
+  label        String
+  labelFr      String?
+  caption      String
+  captionFr    String?
+  span         String?
+  published    Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  @@index([published, sortOrder])
 }
 
 model Event {

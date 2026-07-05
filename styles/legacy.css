@@ -3213,6 +3213,16 @@ footer {
   .dash-cards { padding: 20px 16px 32px; }
 }
 
+/* ═══ MOBILE: portal layouts stack vertically ═══ */
+/* .dash-layout/.admin-layout are flex ROW for the desktop sidebar+main pair;
+   on phones the mobile header/bar must stack ABOVE main, not beside it. */
+@media (max-width: 768px) {
+  .dash-layout,
+  .admin-layout {
+    flex-direction: column;
+  }
+}
+
 /* ═══ MOBILE: visibility utilities ═══ */
 @media (max-width: 768px) { .desktop-only { display: none !important; } }
 @media (min-width: 769px) { .mobile-only { display: none !important; } }

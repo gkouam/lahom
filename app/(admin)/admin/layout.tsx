@@ -233,6 +233,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               {t('admin.gallery')}
             </Link>
           )}
+          {can('MANAGE_GALLERY') && (
+            <Link
+              href="/admin/culture"
+              className={pathname?.includes('/culture') ? 'active' : ''}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 22h20L12 2z" transform="rotate(45 12 12)" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              {t('admin.culture')}
+            </Link>
+          )}
           {(isSuper || can('MANAGE_MEMBERS') || can('MANAGE_FINANCES')) && (
             <Link
               href="/admin/reports"
@@ -325,6 +337,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <polyline points="21 15 16 10 5 21" />
                   </svg>
                   {t('admin.gallery')}
+                </Link>
+              )}
+              {can('MANAGE_GALLERY') && (
+                <Link href="/admin/culture" className="admin-more-row">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 22h20L12 2z" transform="rotate(45 12 12)" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  {t('admin.culture')}
                 </Link>
               )}
               {(isSuper || can('MANAGE_MEMBERS') || can('MANAGE_FINANCES')) && (

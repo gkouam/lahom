@@ -1,42 +1,65 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLanguage } from '@/lib/i18n/context'
 import Image from 'next/image'
 import Lightbox from './Lightbox'
 
-const cultureItems = [
+interface CultureItem {
+  id: string
+  url: string
+  tag: string
+  tagFr: string | null
+  title: string
+  titleFr: string | null
+  description: string
+  descriptionFr: string | null
+}
+
+// Shown until the API answers — and the permanent fallback if the table is
+// ever empty, so the landing page can never go blank.
+const fallbackItems: CultureItem[] = [
   {
-    src: '/images/dallas-museum-elephant-mask.jpg',
-    alt: 'Bamiléké elephant mask with intricate beadwork',
-    tag: 'Sacred Dance',
-    title: 'Elephant Mask Society',
-    desc: 'The Kuosi elephant masks represent royal power, performed at funerals and enthronement ceremonies. This mask resides at the Dallas Museum of Art.',
-    delay: '',
+    id: 'f1',
+    url: '/images/dallas-museum-elephant-mask.jpg',
+    tag: 'Sacred Dance', tagFr: null,
+    title: 'Elephant Mask Society', titleFr: null,
+    description: 'The Kuosi elephant masks represent royal power, performed at funerals and enthronement ceremonies. This mask resides at the Dallas Museum of Art.',
+    descriptionFr: null,
   },
   {
-    src: '/images/bamileke-zing-dance.jpg',
-    alt: 'Traditional Bamiléké dance performance during Zing ceremony',
-    tag: 'Ceremonial Dance',
-    title: 'Zing Dance Ceremony',
-    desc: 'Traditional dancers in Ndop cloth and beaded hats perform the Zing — a sacred rhythm honoring ancestors and community bonds.',
-    delay: ' fd1',
+    id: 'f2',
+    url: '/images/bamileke-zing-dance.jpg',
+    tag: 'Ceremonial Dance', tagFr: null,
+    title: 'Zing Dance Ceremony', titleFr: null,
+    description: 'Traditional dancers in Ndop cloth and beaded hats perform the Zing — a sacred rhythm honoring ancestors and community bonds.',
+    descriptionFr: null,
   },
   {
-    src: '/images/bamileke-dressing.jpg',
-    alt: 'Young Bamiléké men in traditional ceremonial attire',
-    tag: 'Royal Garment',
-    title: 'Toghu & Ceremonial Attire',
-    desc: 'The iconic hand-embroidered garments — pride of the Grasslands people, worn at weddings, royal events, and cultural celebrations.',
-    delay: ' fd2',
+    id: 'f3',
+    url: '/images/bamileke-dressing.jpg',
+    tag: 'Royal Garment', tagFr: null,
+    title: 'Toghu & Ceremonial Attire', titleFr: null,
+    description: 'The iconic hand-embroidered garments — pride of the Grasslands people, worn at weddings, royal events, and cultural celebrations.',
+    descriptionFr: null,
   },
 ]
 
 export default function CultureShowcase() {
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
+  const [items, setItems] = useState<CultureItem[]>(fallbackItems)
   const [lightbox, setLightbox] = useState<{ src: string; alt: string; cap: string } | null>(null)
 
+  useEffect(() => {
+    fetch('/api/public/culture')
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d?.items?.length) setItems(d.items) })
+      .catch(() => {})
+  }, [])
+
   const closeLightbox = useCallback(() => setLightbox(null), [])
+
+  const pick = (en: string, fr: string | null) => (lang === 'fr' && fr ? fr : en)
 
   return (
     <section className="section culture-section" id="culture">
@@ -47,20 +70,25 @@ export default function CultureShowcase() {
         <p className="sec-desc light">{t('culture.desc')}</p>
 
         <div className="culture-grid">
-          {cultureItems.map(item => (
-            <button
-              key={item.title}
-              className={`culture-card fade-in${item.delay}`}
-              onClick={() => setLightbox({ src: item.src, alt: item.alt, cap: `${item.title} — ${item.desc}` })}
-            >
-              <Image src={item.src} alt={item.alt} className="culture-card-img" width={400} height={500} loading="lazy" />
-              <div className="culture-card-overlay">
-                <div className="culture-card-tag">{item.tag}</div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-              </div>
-            </button>
-          ))}
+          {items.map(item => {
+            const tag = pick(item.tag, item.tagFr)
+            const title = pick(item.title, item.titleFr)
+            const desc = pick(item.description, item.descriptionFr)
+            return (
+              <button
+                key={item.id}
+                className="culture-card"
+                onClick={() => setLightbox({ src: item.url, alt: title, cap: `${title} — ${desc}` })}
+              >
+                <Image src={item.url} alt={title} className="culture-card-img" width={400} height={500} loading="lazy" />
+                <div className="culture-card-overlay">
+                  <div className="culture-card-tag">{tag}</div>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </div>
+              </button>
+            )
+          })}
         </div>
       </div>
 

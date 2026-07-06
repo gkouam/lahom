@@ -137,6 +137,22 @@ model MeetingNote {
   @@index([date])
 }
 
+model CultureItem {
+  id            String   @id @default(cuid())
+  url           String
+  tag           String
+  tagFr         String?
+  title         String
+  titleFr       String?
+  description   String
+  descriptionFr String?
+  published     Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  @@index([published, sortOrder])
+}
+
 model GalleryImage {
   id           String   @id @default(cuid())
   url          String

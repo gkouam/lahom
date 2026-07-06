@@ -658,6 +658,15 @@ nav {
   height: 420px;
   cursor: pointer;
   transition: transform 0.4s;
+  /* Cards are <button>s (they open the lightbox) — reset button chrome */
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
 }
 
 .culture-card:hover { transform: translateY(-8px); }

@@ -20,6 +20,8 @@ export default function AdminMembersPage() {
   const [filter, setFilter] = useState<'all' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED'>('all')
   const [search, setSearch] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [resetConfirm, setResetConfirm] = useState<string | null>(null)
+  const [notice, setNotice] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
 
   const fetchMembers = async () => {
     try {
@@ -53,6 +55,53 @@ export default function AdminMembersPage() {
       setActionLoading(null)
     }
   }
+
+  const resendVerification = async (userId: string) => {
+    setActionLoading(userId)
+    setNotice(null)
+    try {
+      const res = await fetch('/api/admin/members', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, action: 'resend_verification' }),
+      })
+      const d = await res.json()
+      setNotice(res.ok ? { kind: 'ok', text: d.message || 'Verification email sent.' } : { kind: 'err', text: d.error || 'Failed to resend verification.' })
+    } catch {
+      setNotice({ kind: 'err', text: 'Network error' })
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const resetRegistration = async (userId: string) => {
+    setActionLoading(userId)
+    setNotice(null)
+    try {
+      const res = await fetch('/api/admin/members', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, action: 'reset_registration' }),
+      })
+      const d = await res.json()
+      if (res.ok) {
+        setMembers(prev => prev.filter(m => m.id !== userId))
+        setNotice({ kind: 'ok', text: d.message || 'Registration reset.' })
+      } else {
+        setNotice({ kind: 'err', text: d.error || 'Failed to reset registration.' })
+      }
+      setResetConfirm(null)
+    } catch {
+      setNotice({ kind: 'err', text: 'Network error' })
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  // A registration can be reset only while it's stuck: unverified email or
+  // still pending. Verified + approved members are established — never reset.
+  const canReset = (m: Member) =>
+    m.role !== 'SUPER_ADMIN' && !(m.emailVerified && m.accountStatus === 'APPROVED')
 
   const totalCount = members.length
   const pendingCount = members.filter(m => m.accountStatus === 'PENDING_APPROVAL').length
@@ -124,6 +173,13 @@ export default function AdminMembersPage() {
           </button>
         </div>
       </div>
+
+      {notice && (
+        <div style={{ background: notice.kind === 'ok' ? 'rgba(45,106,79,0.1)' : '#FFF0F0', border: `1px solid ${notice.kind === 'ok' ? 'rgba(45,106,79,0.35)' : '#E8AAAA'}`, borderRadius: '10px', padding: '12px 18px', marginBottom: '20px', fontSize: '0.82rem', color: notice.kind === 'ok' ? 'var(--forest-mid)' : '#8B2020', display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
+          <span>{notice.text}</span>
+          <button onClick={() => setNotice(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontWeight: 700 }}>&times;</button>
+        </div>
+      )}
 
       {/* Stat Cards (desktop; mobile filters via chips below) */}
       <div className="admin-stats-row desktop-only">
@@ -278,7 +334,7 @@ export default function AdminMembersPage() {
                   {new Date(member.createdAt).toLocaleDateString()}
                 </td>
                 <td>
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                     {member.accountStatus === 'PENDING_APPROVAL' && (
                       <>
                         <button
@@ -305,6 +361,34 @@ export default function AdminMembersPage() {
                       >
                         {actionLoading === member.id ? '...' : 'Approve'}
                       </button>
+                    )}
+                    {!member.emailVerified && (
+                      <button
+                        className="btn-reject"
+                        onClick={() => resendVerification(member.id)}
+                        disabled={actionLoading === member.id}
+                        title="Send a fresh verification email"
+                      >
+                        {actionLoading === member.id ? '...' : 'Resend Verify'}
+                      </button>
+                    )}
+                    {canReset(member) && (
+                      resetConfirm === member.id ? (
+                        <span style={{ display: 'inline-flex', gap: '6px', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.75rem', color: '#8B2020' }}>Reset?</span>
+                          <button onClick={() => resetRegistration(member.id)} disabled={actionLoading === member.id} style={{ padding: '4px 12px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Yes</button>
+                          <button onClick={() => setResetConfirm(null)} style={{ padding: '4px 12px', background: '#eee', color: '#555', border: 'none', borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}>No</button>
+                        </span>
+                      ) : (
+                        <button
+                          className="btn-reject"
+                          onClick={() => setResetConfirm(member.id)}
+                          disabled={actionLoading === member.id}
+                          title="Delete this stuck registration and invite the person to sign up again"
+                        >
+                          Reset
+                        </button>
+                      )
                     )}
                   </div>
                 </td>
@@ -377,6 +461,38 @@ export default function AdminMembersPage() {
                   >
                     {actionLoading === member.id ? '...' : 'Approve'}
                   </button>
+                </div>
+              )}
+              {(!member.emailVerified || canReset(member)) && (
+                <div className="member-card-actions" style={{ gridTemplateColumns: !member.emailVerified && canReset(member) ? '1fr 1fr' : '1fr' }}>
+                  {!member.emailVerified && (
+                    <button
+                      className="btn-reject"
+                      onClick={() => resendVerification(member.id)}
+                      disabled={actionLoading === member.id}
+                    >
+                      {actionLoading === member.id ? '...' : 'Resend Verify'}
+                    </button>
+                  )}
+                  {canReset(member) && (
+                    resetConfirm === member.id ? (
+                      <button
+                        onClick={() => resetRegistration(member.id)}
+                        disabled={actionLoading === member.id}
+                        style={{ minHeight: '44px', background: '#DC3545', color: 'white', border: 'none', borderRadius: '10px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        Confirm Reset
+                      </button>
+                    ) : (
+                      <button
+                        className="btn-reject"
+                        onClick={() => setResetConfirm(member.id)}
+                        disabled={actionLoading === member.id}
+                      >
+                        Reset
+                      </button>
+                    )
+                  )}
                 </div>
               )}
             </div>

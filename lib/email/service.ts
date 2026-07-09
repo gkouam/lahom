@@ -179,6 +179,44 @@ export const emailService = {
     }
   },
 
+  async sendRegistrationReset(email: string, name: string) {
+    try {
+      const resendClient = getResend()
+      if (!resendClient) {
+        console.log('Email not configured. Registration reset for:', email)
+        return { success: true, data: null }
+      }
+
+      const signupUrl = `${process.env.NEXTAUTH_URL}/auth/signup`
+
+      const { data, error } = await resendClient.emails.send({
+        from: FROM_EMAIL,
+        replyTo: REPLY_TO,
+        to: email,
+        subject: 'Please register again · Veuillez vous réinscrire — Baham Dallas',
+        html: renderEmail({
+          preheader: 'Your registration was reset — sign up again in two minutes · Votre inscription a été réinitialisée',
+          title: `Hello, ${name}! · Bonjour, ${name}&nbsp;!`,
+          bodyHtml:
+            paragraph(`Your earlier registration at ${APP_NAME} was reset by a community administrator so you can start fresh — the original sign-up ran into a technical issue on our side. Please register again; it only takes two minutes, and you'll receive a working verification email right away.`) +
+            divider() +
+            paragraph(`Votre inscription précédente à ${APP_NAME} a été réinitialisée par un administrateur afin de repartir à zéro — l'inscription initiale a rencontré un problème technique de notre côté. Veuillez vous réinscrire&nbsp;; cela ne prend que deux minutes et vous recevrez immédiatement un e-mail de vérification fonctionnel.`),
+          cta: { label: "Register Again · S'inscrire à nouveau", url: signupUrl },
+        }),
+        text: `Hello, ${name}!\n\nYour earlier registration at ${APP_NAME} was reset by a community administrator so you can start fresh. Please register again at: ${signupUrl}\n\n---\n\nBonjour, ${name} !\n\nVotre inscription précédente à ${APP_NAME} a été réinitialisée par un administrateur afin de repartir à zéro. Veuillez vous réinscrire sur : ${signupUrl}`,
+      })
+
+      if (error) {
+        console.error('Failed to send registration reset email:', error)
+        return { success: false, error }
+      }
+      return { success: true, data }
+    } catch (error) {
+      console.error('Registration reset email error:', error)
+      return { success: false, error }
+    }
+  },
+
   async sendJoinConfirmation(email: string, name: string) {
     try {
       const resendClient = getResend()

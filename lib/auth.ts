@@ -6,8 +6,11 @@ import {
   getLockoutTimeRemaining,
   recordLoginAttempt,
   clearFailedAttempts,
+  countRecentFailuresFromIp,
   auditLog,
 } from './security/account-security'
+
+const MAX_FAILURES_PER_IP = 20
 
 let prisma: any = null
 try {
@@ -37,13 +40,22 @@ export const authOptions: NextAuthOptions = {
           const ipAddress = req?.headers?.['x-forwarded-for']?.split(',')[0] || req?.headers?.['x-real-ip'] || '0.0.0.0'
           const userAgent = req?.headers?.['user-agent'] || null
 
-          // Check account lockout
+          // Per-network limit, kept in the database so it holds across
+          // serverless instances (the in-memory limiter does not).
+          const failuresFromIp = await countRecentFailuresFromIp(ipAddress)
+          if (failuresFromIp >= MAX_FAILURES_PER_IP) {
+            await auditLog({ action: 'login_blocked_ip_limit', resource: 'user', ipAddress, userAgent, metadata: { email } })
+            throw new Error('Account temporarily locked. Too many sign-in attempts from this network; try again in 15 minutes.')
+          }
+
+          // Check account lockout. Attempts made while locked are logged but
+          // not counted, so the lock always ends 15 minutes after it started
+          // and nobody can keep an officer locked out indefinitely.
           const locked = await isAccountLocked(email)
           if (locked) {
             const timeRemaining = await getLockoutTimeRemaining(email)
-            await recordLoginAttempt(email, false, ipAddress, userAgent, 'Account locked')
             await auditLog({ action: 'login_attempt_while_locked', resource: 'user', ipAddress, userAgent, metadata: { email, timeRemaining } })
-            throw new Error(`Account temporarily locked. Try again in ${Math.ceil(timeRemaining / 60)} minutes.`)
+            throw new Error(`Account temporarily locked. Try again in ${Math.max(1, Math.ceil(timeRemaining / 60))} minutes.`)
           }
 
           let user
@@ -141,9 +153,12 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      // Refresh role/emailVerified/accountStatus hourly
+      // Refresh role/emailVerified/accountStatus hourly, and on every check
+      // while the account is still unverified or awaiting approval, so an
+      // approval takes effect as soon as the person's session is next read.
       const lastCheck = token.emailVerifiedLastCheck as number || 0
-      if (Date.now() - lastCheck > 60 * 60 * 1000) {
+      const awaitingAccess = token.accountStatus !== 'APPROVED' || !token.emailVerified
+      if (awaitingAccess || Date.now() - lastCheck > 60 * 60 * 1000) {
         if (prisma && token.email) {
           try {
             const dbUser = await prisma.user.findUnique({

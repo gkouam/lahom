@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
+import { requirePermission, requireAnyPermission, PERMISSIONS } from '@/lib/security/permissions'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
-  const denied = requirePermission(session, PERMISSIONS.MANAGE_MEMBERS)
+  // Viewing the list needs either permission; changing anything needs MANAGE_MEMBERS.
+  const denied = requireAnyPermission(session, [PERMISSIONS.MANAGE_MEMBERS, PERMISSIONS.VIEW_MEMBERS])
   if (denied) return denied
 
   const users = await prisma.user.findMany({
@@ -86,9 +87,30 @@ export async function PATCH(request: NextRequest) {
         { status: 400 },
       )
     }
+    if (target.id === session!.user.id) {
+      return NextResponse.json({ error: 'You cannot reset your own account.' }, { status: 400 })
+    }
 
-    await prisma.verificationToken.deleteMany({ where: { identifier: target.email } })
-    await prisma.user.delete({ where: { id: userId } })
+    // Reset deletes the account, so it is refused for anyone who holds
+    // permissions or has records other people rely on (payments, notes).
+    const [perms, contributions, recorded, notes, announcements] = await Promise.all([
+      prisma.userPermission.count({ where: { userId } }),
+      prisma.contribution.count({ where: { userId } }),
+      prisma.contribution.count({ where: { recordedById: userId } }),
+      prisma.meetingNote.count({ where: { authorId: userId } }),
+      prisma.announcement.count({ where: { authorId: userId } }),
+    ])
+    if (perms + contributions + recorded + notes + announcements > 0) {
+      return NextResponse.json(
+        { error: 'This account holds permissions or has payments or notes on record, so it can’t be reset. Reject it instead.' },
+        { status: 400 },
+      )
+    }
+
+    await prisma.$transaction([
+      prisma.verificationToken.deleteMany({ where: { identifier: target.email } }),
+      prisma.user.delete({ where: { id: userId } }),
+    ])
 
     const { auditLog } = await import('@/lib/security/account-security')
     await auditLog({
@@ -118,18 +140,41 @@ export async function PATCH(request: NextRequest) {
 
   const newStatus = action === 'approve' ? 'APPROVED' : 'REJECTED'
 
+  const before = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, role: true, accountStatus: true },
+  })
+  if (!before) return NextResponse.json({ error: 'User not found' }, { status: 404 })
+  if (action === 'reject' && (before.role === 'SUPER_ADMIN' || before.id === session!.user.id)) {
+    return NextResponse.json({ error: 'This account can’t be rejected.' }, { status: 400 })
+  }
+
   const user = await prisma.user.update({
     where: { id: userId },
     data: { accountStatus: newStatus },
     select: { id: true, email: true, name: true, accountStatus: true },
   })
 
-  if (action === 'approve') {
-    // Awaited: Vercel freezes the function once the response returns, so an
-    // un-awaited send is silently dropped and the member never gets notified.
+  const { auditLog } = await import('@/lib/security/account-security')
+  await auditLog({
+    userId: session!.user.id,
+    action: action === 'approve' ? 'member_approved' : 'member_rejected',
+    resource: 'user',
+    resourceId: user.id,
+    metadata: { email: user.email, previousStatus: before.accountStatus, newStatus },
+  })
+
+  // Awaited: Vercel freezes the function once the response returns, so an
+  // un-awaited send is silently dropped and the member never gets notified.
+  // Only a real change sends mail (re-clicking doesn't email twice).
+  let emailSent: boolean | null = null
+  if (before.accountStatus !== newStatus) {
     const { emailService } = await import('@/lib/email/service')
-    await emailService.sendAccountApproved(user.email, user.name || 'Member')
+    const result = action === 'approve'
+      ? await emailService.sendAccountApproved(user.email, user.name || 'Member')
+      : await emailService.sendAccountRejected(user.email, user.name || 'Member')
+    emailSent = result.success
   }
 
-  return NextResponse.json({ user })
+  return NextResponse.json({ user, emailSent })
 }

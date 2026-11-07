@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { startOfTodayOrg } from '@/lib/dates'
 
 // Public, unauthenticated. Returns upcoming events with capacity STATUS only —
 // never names or the RSVP roster (those are for approved members via /api/events).
 export async function GET() {
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
+  const startOfToday = startOfTodayOrg()
 
   const events = await prisma.event.findMany({
     where: { date: { gte: startOfToday } },

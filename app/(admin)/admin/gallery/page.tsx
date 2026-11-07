@@ -1,5 +1,6 @@
 'use client'
 
+import { shrinkImageForUpload, MAX_UPLOAD_BYTES, tooLargeMessage } from '@/lib/client/shrink-image'
 import { useCallback, useEffect, useState } from 'react'
 
 interface GalleryImage {
@@ -65,8 +66,10 @@ export default function GalleryAdminPage() {
     if (!file || !uLabel.trim() || !uCaption.trim()) return
     setUploading(true); setError(null)
     try {
+      const photo = await shrinkImageForUpload(file)
+      if (photo.size > MAX_UPLOAD_BYTES) { setError(tooLargeMessage(photo.size)); return }
       const form = new FormData()
-      form.append('file', file)
+      form.append('file', photo)
       form.append('label', uLabel)
       form.append('labelFr', uLabelFr)
       form.append('caption', uCaption)
@@ -77,8 +80,10 @@ export default function GalleryAdminPage() {
         setShowUpload(false); setFile(null)
         setULabel(''); setULabelFr(''); setUCaption(''); setUCaptionFr(''); setUSpan('')
         fetchImages()
+      } else if (res.status === 413) {
+        setError(tooLargeMessage(photo.size))
       } else {
-        const d = await res.json()
+        const d = await res.json().catch(() => ({}))
         setError(d.error || 'Upload failed')
       }
     } catch { setError('Network error') }
@@ -184,7 +189,7 @@ export default function GalleryAdminPage() {
         <div style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)', padding: '24px', marginBottom: '20px' }}>
           <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--night)', marginBottom: '16px' }}>Upload Photo</h3>
           <div style={{ marginBottom: '14px' }}>
-            <label style={labelStyle}>Image (JPEG/PNG/WebP, max 8 MB)</label>
+            <label style={labelStyle}>Image (JPEG, PNG or WebP; large phone photos are resized automatically)</label>
             <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => setFile(e.target.files?.[0] || null)} style={{ fontSize: '0.82rem' }} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }} className="admin-below-table">

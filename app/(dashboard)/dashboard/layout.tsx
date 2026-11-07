@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from '@/lib/i18n/context'
 import MobileTabBar, { MobileTab } from '@/components/MobileTabBar'
+import LanguageToggle from '@/components/LanguageToggle'
 
 // Shared member-portal shell: sidebar + mobile bar wrap every /dashboard/*
 // page (mirrors the admin portal's shared layout).
@@ -81,7 +82,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <circle cx="22" cy="22" r="3.5" fill="var(--gold, #D4A017)" />
           </svg>
           <div>
-            <strong>Baham</strong>
+            <strong>{t('brand.name')}</strong>
             <span>{t('dash.memberPortal')}</span>
           </div>
         </div>
@@ -91,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="user-avatar-circle">{initial}</div>
           <div className="user-name">{user?.name || 'Member'}</div>
           <div className="badge-wrap">
-            <span className="user-role-badge">{user?.role || 'MEMBER'}</span>
+            <span className="user-role-badge">{user?.officerTitle || t(`role.${user?.role || 'MEMBER'}`)}</span>
           </div>
         </div>
 
@@ -136,6 +137,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         <div className="dash-sidebar-bottom">
+          <LanguageToggle variant="full" className="sidebar-lang" />
           <button onClick={() => signOut({ callbackUrl: '/' })}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -162,6 +164,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </svg>
           </Link>
         )}
+        <LanguageToggle className="header-lang" />
         <button className="header-action" onClick={() => signOut({ callbackUrl: '/' })} aria-label={t('auth.signout')}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />

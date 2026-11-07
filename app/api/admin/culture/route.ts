@@ -7,7 +7,9 @@ import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
 import { withRateLimit, rateLimitConfigs } from '@/lib/security/rate-limiter'
 import { auditLog } from '@/lib/security/account-security'
 
-const MAX_BYTES = 8 * 1024 * 1024
+// Vercel functions accept at most 4.5 MB per request; the admin pages resize
+// large photos in the browser before sending them.
+const MAX_BYTES = 4 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 export async function GET() {
@@ -57,7 +59,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Only JPEG, PNG or WebP images are allowed.' }, { status: 400 })
     }
     if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: 'Image must be 8 MB or smaller.' }, { status: 400 })
+      return NextResponse.json({ error: 'Image must be 4 MB or smaller.' }, { status: 400 })
     }
 
     const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg'

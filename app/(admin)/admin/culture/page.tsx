@@ -1,5 +1,6 @@
 'use client'
 
+import { shrinkImageForUpload, MAX_UPLOAD_BYTES, tooLargeMessage } from '@/lib/client/shrink-image'
 import { useCallback, useEffect, useState } from 'react'
 
 interface CultureItem {
@@ -86,15 +87,19 @@ export default function CultureAdminPage() {
     if (!uploadValid) return
     setUploading(true); setError(null)
     try {
+      const photo = await shrinkImageForUpload(file!)
+      if (photo.size > MAX_UPLOAD_BYTES) { setError(tooLargeMessage(photo.size)); return }
       const form = new FormData()
-      form.append('file', file!)
+      form.append('file', photo)
       for (const [k, v] of Object.entries(uFields)) form.append(k, v)
       const res = await fetch('/api/admin/culture', { method: 'POST', body: form })
       if (res.ok) {
         setShowUpload(false); setFile(null); setUFields(emptyFields)
         fetchItems()
+      } else if (res.status === 413) {
+        setError(tooLargeMessage(photo.size))
       } else {
-        const d = await res.json()
+        const d = await res.json().catch(() => ({}))
         setError(d.error || 'Upload failed')
       }
     } catch { setError('Network error') }
@@ -199,7 +204,7 @@ export default function CultureAdminPage() {
         <div style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)', padding: '24px', marginBottom: '20px' }}>
           <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--night)', marginBottom: '16px' }}>New Culture Card</h3>
           <div style={{ marginBottom: '14px' }}>
-            <label style={labelStyle}>Image (JPEG/PNG/WebP, max 8 MB)</label>
+            <label style={labelStyle}>Image (JPEG, PNG or WebP; large phone photos are resized automatically)</label>
             <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => setFile(e.target.files?.[0] || null)} style={{ fontSize: '0.82rem' }} />
           </div>
           <FieldGrid v={uFields} set={setUFields} />

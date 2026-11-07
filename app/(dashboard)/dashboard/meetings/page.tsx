@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { formatCalendarDate } from '@/lib/dates'
 import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/context'
 
@@ -13,7 +14,7 @@ interface MeetingNote {
   date: string
   createdAt: string
   updatedAt: string
-  author: { name: string | null }
+  author: { name: string | null } | null
 }
 
 function resolveContent(note: MeetingNote, lang: 'en' | 'fr') {
@@ -105,8 +106,8 @@ export default function MeetingsPage() {
                 )}
 
                 <div style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '8px' }}>
-                  {new Date(selectedNote.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  {selectedNote.author.name && <> &middot; {selectedNote.author.name}</>}
+                  {formatCalendarDate(selectedNote.date, lang, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  {selectedNote.author?.name && <> &middot; {selectedNote.author.name}</>}
                 </div>
 
                 <h2 style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 700, color: 'var(--night)', marginBottom: '16px' }}>
@@ -164,8 +165,8 @@ export default function MeetingsPage() {
                         </div>
                       )}
                       <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '6px' }}>
-                        {new Date(note.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                        {note.author.name && <> &middot; {note.author.name}</>}
+                        {formatCalendarDate(note.date, lang, { year: 'numeric', month: 'long', day: 'numeric' })}
+                        {note.author?.name && <> &middot; {note.author.name}</>}
                       </div>
                       <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--night)', marginBottom: '8px' }}>
                         {title || t('meetings.contentUnavailable')}

@@ -3,44 +3,40 @@
 import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/i18n/context'
+import PasswordField from '@/components/auth/PasswordField'
+import PasswordRules, { passwordMeetsRules } from '@/components/auth/PasswordRules'
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams()
+  const { t } = useLanguage()
   const token = searchParams.get('token')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const mismatch = confirm.length > 0 && confirm !== password
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-
-    if (password !== confirm) {
-      setError('Passwords do not match')
-      return
-    }
+    if (!passwordMeetsRules(password)) return setError(t('signup.weak'))
+    if (password !== confirm) return setError(t('signup.mismatch'))
 
     setLoading(true)
-
     try {
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password }),
       })
-
-      const data = await res.json()
-
-      if (res.ok) {
-        setDone(true)
-      } else {
-        setError(data.error || 'Failed to reset password')
-      }
+      const data = await res.json().catch(() => ({}))
+      if (res.ok) setDone(true)
+      else setError(data.error || t('reset.failed'))
     } catch {
-      setError('Network error. Please try again.')
+      setError(t('common.networkError'))
     } finally {
       setLoading(false)
     }
@@ -48,88 +44,51 @@ function ResetPasswordContent() {
 
   if (!token) {
     return (
-      <div className="text-center p-8">
-        <p>Invalid reset link.</p>
-        <Link href="/forgot-password" style={{ color: 'var(--gold-ink)' }}>Request a new one</Link>
+      <div className="auth-card centered">
+        <h1 className="auth-title">{t('reset.title')}</h1>
+        <div className="auth-alert error" role="alert">{t('reset.invalidLink')}</div>
+        <p className="auth-switch">
+          <Link href="/forgot-password" className="auth-link strong">{t('reset.requestNew')}</Link>
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="rounded-xl p-8 shadow-lg" style={{ background: 'white' }}>
-        <h1 className="text-2xl font-bold text-center mb-6" style={{ fontFamily: 'var(--serif)', color: 'var(--night)' }}>
-          Set New Password
-        </h1>
+    <div className="auth-card">
+      <h1 className="auth-title">{t('reset.title')}</h1>
 
-        {done ? (
-          <div className="text-center">
-            <p className="mb-4 text-sm" style={{ color: 'var(--muted)' }}>Password reset successfully!</p>
-            <Link href="/auth/signin" className="font-semibold" style={{ color: 'var(--gold-ink)' }}>Sign in</Link>
-          </div>
-        ) : (
-          <>
-            {error && (
-              <div className="mb-4 p-3 rounded-lg text-sm text-center" style={{ background: '#FDECEA', color: '#B71C1C' }}>{error}</div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>New Password</label>
-                <div className="auth-password-wrap">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={8}
-                    className="auth-input"
-                  />
-                  <button
-                    type="button"
-                    className="auth-password-toggle"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                        <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                        <line x1="1" y1="1" x2="23" y2="23" />
-                      </svg>
-                    ) : (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>Confirm Password</label>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  required
-                  className="auth-input"
-                />
-              </div>
-              <button type="submit" disabled={loading} className="w-full py-3 rounded-lg font-semibold text-sm" style={{ background: 'var(--gold)', color: 'var(--night)', opacity: loading ? 0.7 : 1 }}>
-                {loading ? 'Resetting...' : 'Reset Password'}
-              </button>
-            </form>
-          </>
-        )}
-      </div>
+      {done ? (
+        <>
+          <div className="auth-alert success" role="status">{t('reset.done')}</div>
+          <p className="auth-switch">
+            <Link href="/auth/signin" className="auth-link strong">{t('signin.submit')}</Link>
+          </p>
+        </>
+      ) : (
+        <>
+          {error && <div className="auth-alert error" role="alert">{error}</div>}
+          <form onSubmit={handleSubmit} className="auth-form" noValidate>
+            <PasswordField id="reset-password" label={t('reset.new')} value={password} onChange={setPassword} autoComplete="new-password" describedBy="reset-rules" />
+            <PasswordRules id="reset-rules" password={password} />
+            <div className="auth-field">
+              <label htmlFor="reset-confirm" className="auth-label">{t('signup.confirm')}</label>
+              <input id="reset-confirm" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required autoComplete="new-password" className="auth-input" aria-invalid={mismatch || undefined} />
+              {mismatch && <p className="auth-field-error">{t('signup.mismatch')}</p>}
+            </div>
+            <button type="submit" disabled={loading} className="auth-submit">
+              {loading ? t('reset.saving') : t('reset.submit')}
+            </button>
+          </form>
+        </>
+      )}
     </div>
   )
 }
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="text-center p-8">Loading...</div>}>
+    <Suspense fallback={<div className="auth-card auth-loading" />}>
       <ResetPasswordContent />
     </Suspense>
   )

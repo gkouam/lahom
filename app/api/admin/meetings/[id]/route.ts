@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
+import { isCalendarDate, parseCalendarDate } from '@/lib/dates'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
@@ -21,7 +22,7 @@ const patchSchema = z.object({
   body: z.string().max(50000).nullable().optional(),
   titleFr: z.string().max(500).nullable().optional(),
   bodyFr: z.string().max(50000).nullable().optional(),
-  date: z.string().min(1).optional(),
+  date: z.string().refine(isCalendarDate, 'Choose a valid date').optional(),
 })
 
 export async function PATCH(
@@ -69,7 +70,7 @@ export async function PATCH(
     if (parsed.data.body !== undefined) data.body = trimOrNull(parsed.data.body)
     if (parsed.data.titleFr !== undefined) data.titleFr = trimOrNull(parsed.data.titleFr)
     if (parsed.data.bodyFr !== undefined) data.bodyFr = trimOrNull(parsed.data.bodyFr)
-    if (parsed.data.date !== undefined) data.date = new Date(parsed.data.date)
+    if (parsed.data.date !== undefined) data.date = parseCalendarDate(parsed.data.date)
 
     const after = await prisma.meetingNote.update({ where: { id }, data })
 

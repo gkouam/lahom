@@ -61,16 +61,28 @@ export default function MessagesPage() {
   const filtered = rows.filter(r => (filter === 'unread' ? r.status === 'PENDING' : true))
   const selected = selectedId ? rows.find(r => r.id === selectedId) || null : null
 
+  const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null)
+
   const act = async (id: string, action: 'approve' | 'decline') => {
     setBusy(true)
+    setNotice(null)
     try {
       const res = await fetch(`/api/admin/messages/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action }),
       })
-      if (res.ok) await fetchRows()
-    } catch {}
+      const data = await res.json().catch(() => ({}))
+      if (res.ok) {
+        await fetchRows()
+        if (data.inviteSent === true) setNotice({ ok: true, text: t('messages.inviteSent') })
+        if (data.inviteSent === false) setNotice({ ok: false, text: t('messages.inviteFailed') })
+      } else {
+        setNotice({ ok: false, text: t('messages.actionFailed') })
+      }
+    } catch {
+      setNotice({ ok: false, text: t('messages.actionFailed') })
+    }
     finally { setBusy(false) }
   }
 
@@ -193,6 +205,11 @@ export default function MessagesPage() {
                 <div style={{ background: 'rgba(212,160,23,0.08)', border: '1px solid rgba(212,160,23,0.25)', borderRadius: '10px', padding: '12px 14px', fontSize: '0.8rem', color: 'var(--ink)', marginBottom: '20px' }}>
                   {t('messages.callout')}
                 </div>
+                {notice && (
+                  <div role="status" style={{ background: notice.ok ? 'rgba(45,106,79,0.1)' : '#FFF0F0', border: `1px solid ${notice.ok ? 'rgba(45,106,79,0.35)' : '#E8AAAA'}`, borderRadius: '10px', padding: '10px 14px', fontSize: '0.82rem', color: notice.ok ? 'var(--forest-mid)' : '#8B2020', marginBottom: '16px' }}>
+                    {notice.text}
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                   <button

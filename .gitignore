@@ -35,7 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prisma
-prisma/migrations/
+# prisma migrations ARE tracked: without them a new database can't be rebuilt.
+
+# database dumps (they contain member data) and local audit screenshots
+*.dump
 .vercel
 _audit/

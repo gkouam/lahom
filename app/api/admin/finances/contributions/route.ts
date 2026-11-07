@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
+import { isCalendarDate, parseCalendarDate } from '@/lib/dates'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
@@ -46,7 +47,7 @@ const postSchema = z.object({
     const d = new Prisma.Decimal(v)
     return d.greaterThan(0)
   }, 'Amount must be greater than 0'),
-  date: z.string().min(1),
+  date: z.string().refine(isCalendarDate, 'Choose a valid date'),
   method: z.string().max(100).optional(),
   description: z.string().max(500).optional(),
 })
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
         data: {
           userId,
           amount: new Prisma.Decimal(amount),
-          date: new Date(date),
+          date: parseCalendarDate(date),
           method: method || null,
           description: description || null,
           recordedById: actingUserId,

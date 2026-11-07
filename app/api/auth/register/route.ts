@@ -55,14 +55,16 @@ export async function POST(request: NextRequest) {
       // silently never arrived). The service never throws; failures are logged.
       const verificationToken = await createEmailVerificationToken(user.email!)
       const { emailService } = await import('@/lib/email/service')
-      await Promise.all([
+      const [verification] = await Promise.all([
         emailService.sendVerificationEmail(user.email!, user.name || '', verificationToken),
         emailService.sendAdminNewRegistration(user.name || 'Unknown', user.email!),
       ])
 
+      // emailSent lets the next page say so plainly when the link didn't go
+      // out, instead of telling the person to check an empty inbox.
       return NextResponse.json({
         message: 'Account created. Please check your email to verify your account.',
-        user: { id: user.id, email: user.email, name: user.name },
+        emailSent: verification.success,
       })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)

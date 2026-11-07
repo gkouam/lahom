@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { startOfTodayOrg } from '@/lib/dates'
 
 // Returns upcoming events (date >= start of today). With ?include=past, also returns
 // the 50 most recent past events. Requires an authenticated, APPROVED member.
@@ -22,8 +23,8 @@ export async function GET(request: NextRequest) {
   const userId = session.user.id
   const includePast = request.nextUrl.searchParams.get('include') === 'past'
 
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
+  // "Today" in Central Time, so an evening event stays upcoming until midnight.
+  const startOfToday = startOfTodayOrg()
 
   const shape = (e: {
     id: string; title: string | null; titleFr: string | null

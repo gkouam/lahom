@@ -4,7 +4,7 @@ export default function WhatsAppFloat() {
       href="https://chat.whatsapp.com/FdXvBZ537ZdFfJvENDernh"
       className="whatsapp-float"
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
     >
       <svg width="28" height="28" viewBox="0 0 24 24" fill="white">

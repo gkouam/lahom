@@ -5,8 +5,9 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase()
 }
 
-// Simple HTML escape (no external dependency)
-function escapeInput(val: string): string {
+// Simple HTML escape (no external dependency). Not applied on input any more;
+// kept for callers that build HTML by hand.
+export function escapeInput(val: string): string {
   return val
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -26,16 +27,20 @@ export const schemas = {
     .string()
     .min(8, 'Password must be at least 8 characters')
     .max(100, 'Password too long')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      'Password must contain uppercase, lowercase, number and special character'
-    ),
+    // Any symbol counts as the special character (#, -, _, ., space, etc.).
+    .regex(/[a-z]/, 'Password needs a lowercase letter')
+    .regex(/[A-Z]/, 'Password needs an uppercase letter')
+    .regex(/\d/, 'Password needs a number')
+    .regex(/[^A-Za-z0-9]/, 'Password needs a symbol, such as ! # - or _'),
 
+  // Stored as typed. React escapes it on screen and the email templates escape
+  // it in HTML (lib/email/templates.ts esc()). Escaping on input corrupted names
+  // with apostrophes, such as N'Guessan, into "N&#x27;Guessan".
   name: z
     .string()
+    .trim()
     .min(2, 'Name too short')
-    .max(100, 'Name too long')
-    .transform(val => escapeInput(val)),
+    .max(100, 'Name too long'),
 
   phone: z
     .string()
@@ -44,16 +49,17 @@ export const schemas = {
 
   hometown: z
     .string()
+    .trim()
     .max(100, 'Hometown too long')
-    .transform(val => escapeInput(val))
     .optional(),
 
+  // Public contact form. Values are stored as typed and escaped when shown.
   membershipRequest: z.object({
-    email: z.string().email('Invalid email').transform(val => normalizeEmail(val)),
-    name: z.string().min(2, 'Name too short').max(100, 'Name too long'),
-    phone: z.string().max(20).optional(),
-    hometown: z.string().max(100).optional(),
-    message: z.string().max(1000).optional(),
+    email: z.string().trim().email('Invalid email').max(255).transform(val => normalizeEmail(val)),
+    name: z.string().trim().min(2, 'Name too short').max(100, 'Name too long'),
+    phone: z.string().trim().max(20).optional(),
+    hometown: z.string().trim().max(100).optional(),
+    message: z.string().trim().max(1000, 'Message too long').optional(),
   }),
 }
 

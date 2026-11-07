@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
+import { isCalendarDate, parseCalendarDate } from '@/lib/dates'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
@@ -21,7 +22,7 @@ const patchSchema = z.object({
   description: z.string().max(10000).nullable().optional(),
   titleFr: z.string().max(300).nullable().optional(),
   descriptionFr: z.string().max(10000).nullable().optional(),
-  date: z.string().min(1).optional(),
+  date: z.string().refine(isCalendarDate, 'Choose a valid date').optional(),
   time: z.string().max(100).nullable().optional(),
   location: z.string().max(300).nullable().optional(),
   color: z.string().max(30).optional(),
@@ -86,7 +87,7 @@ export async function PATCH(
     if (parsed.data.description !== undefined) data.description = trimOrNull(parsed.data.description)
     if (parsed.data.titleFr !== undefined) data.titleFr = trimOrNull(parsed.data.titleFr)
     if (parsed.data.descriptionFr !== undefined) data.descriptionFr = trimOrNull(parsed.data.descriptionFr)
-    if (parsed.data.date !== undefined) data.date = new Date(parsed.data.date)
+    if (parsed.data.date !== undefined) data.date = parseCalendarDate(parsed.data.date)
     if (parsed.data.time !== undefined) data.time = trimOrNull(parsed.data.time)
     if (parsed.data.location !== undefined) data.location = trimOrNull(parsed.data.location)
     if (parsed.data.color !== undefined) data.color = parsed.data.color

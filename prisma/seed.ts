@@ -3,17 +3,31 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
+// Seeds a local or test database. It never runs against production by
+// accident, and the admin password always comes from the environment; the
+// repository must never contain a working password.
 async function main() {
-  const adminPassword = await bcrypt.hash('Admin123!@#', 12)
+  if (process.env.NODE_ENV === 'production' && process.env.ALLOW_PRODUCTION_SEED !== 'yes') {
+    throw new Error('Refusing to seed with NODE_ENV=production. Set ALLOW_PRODUCTION_SEED=yes if you really mean it.')
+  }
+  const adminEmail = (process.env.SEED_ADMIN_EMAIL || 'admin@example.test').toLowerCase()
+  const plainPassword = process.env.SEED_ADMIN_PASSWORD
+  if (!plainPassword || plainPassword.length < 16) {
+    throw new Error('Set SEED_ADMIN_PASSWORD (16+ characters) before seeding.')
+  }
+
+  const adminPassword = await bcrypt.hash(plainPassword, 12)
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@lahomdfw.org' },
+    where: { email: adminEmail },
+    // An existing account keeps its password; only its role is ensured.
     update: { role: Role.SUPER_ADMIN },
     create: {
-      email: 'admin@lahomdfw.org',
+      email: adminEmail,
       name: 'Admin',
       passwordHash: adminPassword,
       emailVerified: new Date(),
       role: Role.SUPER_ADMIN,
+      accountStatus: 'APPROVED',
       hometown: 'Baham',
     },
   })

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { formatCalendarDate, todayInOrgTimeZone } from '@/lib/dates'
 
 interface MeetingNote {
   id: string
@@ -11,7 +12,7 @@ interface MeetingNote {
   date: string
   createdAt: string
   updatedAt: string
-  author: { id: string; name: string | null; email: string }
+  author: { id: string; name: string | null; email: string } | null
 }
 
 function langIndicator(note: MeetingNote) {
@@ -63,7 +64,7 @@ export default function MeetingsPage() {
   const [formBody, setFormBody] = useState('')
   const [formTitleFr, setFormTitleFr] = useState('')
   const [formBodyFr, setFormBodyFr] = useState('')
-  const [formDate, setFormDate] = useState(new Date().toISOString().split('T')[0])
+  const [formDate, setFormDate] = useState(todayInOrgTimeZone())
   const [saving, setSaving] = useState(false)
 
   // Delete confirmation
@@ -86,7 +87,7 @@ export default function MeetingsPage() {
     setFormBody('')
     setFormTitleFr('')
     setFormBodyFr('')
-    setFormDate(new Date().toISOString().split('T')[0])
+    setFormDate(todayInOrgTimeZone())
     setEditingId(null)
     setShowForm(false)
   }
@@ -312,7 +313,7 @@ export default function MeetingsPage() {
                 {notes.map(note => (
                   <tr key={note.id}>
                     <td style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
-                      {new Date(note.date).toLocaleDateString()}
+                      {formatCalendarDate(note.date)}
                     </td>
                     <td style={{ fontSize: '0.82rem', fontWeight: 600, maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {displayTitle(note)}
@@ -329,7 +330,7 @@ export default function MeetingsPage() {
                       })()}
                     </td>
                     <td style={{ fontSize: '0.82rem', color: 'var(--muted)' }}>
-                      {note.author.name || note.author.email}
+                      {note.author ? (note.author.name || note.author.email) : 'Former member'}
                     </td>
                     <td style={{ fontSize: '0.82rem', color: 'var(--muted)' }}>
                       {new Date(note.updatedAt).toLocaleDateString()}

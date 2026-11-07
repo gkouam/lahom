@@ -1,57 +1,83 @@
 'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/i18n/context'
+
+// Shown when a confirmation link fails. The page maps a short code from the
+// URL to its own message; it never prints text taken from the URL.
+const MESSAGES: Record<string, string> = {
+  expired: 'verify.expired',
+  invalid: 'verify.invalid',
+  missing: 'verify.invalid',
+  failed: 'verify.failed',
+}
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams()
+  const { t } = useLanguage()
   const token = searchParams.get('token')
-  const error = searchParams.get('error')
+  const code = searchParams.get('error')
+  const messageKey = code ? MESSAGES[code] || 'verify.invalid' : null
+
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
+  // Old emails linked here with ?token=; hand those to the API route.
+  useEffect(() => {
+    if (token) window.location.href = `/api/auth/verify-email?token=${encodeURIComponent(token)}`
+  }, [token])
+
+  const resend = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    setStatus('sending')
+    try {
+      const res = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      setStatus(res.ok ? 'sent' : 'error')
+    } catch {
+      setStatus('error')
+    }
+  }
 
   if (token) {
-    if (typeof window !== 'undefined') {
-      window.location.href = `/api/auth/verify-email?token=${token}`
-    }
-    return (
-      <div className="w-full max-w-md">
-        <div className="rounded-xl p-8 shadow-lg text-center" style={{ background: 'white' }}>
-          <p style={{ color: 'var(--night)' }}>Verifying your email...</p>
-        </div>
-      </div>
-    )
+    return <div className="auth-card centered"><p className="auth-subtitle">{t('verify.checking')}</p></div>
   }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="rounded-xl p-8 shadow-lg text-center" style={{ background: 'white' }}>
-        <h1 className="text-2xl font-bold mb-4" style={{ fontFamily: 'var(--serif)', color: 'var(--night)' }}>
-          Email Verification
-        </h1>
-
-        {error ? (
-          <>
-            <div className="mb-4 p-3 rounded-lg text-sm" style={{ background: '#FDECEA', color: '#B71C1C' }}>
-              {error}
-            </div>
-            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold-ink)' }}>Back to sign in</Link>
-          </>
-        ) : (
-          <>
-            <p className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
-              Check your email for a verification link.
-            </p>
-            <Link href="/auth/signin" className="text-sm font-semibold" style={{ color: 'var(--gold-ink)' }}>Back to sign in</Link>
-          </>
-        )}
-      </div>
+    <div className="auth-card centered">
+      <h1 className="auth-title">{t('verify.title')}</h1>
+      {messageKey ? (
+        <>
+          <div className="auth-alert error" role="alert">{t(messageKey)}</div>
+          <form onSubmit={resend} className="auth-form">
+            <label htmlFor="verify-email" className="auth-label">{t('verifyReq.resendLabel')}</label>
+            <input id="verify-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" className="auth-input" />
+            <button type="submit" disabled={status === 'sending' || !email.trim()} className="auth-submit">
+              {status === 'sending' ? t('verifyReq.sending') : t('verifyReq.resend')}
+            </button>
+            {status === 'sent' && <div className="auth-alert success" role="status">{t('verifyReq.sent')}</div>}
+            {status === 'error' && <div className="auth-alert error" role="alert">{t('verifyReq.error')}</div>}
+          </form>
+        </>
+      ) : (
+        <p className="auth-subtitle">{t('verify.default')}</p>
+      )}
+      <p className="auth-switch">
+        <Link href="/auth/signin" className="auth-link">{t('auth.backToSignin')}</Link>
+      </p>
     </div>
   )
 }
 
 export default function VerifyEmailPage() {
   return (
-    <Suspense fallback={<div className="text-center p-8">Loading...</div>}>
+    <Suspense fallback={<div className="auth-card auth-loading" />}>
       <VerifyEmailContent />
     </Suspense>
   )

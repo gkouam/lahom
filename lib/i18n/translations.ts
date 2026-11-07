@@ -91,10 +91,6 @@ export const translations: Record<string, { en: string; fr: string }> = {
     fr: 'Que vous soyez Baham, Bamiléké, Camerounais ou ami de notre culture — vous êtes les bienvenus. Ensemble, nous préservons notre patrimoine et élevons notre communauté dans la métropole de Dallas–Fort Worth.',
   },
   'join.btn': { en: 'Join Now', fr: 'Rejoindre' },
-  'join.contact': {
-    en: 'Or contact us at <strong>info@lahomdfw.org</strong> · (469) 555-BHAM',
-    fr: 'Ou contactez-nous à <strong>info@lahomdfw.org</strong> · (469) 555-BHAM',
-  },
   'join.whatsapp': { en: 'Chat on WhatsApp', fr: 'Discuter sur WhatsApp' },
   'join.stickyCta': { en: 'Join the Community', fr: 'Rejoindre la Communauté' },
 
@@ -249,11 +245,11 @@ export const translations: Record<string, { en: string; fr: string }> = {
 
   // Admin messages
   'messages.title': { en: 'Messages', fr: 'Messages' },
-  'messages.subtitle': { en: 'Membership requests and inquiries', fr: 'Demandes d\'adhésion et messages' },
+  'messages.subtitle': { en: 'Messages sent through the website', fr: 'Messages envoyés depuis le site' },
   'messages.filter.all': { en: 'All', fr: 'Tous' },
   'messages.filter.unread': { en: 'Unread', fr: 'Non lus' },
   'messages.filter.join': { en: 'Join requests', fr: 'Demandes d\'adhésion' },
-  'messages.joinRequest': { en: 'Join request', fr: 'Demande d\'adhésion' },
+  'messages.joinRequest': { en: 'Website message', fr: 'Message du site' },
   'messages.empty': { en: 'No messages.', fr: 'Aucun message.' },
   'messages.selectPrompt': { en: 'Select a message to read.', fr: 'Sélectionnez un message à lire.' },
   'messages.loading': { en: 'Loading messages…', fr: 'Chargement des messages…' },
@@ -262,9 +258,12 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'messages.hometown': { en: 'Hometown', fr: 'Ville d\'origine' },
   'messages.noMessage': { en: 'No message provided.', fr: 'Aucun message fourni.' },
   'messages.callout': {
-    en: 'Approving marks this request as approved so you can invite the person to register at the sign-up page. It does not create an account automatically.',
-    fr: 'Approuver marque cette demande comme approuvée afin que vous puissiez inviter la personne à s\'inscrire. Cela ne crée pas de compte automatiquement.',
+    en: 'Approve & Invite emails this person a link to create their member account, with their address filled in. Their account still needs email confirmation and your approval on the Members page.',
+    fr: "Approuver & Inviter envoie à cette personne un lien pour créer son compte membre, avec son adresse déjà remplie. Son compte devra encore être confirmé par e-mail puis approuvé dans la page Membres.",
   },
+  'messages.inviteSent': { en: 'Invitation sent.', fr: 'Invitation envoyée.' },
+  'messages.inviteFailed': { en: 'Marked as approved, but the invitation email could not be sent. Reply by email instead.', fr: "Marquée comme approuvée, mais l'invitation n'a pas pu être envoyée. Répondez plutôt par e-mail." },
+  'messages.actionFailed': { en: "That didn't work. Please try again.", fr: "Cela n'a pas fonctionné. Veuillez réessayer." },
   'messages.approve': { en: 'Approve & Invite', fr: 'Approuver & Inviter' },
   'messages.decline': { en: 'Decline', fr: 'Refuser' },
   'messages.replyByEmail': { en: 'Reply by Email', fr: 'Répondre par E-mail' },
@@ -276,4 +275,207 @@ export const translations: Record<string, { en: string; fr: string }> = {
   'form.emailEmpty': { en: 'Please enter your email address.', fr: 'Veuillez entrer votre adresse e-mail.' },
   'form.emailInvalid': { en: 'Please enter a valid email address.', fr: 'Veuillez entrer une adresse e-mail valide.' },
   'form.success': { en: 'Thank you! We\'ll be in touch soon.', fr: 'Merci ! Nous vous contacterons bientôt.' },
+
+  // Brand
+  'brand.name': { en: "La'Hom DFW", fr: "La'Hom DFW" },
+  'brand.tagline': { en: 'Baham Bamiléké Community of Dallas–Fort Worth', fr: 'Communauté Baham Bamiléké de Dallas–Fort Worth' },
+  'brand.place': { en: 'Dallas–Fort Worth', fr: 'Dallas–Fort Worth' },
+
+  // Hero extras
+  'hero.scroll': { en: 'Scroll', fr: 'Défiler' },
+  'hero.imageAlt': { en: 'Enthronement ceremony of a Mafo in Baham, Cameroon', fr: "Cérémonie d'intronisation d'une Mafo à Baham, Cameroun" },
+
+  // Culture ticker
+  'ticker.1': { en: 'Elephant Mask Dance', fr: 'Danse du masque éléphant' },
+  'ticker.2': { en: 'Ndop Royal Cloth', fr: 'Tissu royal ndop' },
+  'ticker.3': { en: 'Juju Feathered Hats', fr: 'Coiffes à plumes juju' },
+  'ticker.4': { en: 'Beaded Thrones', fr: 'Trônes perlés' },
+  'ticker.5': { en: 'Royal Chieftaincy', fr: 'Chefferie royale' },
+  'ticker.6': { en: 'Toghu Royal Garment', fr: 'Toghu, habit royal' },
+  'ticker.7': { en: 'Nkam Festival', fr: 'Festival Nkam' },
+  'ticker.8': { en: "Ghomala' Language", fr: "Langue ghomala'" },
+  'ticker.9': { en: 'Sacred Forests', fr: 'Forêts sacrées' },
+
+  // Heritage photos
+  'heritage.photo1.tag': { en: 'Royal Museum of Baham', fr: 'Musée royal de Baham' },
+  'heritage.photo1.alt': { en: 'Royal Museum of Baham, traditional Grassfields architecture', fr: 'Musée royal de Baham, architecture traditionnelle des Grassfields' },
+  'heritage.photo2.tag': { en: 'Sacred Artifacts', fr: 'Objets sacrés' },
+  'heritage.photo2.alt': { en: 'Interior of the Royal Museum with ancestral sculptures', fr: 'Intérieur du Musée royal et sculptures ancestrales' },
+
+  // Location facts
+  'location.mapLabel': { en: 'Map of Cameroon showing where Baham is', fr: 'Carte du Cameroun indiquant Baham' },
+  'location.region': { en: 'West Region', fr: "Région de l'Ouest" },
+  'location.fact.region': { en: 'Region', fr: 'Région' },
+  'location.fact.regionValue': { en: 'West · Hauts-Plateaux', fr: 'Ouest · Hauts-Plateaux' },
+  'location.fact.language': { en: 'Language', fr: 'Langue' },
+  'location.fact.altitude': { en: 'Altitude', fr: 'Altitude' },
+  'location.fact.coordinates': { en: 'Coordinates', fr: 'Coordonnées' },
+
+  // Elephant mask feature
+  'mask.label': { en: 'The Elephant Mask', fr: 'Le masque éléphant' },
+  'mask.p1': {
+    en: "The elephant mask is the most iconic symbol of Bamiléké artistic achievement. With protruding circular ears, geometric beadwork and rows of triangles, the sacred symbol of the leopard, it represents the Fon's power to transform into nature's mightiest creatures.",
+    fr: "Le masque éléphant est le symbole le plus emblématique de l'art bamiléké. Avec ses oreilles circulaires, son perlage géométrique et ses rangées de triangles, symbole sacré du léopard, il représente le pouvoir du Fon de se transformer en la plus puissante des créatures.",
+  },
+  'mask.p2': {
+    en: 'A mask like this one is held by the Dallas Museum of Art, a living bridge between our ancestral homeland and our Texas community.',
+    fr: "Un masque comme celui-ci est conservé au Dallas Museum of Art, un pont vivant entre notre terre ancestrale et notre communauté du Texas.",
+  },
+  'mask.alt': { en: 'Close-up of Bamiléké elephant mask beadwork', fr: "Gros plan sur le perlage d'un masque éléphant bamiléké" },
+  'mask.leopard': { en: 'Leopard', fr: 'Léopard' },
+  'mask.power': { en: 'Power', fr: 'Puissance' },
+  'mask.elephant': { en: 'Elephant', fr: 'Éléphant' },
+  'mask.wisdom': { en: 'Wisdom', fr: 'Sagesse' },
+  'mask.royal': { en: 'Royalty', fr: 'Royauté' },
+  'mask.authority': { en: 'Authority', fr: 'Autorité' },
+
+  // Events (landing)
+  'events.emptyTitle': { en: 'No gathering is scheduled right now', fr: "Aucun rassemblement n'est prévu pour le moment" },
+  'events.emptyBody': {
+    en: 'Members receive invitations in the member portal and on WhatsApp. Create your member account to be invited to the next one.',
+    fr: "Les membres reçoivent les invitations dans l'espace membre et sur WhatsApp. Créez votre compte membre pour être invité(e) au prochain.",
+  },
+  'events.emptyCta': { en: 'Become a member', fr: 'Devenir membre' },
+  'events.memberLink': { en: 'All events in the member portal →', fr: "Tous les événements dans l'espace membre →" },
+
+  // Leadership roles
+  'leadership.role.president': { en: 'Community President', fr: 'Président de la communauté' },
+  'leadership.role.vp': { en: 'Vice President', fr: 'Vice-président' },
+  'leadership.role.secretary': { en: 'Secretary General', fr: 'Secrétaire général' },
+  'leadership.role.treasurer': { en: 'Treasurer', fr: 'Trésorier' },
+  'leadership.honorific': { en: 'Mr.', fr: 'M.' },
+
+  // Join + contact
+  'join.cta': { en: 'Create your member account', fr: 'Créer votre compte membre' },
+  'join.stepsTitle': { en: 'How membership works', fr: 'Comment devenir membre' },
+  'join.step1': { en: 'Create your account with your name and email.', fr: 'Créez votre compte avec votre nom et votre e-mail.' },
+  'join.step2': { en: 'Confirm your email with the link we send you.', fr: 'Confirmez votre e-mail grâce au lien que nous vous envoyons.' },
+  'join.step3': { en: 'An officer reviews and approves your membership.', fr: 'Un responsable examine et approuve votre adhésion.' },
+  'join.haveAccount': { en: 'Already a member?', fr: 'Déjà membre ?' },
+  'contact.title': { en: 'Questions? Write to us', fr: 'Une question ? Écrivez-nous' },
+  'contact.name': { en: 'Your name', fr: 'Votre nom' },
+  'contact.email': { en: 'Your email', fr: 'Votre e-mail' },
+  'contact.message': { en: 'Your message', fr: 'Votre message' },
+  'contact.send': { en: 'Send message', fr: 'Envoyer le message' },
+  'contact.sending': { en: 'Sending…', fr: 'Envoi…' },
+  'contact.sent': { en: 'Thank you. An officer will reply by email.', fr: 'Merci. Un responsable vous répondra par e-mail.' },
+  'contact.error': { en: 'Your message could not be sent. Please try again, or email info@lahomdfw.org.', fr: "Votre message n'a pas pu être envoyé. Réessayez, ou écrivez à info@lahomdfw.org." },
+  'contact.nameRequired': { en: 'Please enter your name.', fr: 'Veuillez entrer votre nom.' },
+  'contact.messageRequired': { en: 'Please write a short message.', fr: 'Veuillez écrire un court message.' },
+  'contact.orEmail': { en: 'Or email', fr: 'Ou écrivez à' },
+
+  // Footer
+  'footer.about': {
+    en: "La'Hom DFW brings the Baham Bamiléké community of Dallas–Fort Worth together to preserve and teach the language, history, arts and traditions of the Baham people, and to support education and the integration of immigrants in our area.",
+    fr: "La'Hom DFW rassemble la communauté Baham Bamiléké de Dallas–Fort Worth pour préserver et transmettre la langue, l'histoire, les arts et les traditions du peuple Baham, et pour soutenir l'éducation et l'intégration des immigrants de notre région.",
+  },
+  'footer.flag': { en: 'Republic of Cameroon', fr: 'République du Cameroun' },
+  'footer.quickLinks': { en: 'Explore', fr: 'Découvrir' },
+  'footer.culture': { en: 'Culture & Art', fr: 'Culture et art' },
+  'footer.members': { en: 'Members', fr: 'Membres' },
+  'footer.becomeMember': { en: 'Become a member', fr: 'Devenir membre' },
+  'footer.signIn': { en: 'Member sign-in', fr: 'Espace membre' },
+  'footer.contact': { en: 'Contact', fr: 'Contact' },
+  'footer.whatsapp': { en: 'WhatsApp group', fr: 'Groupe WhatsApp' },
+  'footer.rights': { en: "© {year} La'Hom DFW. All rights reserved.", fr: "© {year} La'Hom DFW. Tous droits réservés." },
+  'footer.photos': { en: 'Heritage photos from Wikimedia Commons (CC BY-SA) by', fr: 'Photos du patrimoine issues de Wikimedia Commons (CC BY-SA), par' },
+
+  // Auth shell
+  'auth.home': { en: 'Home', fr: 'Accueil' },
+  'auth.tagline': { en: 'Connecting our community, preserving our heritage, building our future together.', fr: 'Relier notre communauté, préserver notre patrimoine, bâtir ensemble notre avenir.' },
+  'auth.showPassword': { en: 'Show password', fr: 'Afficher le mot de passe' },
+  'auth.hidePassword': { en: 'Hide password', fr: 'Masquer le mot de passe' },
+  'auth.backToSignin': { en: 'Back to sign in', fr: 'Retour à la connexion' },
+  'auth.loading': { en: 'Loading…', fr: 'Chargement…' },
+
+  // Sign in
+  'signin.title': { en: 'Welcome back', fr: 'Bon retour' },
+  'signin.subtitle': { en: "Sign in to your La'Hom DFW member account", fr: "Connectez-vous à votre compte membre La'Hom DFW" },
+  'signin.verified': { en: 'Email confirmed. You can sign in now.', fr: 'E-mail confirmé. Vous pouvez vous connecter.' },
+  'signin.invalid': { en: "That email and password don't match. Check both and try again.", fr: 'Cet e-mail et ce mot de passe ne correspondent pas. Vérifiez-les et réessayez.' },
+  'signin.locked': { en: 'Too many attempts. Sign-in is paused for 15 minutes; try again later or reset your password.', fr: 'Trop de tentatives. La connexion est suspendue pendant 15 minutes ; réessayez plus tard ou réinitialisez votre mot de passe.' },
+  'signin.failed': { en: 'Sign-in failed. Please try again.', fr: 'La connexion a échoué. Veuillez réessayer.' },
+  'signin.submit': { en: 'Sign in', fr: 'Se connecter' },
+  'signin.submitting': { en: 'Signing in…', fr: 'Connexion…' },
+  'signin.forgot': { en: 'Forgot your password?', fr: 'Mot de passe oublié ?' },
+  'signin.noAccount': { en: 'Not a member yet?', fr: 'Pas encore membre ?' },
+  'signin.create': { en: 'Create an account', fr: 'Créer un compte' },
+
+  // Sign up
+  'signup.title': { en: "Join La'Hom DFW", fr: "Rejoindre La'Hom DFW" },
+  'signup.subtitle': { en: 'Create your member account. After you confirm your email, an officer reviews and approves it.', fr: "Créez votre compte membre. Après la confirmation de votre e-mail, un responsable l'examine et l'approuve." },
+  'signup.account': { en: 'Your account', fr: 'Votre compte' },
+  'signup.optional': { en: 'Optional', fr: 'Facultatif' },
+  'signup.name': { en: 'Full name', fr: 'Nom complet' },
+  'signup.namePlaceholder': { en: 'As members know you', fr: 'Tel que les membres vous connaissent' },
+  'signup.confirm': { en: 'Confirm password', fr: 'Confirmer le mot de passe' },
+  'signup.rulesTitle': { en: 'Your password needs', fr: 'Votre mot de passe doit contenir' },
+  'signup.rule.length': { en: 'At least 8 characters', fr: 'Au moins 8 caractères' },
+  'signup.rule.lower': { en: 'A lowercase letter', fr: 'Une minuscule' },
+  'signup.rule.upper': { en: 'An uppercase letter', fr: 'Une majuscule' },
+  'signup.rule.number': { en: 'A number', fr: 'Un chiffre' },
+  'signup.rule.symbol': { en: 'A symbol, such as ! # - or _', fr: 'Un symbole, comme ! # - ou _' },
+  'signup.mismatch': { en: "The two passwords don't match.", fr: 'Les deux mots de passe ne correspondent pas.' },
+  'signup.weak': { en: 'Your password needs every item in the list above.', fr: 'Votre mot de passe doit remplir toutes les conditions ci-dessus.' },
+  'signup.phone': { en: 'Phone', fr: 'Téléphone' },
+  'signup.hometown': { en: 'Hometown', fr: "Ville d'origine" },
+  'signup.submit': { en: 'Create my account', fr: 'Créer mon compte' },
+  'signup.submitting': { en: 'Creating your account…', fr: 'Création du compte…' },
+  'signup.hasAccount': { en: 'Already a member?', fr: 'Déjà membre ?' },
+  'signup.exists': { en: 'An account already uses this email. Sign in, or reset your password if you forgot it.', fr: "Un compte utilise déjà cet e-mail. Connectez-vous, ou réinitialisez votre mot de passe si vous l'avez oublié." },
+  'signup.failed': { en: "We couldn't create your account. Please try again.", fr: "Nous n'avons pas pu créer votre compte. Veuillez réessayer." },
+
+  // Verify email (waiting page)
+  'verifyReq.title': { en: 'Check your email', fr: 'Vérifiez votre boîte mail' },
+  'verifyReq.bodyTo': { en: 'We sent a confirmation link to {email}. Open it to confirm your address; it works for 24 hours.', fr: 'Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le pour confirmer votre adresse ; il est valable 24 heures.' },
+  'verifyReq.body': { en: 'We sent a confirmation link to your email address. Open it to confirm your address; it works for 24 hours.', fr: 'Nous avons envoyé un lien de confirmation à votre adresse e-mail. Ouvrez-le pour confirmer votre adresse ; il est valable 24 heures.' },
+  'verifyReq.createdNotSent': { en: "Your account was created, but we couldn't send the confirmation email to {email}. Use the button below to try again, or write to info@lahomdfw.org.", fr: "Votre compte a été créé, mais nous n'avons pas pu envoyer l'e-mail de confirmation à {email}. Utilisez le bouton ci-dessous pour réessayer, ou écrivez à info@lahomdfw.org." },
+  'verifyReq.notSent': { en: "We couldn't send the email just now. Use the button below to try again, or write to info@lahomdfw.org.", fr: "Nous n'avons pas pu envoyer l'e-mail pour le moment. Utilisez le bouton ci-dessous pour réessayer, ou écrivez à info@lahomdfw.org." },
+  'verifyReq.next': { en: "Then an officer reviews your registration. You'll get an email when it's approved.", fr: 'Ensuite, un responsable examine votre inscription. Vous recevrez un e-mail une fois approuvée.' },
+  'verifyReq.resendLabel': { en: "Didn't get it? Check your spam folder, or send a new link:", fr: 'Rien reçu ? Vérifiez vos courriers indésirables, ou envoyez un nouveau lien :' },
+  'verifyReq.resend': { en: 'Send a new link', fr: 'Envoyer un nouveau lien' },
+  'verifyReq.sending': { en: 'Sending…', fr: 'Envoi…' },
+  'verifyReq.sent': { en: 'If that address has an unconfirmed account, a new link is on its way.', fr: 'Si cette adresse a un compte non confirmé, un nouveau lien est en route.' },
+  'verifyReq.error': { en: "We couldn't send the email right now. Please try again later.", fr: "Nous n'avons pas pu envoyer l'e-mail pour le moment. Veuillez réessayer plus tard." },
+
+  // Verify email (link result)
+  'verify.title': { en: 'Email confirmation', fr: "Confirmation de l'e-mail" },
+  'verify.checking': { en: 'Confirming your email…', fr: 'Confirmation de votre e-mail…' },
+  'verify.expired': { en: 'This link has expired. Links work for 24 hours; send yourself a new one below.', fr: 'Ce lien a expiré. Les liens sont valables 24 heures ; envoyez-vous-en un nouveau ci-dessous.' },
+  'verify.invalid': { en: "This link isn't valid or was already used. If you already confirmed your email, just sign in.", fr: "Ce lien n'est pas valide ou a déjà été utilisé. Si vous avez déjà confirmé votre e-mail, connectez-vous simplement." },
+  'verify.failed': { en: 'Something went wrong while confirming your email. Please try again.', fr: 'Un problème est survenu lors de la confirmation de votre e-mail. Veuillez réessayer.' },
+  'verify.default': { en: 'Check your email for a confirmation link.', fr: 'Vérifiez votre boîte mail : un lien de confirmation vous attend.' },
+
+  // Pending approval
+  'pending.title': { en: 'Awaiting approval', fr: "En attente d'approbation" },
+  'pending.body': { en: "Your email is confirmed. An officer will review your registration, and you'll get an email when it's approved. This page updates by itself.", fr: 'Votre e-mail est confirmé. Un responsable examinera votre inscription et vous recevrez un e-mail une fois approuvée. Cette page se met à jour toute seule.' },
+  'pending.rejectedTitle': { en: 'Registration not approved', fr: 'Inscription non approuvée' },
+  'pending.rejectedBody': { en: 'Our officers were not able to approve this registration. If you think this is a mistake, write to info@lahomdfw.org.', fr: "Nos responsables n'ont pas pu approuver cette inscription. Si vous pensez qu'il s'agit d'une erreur, écrivez à info@lahomdfw.org." },
+  'pending.whatsapp': { en: 'Join the WhatsApp community', fr: 'Rejoindre la communauté WhatsApp' },
+
+  // Forgot / reset password
+  'forgot.title': { en: 'Reset your password', fr: 'Réinitialiser votre mot de passe' },
+  'forgot.body': { en: "Enter the email you signed up with and we'll send you a reset link.", fr: "Entrez l'e-mail utilisé lors de votre inscription et nous vous enverrons un lien de réinitialisation." },
+  'forgot.submit': { en: 'Send reset link', fr: 'Envoyer le lien' },
+  'forgot.sending': { en: 'Sending…', fr: 'Envoi…' },
+  'forgot.sent': { en: 'If an account exists for that email, a reset link is on its way. It works for 1 hour.', fr: 'Si un compte existe pour cet e-mail, un lien de réinitialisation est en route. Il est valable 1 heure.' },
+  'forgot.error': { en: "We couldn't send the link right now. Please try again.", fr: "Nous n'avons pas pu envoyer le lien pour le moment. Veuillez réessayer." },
+  'reset.title': { en: 'Choose a new password', fr: 'Choisissez un nouveau mot de passe' },
+  'reset.new': { en: 'New password', fr: 'Nouveau mot de passe' },
+  'reset.submit': { en: 'Save new password', fr: 'Enregistrer le nouveau mot de passe' },
+  'reset.saving': { en: 'Saving…', fr: 'Enregistrement…' },
+  'reset.done': { en: 'Your password is changed. You can sign in with it now.', fr: 'Votre mot de passe a été modifié. Vous pouvez vous connecter avec.' },
+  'reset.invalidLink': { en: 'This reset link is incomplete. Request a new one.', fr: 'Ce lien de réinitialisation est incomplet. Demandez-en un nouveau.' },
+  'reset.requestNew': { en: 'Request a new link', fr: 'Demander un nouveau lien' },
+  'reset.failed': { en: "We couldn't change your password. Please try again.", fr: "Nous n'avons pas pu modifier votre mot de passe. Veuillez réessayer." },
+
+  // Not found
+  'notFound.title': { en: "This page doesn't exist", fr: "Cette page n'existe pas" },
+  'notFound.body': { en: 'The link may be old or mistyped.', fr: 'Le lien est peut-être ancien ou mal saisi.' },
+  'notFound.home': { en: 'Go to the home page', fr: "Aller à l'accueil" },
+
+  // Portal chrome
+  'role.MEMBER': { en: 'Member', fr: 'Membre' },
+  'role.SUPER_ADMIN': { en: 'Super Admin', fr: 'Super administrateur' },
+  'lang.label': { en: 'Français', fr: 'English' },
 }

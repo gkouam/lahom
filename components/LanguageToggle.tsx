@@ -2,16 +2,21 @@
 
 import { useLanguage } from '@/lib/i18n/context'
 
-export default function LanguageToggle() {
-  const { lang, setLang } = useLanguage()
+// "compact" shows FR / EN (site header); "full" shows Français / English
+// (portal sidebars and the sign-in pages, where there is room for the word).
+export default function LanguageToggle({ variant = 'compact', className = '' }: { variant?: 'compact' | 'full'; className?: string }) {
+  const { lang, setLang, t } = useLanguage()
+  const next = lang === 'en' ? 'fr' : 'en'
 
   return (
     <button
-      className="lang-toggle"
-      onClick={() => setLang(lang === 'en' ? 'fr' : 'en')}
-      aria-label="Toggle language"
+      type="button"
+      className={`lang-toggle${variant === 'full' ? ' lang-toggle-full' : ''}${className ? ` ${className}` : ''}`}
+      onClick={() => setLang(next)}
+      aria-label={lang === 'en' ? 'Passer en français' : 'Switch to English'}
+      lang={next}
     >
-      {lang === 'en' ? 'FR' : 'EN'}
+      {variant === 'full' ? t('lang.label') : next.toUpperCase()}
     </button>
   )
 }

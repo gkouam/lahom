@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
+import { isCalendarDate, parseCalendarDate } from '@/lib/dates'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
@@ -13,7 +14,7 @@ const patchSchema = z.object({
     const d = new Prisma.Decimal(v)
     return d.greaterThan(0)
   }, 'Amount must be greater than 0').optional(),
-  date: z.string().min(1).optional(),
+  date: z.string().refine(isCalendarDate, 'Choose a valid date').optional(),
   method: z.string().max(100).nullable().optional(),
   description: z.string().max(500).nullable().optional(),
 })
@@ -45,7 +46,7 @@ export async function PATCH(
 
       const data: Record<string, unknown> = {}
       if (parsed.data.amount !== undefined) data.amount = new Prisma.Decimal(parsed.data.amount)
-      if (parsed.data.date !== undefined) data.date = new Date(parsed.data.date)
+      if (parsed.data.date !== undefined) data.date = parseCalendarDate(parsed.data.date)
       if (parsed.data.method !== undefined) data.method = parsed.data.method
       if (parsed.data.description !== undefined) data.description = parsed.data.description
 

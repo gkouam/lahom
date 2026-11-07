@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { formatCalendarDate } from '@/lib/dates'
 import { useLanguage } from '@/lib/i18n/context'
 
 interface Bar { label: string; value: number }
@@ -78,7 +79,7 @@ export default function ReportsPage() {
       [t('reports.stat.behindOnDues'), String(data.stats.behindOnDues)],
       [],
       [t('reports.table.event'), t('reports.table.date'), t('reports.table.rsvpd'), t('reports.table.attended'), t('reports.table.turnout')],
-      ...data.attendance.map(r => [eventName(r), new Date(r.date).toLocaleDateString(), String(r.rsvpd), String(r.attended), `${r.turnout}%`]),
+      ...data.attendance.map(r => [eventName(r), formatCalendarDate(r.date), String(r.rsvpd), String(r.attended), `${r.turnout}%`]),
     ]
     const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
@@ -221,7 +222,7 @@ export default function ReportsPage() {
                     return (
                       <tr key={r.id}>
                         <td style={{ fontWeight: 600 }}>{eventName(r)}</td>
-                        <td style={{ color: 'var(--muted)' }}>{new Date(r.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}</td>
+                        <td style={{ color: 'var(--muted)' }}>{formatCalendarDate(r.date, lang)}</td>
                         <td>{r.rsvpd}</td>
                         <td>{r.attended}</td>
                         <td style={{ textAlign: 'right' }}>

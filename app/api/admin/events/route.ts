@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
+import { isCalendarDate, parseCalendarDate } from '@/lib/dates'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { requirePermission, PERMISSIONS } from '@/lib/security/permissions'
@@ -48,7 +49,7 @@ const postSchema = z.object({
   description: z.string().max(10000).nullable().optional(),
   titleFr: z.string().max(300).nullable().optional(),
   descriptionFr: z.string().max(10000).nullable().optional(),
-  date: z.string().min(1),
+  date: z.string().refine(isCalendarDate, 'Choose a valid date'),
   time: z.string().max(100).nullable().optional(),
   location: z.string().max(300).nullable().optional(),
   color: z.string().max(30).optional(),
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
         titleFr,
         description,
         descriptionFr,
-        date: new Date(parsed.data.date),
+        date: parseCalendarDate(parsed.data.date),
         time: trimOrNull(parsed.data.time),
         location: trimOrNull(parsed.data.location),
         color: parsed.data.color || 'red',

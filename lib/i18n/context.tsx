@@ -1,36 +1,47 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
 import { Language, translations } from './translations'
 
 interface LanguageContextType {
   lang: Language
   setLang: (lang: Language) => void
   t: (key: string) => string
+  /** t() with {placeholders} filled in. */
+  tf: (key: string, params: Record<string, string | number>) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+
+export function fill(template: string, params: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (_, k) => (params[k] !== undefined ? String(params[k]) : `{${k}}`))
+}
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>('en')
 
   useEffect(() => {
-    const saved = localStorage.getItem('lang') as Language
+    let saved: string | null = null
+    try { saved = localStorage.getItem('lang') } catch {}
     if (saved === 'fr') setLangState('fr')
   }, [])
 
-  const setLang = (newLang: Language) => {
-    setLangState(newLang)
-    localStorage.setItem('lang', newLang)
-    document.documentElement.lang = newLang
-  }
+  // Keep <html lang> in step with the chosen language, so screen readers
+  // pronounce French text correctly and search engines label it properly.
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
 
-  const t = (key: string): string => {
-    return translations[key]?.[lang] || key
-  }
+  const setLang = useCallback((newLang: Language) => {
+    setLangState(newLang)
+    try { localStorage.setItem('lang', newLang) } catch {}
+  }, [])
+
+  const t = useCallback((key: string): string => translations[key]?.[lang] || key, [lang])
+  const tf = useCallback((key: string, params: Record<string, string | number>) => fill(t(key), params), [t])
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t, tf }}>
       {children}
     </LanguageContext.Provider>
   )

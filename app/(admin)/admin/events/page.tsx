@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useState, useCallback } from 'react'
+import { formatCalendarDate, startOfTodayOrg, todayInOrgTimeZone } from '@/lib/dates'
 
 interface EventRow {
   id: string
@@ -60,7 +61,7 @@ export default function EventsAdminPage() {
   const [fDesc, setFDesc] = useState('')
   const [fTitleFr, setFTitleFr] = useState('')
   const [fDescFr, setFDescFr] = useState('')
-  const [fDate, setFDate] = useState(new Date().toISOString().split('T')[0])
+  const [fDate, setFDate] = useState(todayInOrgTimeZone())
   const [fTime, setFTime] = useState('')
   const [fLocation, setFLocation] = useState('')
   const [fColor, setFColor] = useState('red')
@@ -88,7 +89,7 @@ export default function EventsAdminPage() {
 
   const resetForm = () => {
     setFTitle(''); setFDesc(''); setFTitleFr(''); setFDescFr('')
-    setFDate(new Date().toISOString().split('T')[0])
+    setFDate(todayInOrgTimeZone())
     setFTime(''); setFLocation(''); setFColor('red'); setFCapacity('')
     setEditingId(null); setShowForm(false)
   }
@@ -288,11 +289,11 @@ export default function EventsAdminPage() {
                 {events.map(e => {
                   const lang = langIndicator(e)
                   const s = LANG_BADGE[lang]
-                  const past = new Date(e.date) < new Date(new Date().setHours(0, 0, 0, 0))
+                  const past = new Date(e.date) < startOfTodayOrg()
                   return (
                     <Fragment key={e.id}>
                       <tr style={past ? { opacity: 0.6 } : undefined}>
-                        <td style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{new Date(e.date).toLocaleDateString()}</td>
+                        <td style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{formatCalendarDate(e.date)}</td>
                         <td style={{ fontSize: '0.82rem', fontWeight: 600, maxWidth: '260px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayTitle(e)}</td>
                         <td><span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700 }}>{lang}</span></td>
                         <td style={{ fontSize: '0.82rem' }}>

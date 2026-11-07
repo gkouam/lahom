@@ -9,9 +9,10 @@ import { auditLog } from '@/lib/security/account-security'
 
 const patchSchema = z.object({ action: z.enum(['approve', 'decline']) })
 
-// Approve/decline a membership request. Approve marks it APPROVED so the
-// requester can be invited to register; decline marks it REJECTED. Neither
-// creates a User account (self-registration happens at /auth/signup).
+// Approve/decline a message from the website. Approve marks it APPROVED and
+// emails the person a link to create their member account (the sign-up form,
+// with their address filled in); the account itself still goes through email
+// verification and officer approval. Decline marks it REJECTED, sends nothing.
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -35,14 +36,21 @@ export async function PATCH(
     const status = parsed.data.action === 'approve' ? 'APPROVED' : 'REJECTED'
     const updated = await prisma.membershipRequest.update({ where: { id }, data: { status } })
 
+    let inviteSent: boolean | null = null
+    if (status === 'APPROVED' && existing.status !== 'APPROVED') {
+      const { emailService } = await import('@/lib/email/service')
+      const result = await emailService.sendMemberInvite(existing.email, existing.name)
+      inviteSent = result.success
+    }
+
     await auditLog({
       userId: session!.user.id,
       action: parsed.data.action === 'approve' ? 'membership_request_approved' : 'membership_request_declined',
       resource: 'membership_request',
       resourceId: id,
-      metadata: { email: existing.email, name: existing.name, previousStatus: existing.status, newStatus: status },
+      metadata: { email: existing.email, name: existing.name, previousStatus: existing.status, newStatus: status, inviteSent },
     })
 
-    return NextResponse.json({ request: updated })
+    return NextResponse.json({ request: updated, inviteSent })
   })
 }

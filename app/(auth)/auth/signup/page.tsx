@@ -1,138 +1,118 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/i18n/context'
+import PasswordField from '@/components/auth/PasswordField'
+import PasswordRules, { passwordMeetsRules } from '@/components/auth/PasswordRules'
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter()
-  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', hometown: '' })
-  const [showPassword, setShowPassword] = useState(false)
+  const searchParams = useSearchParams()
+  const { t } = useLanguage()
+  const [form, setForm] = useState({ name: '', email: '', phone: '', hometown: '' })
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  // An invitation link from an officer carries the address: fill it in.
+  useEffect(() => {
+    const invited = searchParams.get('email')
+    if (invited) setForm(f => (f.email ? f : { ...f, email: invited }))
+  }, [searchParams])
+
+  const update = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(prev => ({ ...prev, [field]: e.target.value }))
-  }
+
+  const mismatch = confirm.length > 0 && confirm !== password
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    setLoading(true)
+    if (!passwordMeetsRules(password)) return setError(t('signup.weak'))
+    if (password !== confirm) return setError(t('signup.mismatch'))
 
+    setLoading(true)
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, password }),
       })
-
-      const data = await res.json()
-
+      const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        setError(data.error || 'Registration failed')
+        setError(res.status === 409 ? t('signup.exists') : (data.error || t('signup.failed')))
         setLoading(false)
         return
       }
-
+      try {
+        sessionStorage.setItem('lahom.signupEmail', form.email.trim().toLowerCase())
+        sessionStorage.setItem('lahom.signupEmailSent', data.emailSent === false ? 'no' : 'yes')
+      } catch {}
       router.push('/auth/verify-email-required')
     } catch {
-      setError('Network error. Please try again.')
+      setError(t('common.networkError'))
       setLoading(false)
     }
   }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="rounded-xl p-8 shadow-lg" style={{ background: 'white' }}>
-        <h1 className="text-2xl font-bold text-center mb-2" style={{ fontFamily: 'var(--serif)', color: 'var(--night)' }}>
-          Join the Community
-        </h1>
-        <p className="text-center text-sm mb-6" style={{ color: 'var(--muted)' }}>
-          Create your Baham Bamiléké Dallas account
-        </p>
+    <div className="auth-card">
+      <h1 className="auth-title">{t('signup.title')}</h1>
+      <p className="auth-subtitle">{t('signup.subtitle')}</p>
 
-        {error && (
-          <div className="mb-4 p-3 rounded-lg text-sm text-center" style={{ background: '#FDECEA', color: '#B71C1C' }}>
-            {error}
+      {error && <div className="auth-alert error" role="alert">{error}</div>}
+
+      <form onSubmit={handleSubmit} className="auth-form" noValidate>
+        <div className="auth-field-group">{t('signup.account')}</div>
+
+        <div className="auth-field">
+          <label htmlFor="signup-name" className="auth-label">{t('signup.name')}</label>
+          <input id="signup-name" type="text" value={form.name} onChange={update('name')} required minLength={2} maxLength={100} autoComplete="name" className="auth-input" placeholder={t('signup.namePlaceholder')} />
+        </div>
+        <div className="auth-field">
+          <label htmlFor="signup-email" className="auth-label">{t('auth.email')}</label>
+          <input id="signup-email" type="email" value={form.email} onChange={update('email')} required autoComplete="email" className="auth-input" />
+        </div>
+        <PasswordField id="signup-password" label={t('auth.password')} value={password} onChange={setPassword} autoComplete="new-password" describedBy="signup-rules" />
+        <PasswordRules id="signup-rules" password={password} />
+        <div className="auth-field">
+          <label htmlFor="signup-confirm" className="auth-label">{t('signup.confirm')}</label>
+          <input id="signup-confirm" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required autoComplete="new-password" className="auth-input" aria-invalid={mismatch || undefined} aria-describedby={mismatch ? 'signup-confirm-msg' : undefined} />
+          {mismatch && <p id="signup-confirm-msg" className="auth-field-error">{t('signup.mismatch')}</p>}
+        </div>
+
+        <div className="auth-field-group">{t('signup.optional')}</div>
+
+        <div className="auth-two-col">
+          <div className="auth-field">
+            <label htmlFor="signup-phone" className="auth-label">{t('signup.phone')}</label>
+            <input id="signup-phone" type="tel" value={form.phone} onChange={update('phone')} maxLength={20} autoComplete="tel" className="auth-input" />
           </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="auth-field-group">Account</div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>Full Name *</label>
-            <input type="text" value={form.name} onChange={update('name')} required className="auth-input" placeholder="Your full name" />
+          <div className="auth-field">
+            <label htmlFor="signup-hometown" className="auth-label">{t('signup.hometown')}</label>
+            <input id="signup-hometown" type="text" value={form.hometown} onChange={update('hometown')} maxLength={100} className="auth-input" />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>Email *</label>
-            <input type="email" value={form.email} onChange={update('email')} required className="auth-input" placeholder="you@example.com" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>Password *</label>
-            <div className="auth-password-wrap">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={form.password}
-                onChange={update('password')}
-                required
-                minLength={8}
-                className="auth-input"
-                placeholder="Min 8 chars, upper + lower + digit + special"
-              />
-              <button
-                type="button"
-                className="auth-password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                    <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                    <line x1="1" y1="1" x2="23" y2="23" />
-                  </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
+        </div>
 
-          <div className="auth-field-group" style={{ marginTop: '16px' }}>Optional</div>
+        <button type="submit" disabled={loading} className="auth-submit">
+          {loading ? t('signup.submitting') : t('signup.submit')}
+        </button>
+      </form>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>Phone</label>
-              <input type="tel" value={form.phone} onChange={update('phone')} className="auth-input" placeholder="(optional)" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: 'var(--night)' }}>Hometown</label>
-              <input type="text" value={form.hometown} onChange={update('hometown')} className="auth-input" placeholder="(optional)" />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-lg font-semibold text-sm transition-opacity"
-            style={{ background: 'var(--gold)', color: 'var(--night)', opacity: loading ? 0.7 : 1 }}
-          >
-            {loading ? 'Creating account...' : 'Create Account'}
-          </button>
-        </form>
-
-        <p className="text-center text-sm mt-6" style={{ color: 'var(--muted)' }}>
-          Already have an account?{' '}
-          <Link href="/auth/signin" style={{ color: 'var(--gold-ink)', fontWeight: 600 }}>
-            Sign in
-          </Link>
-        </p>
-      </div>
+      <p className="auth-switch">
+        {t('signup.hasAccount')} <Link href="/auth/signin" className="auth-link strong">{t('auth.signin')}</Link>
+      </p>
     </div>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div className="auth-card auth-loading" />}>
+      <SignUpContent />
+    </Suspense>
   )
 }

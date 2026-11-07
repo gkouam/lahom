@@ -3,7 +3,12 @@ import fs from 'fs'
 
 const BASE = 'http://localhost:3000'
 const OUT = '_audit'
-const ADMIN = { email: process.env.AUDIT_EMAIL || "admin@lahomdfw.org", password: process.env.AUDIT_PASSWORD || "Admin123!@#" }
+// Credentials come only from the environment; never commit a password here.
+const ADMIN = { email: process.env.AUDIT_EMAIL, password: process.env.AUDIT_PASSWORD }
+if (!ADMIN.email || !ADMIN.password) {
+  console.error('Set AUDIT_EMAIL and AUDIT_PASSWORD (a local test account) before running this audit.')
+  process.exit(1)
+}
 
 fs.mkdirSync(OUT, { recursive: true })
 

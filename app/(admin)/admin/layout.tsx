@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from '@/lib/i18n/context'
 import MobileTabBar, { MobileTab } from '@/components/MobileTabBar'
+import LanguageToggle from '@/components/LanguageToggle'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -130,7 +131,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <circle cx="22" cy="22" r="3.5" fill="var(--gold, #D4A017)" />
           </svg>
           <div>
-            <strong>Baham Admin</strong>
+            <strong>{t('brand.name')}</strong>
             <span>{t('admin.controlPanel')}</span>
           </div>
         </div>
@@ -155,7 +156,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </Link>
 
         <nav className="admin-sidebar-nav">
-          <Link
+          {canManageMembers && <Link
             href="/admin/members"
             className={pathname?.includes('/members') ? 'active' : ''}
           >
@@ -167,7 +168,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </svg>
             {t('admin.members')}
             {counts.pendingMembers > 0 && <span className="nav-badge">{counts.pendingMembers}</span>}
-          </Link>
+          </Link>}
           {can('MANAGE_PERMISSIONS') && (
             <Link
               href="/admin/permissions"
@@ -272,6 +273,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="admin-sidebar-bottom">
+          <LanguageToggle variant="full" className="sidebar-lang" />
           <button onClick={() => signOut({ callbackUrl: '/' })}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -291,7 +293,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <path d="M22 2L42 22L22 42L2 22Z" stroke="var(--gold, #D4A017)" strokeWidth="1.6" />
             <circle cx="22" cy="22" r="3.5" fill="var(--gold, #D4A017)" />
           </svg>
-          Baham Admin
+          {t('brand.name')} · {t('dash.admin')}
         </Link>
         <span className="user-role-badge">{user?.officerTitle || (isSuper ? 'Super Admin' : 'Officer')}</span>
       </div>

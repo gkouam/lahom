@@ -1,12 +1,13 @@
 'use client'
 
+import Image from 'next/image'
 import { useLanguage } from '@/lib/i18n/context'
 
 const leaders = [
-  { initial: 'P', title: 'Community President', role: 'Mr. Ghislain Wassu', image: '/images/president-wassu.jpg', imagePosition: 'center 20%' },
-  { initial: 'VP', title: 'Vice President', role: 'Mr. Guy Kouam', image: '/images/vp-kouam.jpg', imagePosition: 'center 30%' },
-  { initial: 'S', title: 'Secretary General', role: 'Mr. Fredy Domleu', image: '/images/secretary-domleu.jpg', imagePosition: 'center 15%' },
-  { initial: 'T', title: 'Treasurer', role: 'Mr. Francis Tebang Te Buh Tagne Tebuwah', image: '/images/treasurer-tebang.jpg' },
+  { titleKey: 'leadership.role.president', name: 'Ghislain Wassu', image: '/images/president-wassu.jpg', imagePosition: 'center 20%' },
+  { titleKey: 'leadership.role.vp', name: 'Guy Kouam', image: '/images/vp-kouam.jpg', imagePosition: 'center 30%' },
+  { titleKey: 'leadership.role.secretary', name: 'Fredy Domleu', image: '/images/secretary-domleu.jpg', imagePosition: 'center 15%' },
+  { titleKey: 'leadership.role.treasurer', name: 'Francis Tebang Te Buh Tagne Tebuwah', image: '/images/treasurer-tebang.jpg', imagePosition: 'center 15%' },
 ]
 
 export default function LeadershipSection() {
@@ -24,26 +25,21 @@ export default function LeadershipSection() {
 
         <div className="leaders-grid">
           {leaders.map((leader, i) => (
-            <div key={i} className={`leader-card fade-in${delays[i]}`}>
+            <div key={leader.name} className={`leader-card fade-in${delays[i]}`}>
               <div className="leader-ring">
-                {leader.image ? (
-                  <img
-                    src={leader.image}
-                    alt={leader.role}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: leader.imagePosition || 'center 15%',
-                      borderRadius: '50%',
-                    }}
-                  />
-                ) : (
-                  <div className="leader-initial">{leader.initial}</div>
-                )}
+                {/* next/image serves a small, sized copy instead of the full-size upload. */}
+                <Image
+                  src={leader.image}
+                  alt={`${t('leadership.honorific')} ${leader.name}`}
+                  width={240}
+                  height={240}
+                  sizes="122px"
+                  className="leader-photo"
+                  style={{ objectPosition: leader.imagePosition }}
+                />
               </div>
-              <h4>{leader.title}</h4>
-              <span className="leader-role">{leader.role}</span>
+              <h4>{t(leader.titleKey)}</h4>
+              <span className="leader-role">{t('leadership.honorific')} {leader.name}</span>
             </div>
           ))}
         </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { formatCalendarDate } from '@/lib/dates'
 import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/context'
 
@@ -146,7 +147,7 @@ export default function MemberEventsPage() {
             </div>
           )}
           <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '6px' }}>
-            {new Date(e.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            {formatCalendarDate(e.date, lang, { year: 'numeric', month: 'long', day: 'numeric' })}
             {e.time && <> &middot; {e.time}</>}
             {e.location && <> &middot; {e.location}</>}
           </div>

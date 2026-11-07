@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/context'
+import { calendarDayOfMonth, formatCalendarDate } from '@/lib/dates'
 
 interface MyFinances {
   standing: string
@@ -24,7 +25,7 @@ interface MeetingNoteSummary {
   body: string | null
   bodyFr: string | null
   date: string
-  author: { name: string | null }
+  author: { name: string | null } | null
 }
 
 interface UpcomingEvent {
@@ -178,8 +179,8 @@ export default function DashboardPage() {
     return it.title || it.titleFr || ''
   }
 
-  const fmtDate = (iso: string) =>
-    new Date(iso).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short', day: 'numeric' })
+  // Event and contribution dates are calendar dates (see lib/dates.ts).
+  const fmtDate = (iso: string) => formatCalendarDate(iso, lang, { month: 'short', day: 'numeric' })
 
   const activityMessage = (it: ActivityItem): string => {
     switch (it.kind) {
@@ -209,20 +210,6 @@ export default function DashboardPage() {
             <div className="topbar-left">
               <h1>{t('dash.welcome')} <span style={{ color: 'var(--gold-ink)' }}>{user?.name || 'Member'}</span></h1>
               <p>{t('dash.motto')}</p>
-            </div>
-            <div className="topbar-actions">
-              <button title={t('dash.notifications')} aria-label={t('dash.notifications')}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-              </button>
-              <button title={t('dash.settings')} aria-label={t('dash.settings')}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="3" />
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                </svg>
-              </button>
             </div>
           </div>
 
@@ -269,7 +256,7 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <div>
-                  <div className="stat-label">{t('finances.duesPaid')}</div>
+                  <div className="stat-label">{t('finances.totalContributed')}</div>
                   <div className="stat-value">${finances?.totalContributed || '0.00'}</div>
                 </div>
               </div>
@@ -321,9 +308,8 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   events.map(e => {
-                    const d = new Date(e.date)
-                    const month = d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' })
-                    const day = d.getDate()
+                    const month = formatCalendarDate(e.date, lang, { month: 'short' })
+                    const day = calendarDayOfMonth(e.date)
                     const full = e.capacityFull && e.myRsvp !== 'GOING'
                     const rsvpBtn = (response: 'GOING' | 'MAYBE' | 'NOT_GOING', labelKey: string) => {
                       const active = e.myRsvp === response
@@ -461,7 +447,7 @@ export default function DashboardPage() {
                       <tbody>
                         {finances.contributions.slice(0, 10).map(c => (
                           <tr key={c.id}>
-                            <td style={{ fontSize: '0.82rem' }}>{new Date(c.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}</td>
+                            <td style={{ fontSize: '0.82rem' }}>{formatCalendarDate(c.date, lang)}</td>
                             <td style={{ fontWeight: 700, fontSize: '0.82rem' }}>${c.amount}</td>
                             <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.method || '—'}</td>
                             <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.description || '—'}</td>
@@ -474,7 +460,7 @@ export default function DashboardPage() {
                     {finances.contributions.slice(0, 10).map(c => (
                       <div key={c.id} className="contrib-card">
                         <div>
-                          <div className="contrib-date">{new Date(c.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}</div>
+                          <div className="contrib-date">{formatCalendarDate(c.date, lang)}</div>
                           <div className="contrib-desc">{[c.description, c.method].filter(Boolean).join(' · ') || '—'}</div>
                         </div>
                         <div className="contrib-amount">${c.amount}</div>
@@ -528,7 +514,7 @@ export default function DashboardPage() {
                         </div>
                       )}
                       <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '4px' }}>
-                        {new Date(note.date).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        {formatCalendarDate(note.date, lang, { year: 'numeric', month: 'long', day: 'numeric' })}
                       </div>
                       <h4 style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--night)', marginBottom: '4px' }}>
                         {noteTitle}

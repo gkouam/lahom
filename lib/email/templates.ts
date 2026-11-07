@@ -33,6 +33,32 @@ export interface RenderEmailOptions {
   footnoteHtml?: string
 }
 
+/**
+ * Escape a user-supplied value for HTML email. Every name, email address or
+ * message that reaches an email body must pass through this. Older rows were
+ * stored pre-escaped, so known entities are decoded first to avoid showing
+ * "&amp;#x27;" to the reader.
+ */
+export function esc(value: string | null | undefined): string {
+  return plain(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+/** Decode the entities older code stored in names, for plain-text email parts. */
+export function plain(value: string | null | undefined): string {
+  return String(value ?? '')
+    .replace(/&#x27;|&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x2F;/g, '/')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+}
+
 export function paragraph(text: string): string {
   return `<p style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:${C.ink};margin:0 0 14px;">${text}</p>`
 }
@@ -64,7 +90,7 @@ export function renderEmail(opts: RenderEmailOptions): string {
 
       <!-- Header -->
       <div style="background-color:${C.night};border-radius:12px 12px 0 0;padding:20px 24px;text-align:center;">
-        <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:bold;color:${C.gold};">Baham Bamil&eacute;k&eacute; Dallas</span>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:bold;color:${C.gold};">La&#39;Hom DFW</span>
       </div>
 
       <!-- Kente strip -->
@@ -86,7 +112,7 @@ export function renderEmail(opts: RenderEmailOptions): string {
       <!-- Footer -->
       <div style="background-color:#ffffff;border:1px solid ${C.line};border-top:1px solid ${C.line};border-radius:0 0 12px 12px;padding:16px 24px;text-align:center;">
         <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:${C.muted};margin:0 0 6px;">
-          Baham Bamil&eacute;k&eacute; Community of Dallas &middot; <a href="https://lahomdfw.org" style="color:${C.goldInk};text-decoration:none;font-weight:bold;">lahomdfw.org</a>
+          La&#39;Hom DFW &middot; Baham Bamil&eacute;k&eacute; Community of Dallas&ndash;Fort Worth &middot; <a href="https://lahomdfw.org" style="color:${C.goldInk};text-decoration:none;font-weight:bold;">lahomdfw.org</a>
         </p>
         <p style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:${C.muted};margin:0 0 6px;">
           You're receiving this because you have an account or requested membership at lahomdfw.org.<br>

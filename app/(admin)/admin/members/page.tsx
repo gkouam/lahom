@@ -21,6 +21,8 @@ export default function AdminMembersPage() {
   const [search, setSearch] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [resetConfirm, setResetConfirm] = useState<string | null>(null)
+  const [rejectConfirm, setRejectConfirm] = useState<string | null>(null)
+  const [unreadMessages, setUnreadMessages] = useState(0)
   const [notice, setNotice] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
 
   const fetchMembers = async () => {
@@ -35,22 +37,35 @@ export default function AdminMembersPage() {
     }
   }
 
-  useEffect(() => { fetchMembers() }, [])
+  useEffect(() => {
+    fetchMembers()
+    fetch('/api/admin/counts')
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d) setUnreadMessages(d.unreadMessages ?? 0) })
+      .catch(() => {})
+  }, [])
 
   const handleAction = async (userId: string, action: 'approve' | 'reject') => {
     setActionLoading(userId)
+    setNotice(null)
     try {
       const res = await fetch('/api/admin/members', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, action }),
       })
+      const data = await res.json().catch(() => ({}))
       if (res.ok) {
-        const data = await res.json()
         setMembers(prev => prev.map(m => m.id === userId ? { ...m, accountStatus: data.user.accountStatus } : m))
+        const who = data.user?.name || data.user?.email || 'The member'
+        const mail = data.emailSent === false ? ' The email could not be sent; please let them know directly.' : data.emailSent ? ' They were emailed.' : ''
+        setNotice({ kind: data.emailSent === false ? 'err' : 'ok', text: `${who} ${action === 'approve' ? 'was approved.' : 'was not approved.'}${mail}` })
+      } else {
+        setNotice({ kind: 'err', text: data.error || 'That didn’t work. Please try again.' })
       }
+      setRejectConfirm(null)
     } catch {
-      console.error('Action failed')
+      setNotice({ kind: 'err', text: 'Network error. Please try again.' })
     } finally {
       setActionLoading(null)
     }
@@ -107,6 +122,7 @@ export default function AdminMembersPage() {
   const pendingCount = members.filter(m => m.accountStatus === 'PENDING_APPROVAL').length
   const approvedCount = members.filter(m => m.accountStatus === 'APPROVED').length
   const rejectedCount = members.filter(m => m.accountStatus === 'REJECTED').length
+  const unverifiedCount = members.filter(m => !m.emailVerified).length
 
   const filtered = members
     .filter(m => filter === 'all' || m.accountStatus === filter)
@@ -157,20 +173,6 @@ export default function AdminMembersPage() {
         <div className="topbar-left">
           <h1>Members</h1>
           <p>Manage community membership and approvals</p>
-        </div>
-        <div className="topbar-actions">
-          <button title="Notifications" aria-label="Notifications">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-          </button>
-          <button title="Settings" aria-label="Settings">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-          </button>
         </div>
       </div>
 
@@ -244,16 +246,23 @@ export default function AdminMembersPage() {
         </div>
       </div>
 
-      {/* Pending Actions Card */}
-      <div className="pending-actions-card" style={{ marginBottom: '24px' }}>
-        <h3>Pending Actions</h3>
-        <ul>
-          <li><span className="bullet" />{pendingCount} member{pendingCount !== 1 ? 's' : ''} awaiting approval</li>
-          <li><span className="bullet" />Quarterly dues collection due this month</li>
-          <li><span className="bullet" />Community event planning for next month</li>
-          <li><span className="bullet" />Update member directory and contact info</li>
-        </ul>
-      </div>
+      {/* Needs attention: real counts only, each one a shortcut */}
+      {(pendingCount > 0 || unverifiedCount > 0 || unreadMessages > 0) && (
+        <div className="pending-actions-card" style={{ marginBottom: '24px' }}>
+          <h3>Needs attention</h3>
+          <ul>
+            {pendingCount > 0 && (
+              <li><span className="bullet" /><button type="button" className="pending-link" onClick={() => setFilter('PENDING_APPROVAL')}>{pendingCount} {pendingCount === 1 ? 'person is' : 'people are'} waiting for approval</button></li>
+            )}
+            {unverifiedCount > 0 && (
+              <li><span className="bullet" />{unverifiedCount} {unverifiedCount === 1 ? 'person hasn’t' : 'people haven’t'} confirmed their email yet (use “Resend Verify”)</li>
+            )}
+            {unreadMessages > 0 && (
+              <li><span className="bullet" /><a className="pending-link" href="/admin/messages">{unreadMessages} unread {unreadMessages === 1 ? 'message' : 'messages'} from the website</a></li>
+            )}
+          </ul>
+        </div>
+      )}
 
       {/* Filters + Search */}
       <div className="admin-filter-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
@@ -344,13 +353,21 @@ export default function AdminMembersPage() {
                         >
                           {actionLoading === member.id ? '...' : 'Approve'}
                         </button>
-                        <button
-                          className="btn-reject"
-                          onClick={() => handleAction(member.id, 'reject')}
-                          disabled={actionLoading === member.id}
-                        >
-                          Reject
-                        </button>
+                        {rejectConfirm === member.id ? (
+                          <span style={{ display: 'inline-flex', gap: '6px', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#8B2020' }}>Reject and email them?</span>
+                            <button onClick={() => handleAction(member.id, 'reject')} disabled={actionLoading === member.id} style={{ padding: '4px 12px', background: '#B02A37', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Yes</button>
+                            <button onClick={() => setRejectConfirm(null)} style={{ padding: '4px 12px', background: '#eee', color: '#555', border: 'none', borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}>No</button>
+                          </span>
+                        ) : (
+                          <button
+                            className="btn-reject"
+                            onClick={() => setRejectConfirm(member.id)}
+                            disabled={actionLoading === member.id}
+                          >
+                            Reject
+                          </button>
+                        )}
                       </>
                     )}
                     {member.accountStatus === 'REJECTED' && (
@@ -443,13 +460,23 @@ export default function AdminMembersPage() {
                   >
                     {actionLoading === member.id ? '...' : 'Approve'}
                   </button>
-                  <button
-                    className="btn-reject"
-                    onClick={() => handleAction(member.id, 'reject')}
-                    disabled={actionLoading === member.id}
-                  >
-                    Reject
-                  </button>
+                  {rejectConfirm === member.id ? (
+                    <button
+                      onClick={() => handleAction(member.id, 'reject')}
+                      disabled={actionLoading === member.id}
+                      style={{ minHeight: '44px', background: '#B02A37', color: 'white', border: 'none', borderRadius: '10px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      Confirm reject
+                    </button>
+                  ) : (
+                    <button
+                      className="btn-reject"
+                      onClick={() => setRejectConfirm(member.id)}
+                      disabled={actionLoading === member.id}
+                    >
+                      Reject
+                    </button>
+                  )}
                 </div>
               )}
               {member.accountStatus === 'REJECTED' && (
@@ -500,89 +527,6 @@ export default function AdminMembersPage() {
         )}
       </div>
 
-      {/* Activity Log + Admin Tools */}
-      <div className="admin-below-table" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '20px', marginTop: '24px' }}>
-        {/* Recent Activity Log */}
-        <div style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)', overflow: 'hidden' }}>
-          <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--night)' }}>Recent Activity</h3>
-            <span style={{ fontSize: '0.78rem', color: 'var(--gold-ink)', fontWeight: 600 }}>View All</span>
-          </div>
-          <div style={{ padding: '8px 20px 16px' }}>
-            <div className="activity-row">
-              <div className="activity-avatar">K</div>
-              <div style={{ flex: 1 }}>
-                <div className="activity-text"><strong>Kouam N.</strong> submitted a membership application</div>
-                <span className="activity-time">2 hours ago</span>
-              </div>
-              <span className="activity-badge pending">Pending</span>
-            </div>
-            <div className="activity-row">
-              <div className="activity-avatar">T</div>
-              <div style={{ flex: 1 }}>
-                <div className="activity-text"><strong>Tagne P.</strong> was approved as a member</div>
-                <span className="activity-time">5 hours ago</span>
-              </div>
-              <span className="activity-badge approved">Approved</span>
-            </div>
-            <div className="activity-row">
-              <div className="activity-avatar">F</div>
-              <div style={{ flex: 1 }}>
-                <div className="activity-text"><strong>Fotso M.</strong> updated their profile information</div>
-                <span className="activity-time">1 day ago</span>
-              </div>
-              <span className="activity-badge new">Updated</span>
-            </div>
-            <div className="activity-row">
-              <div className="activity-avatar">N</div>
-              <div style={{ flex: 1 }}>
-                <div className="activity-text"><strong>Nganou S.</strong> paid quarterly dues</div>
-                <span className="activity-time">2 days ago</span>
-              </div>
-              <span className="activity-badge approved">Paid</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Admin Tools */}
-        <div style={{ background: 'white', borderRadius: '14px', border: '1px solid var(--line)', overflow: 'hidden' }}>
-          <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid var(--line)' }}>
-            <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--night)' }}>Admin Tools</h3>
-          </div>
-          <div style={{ padding: '16px 20px 20px' }}>
-            <button className="admin-tools-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-              Send Email to Members
-            </button>
-            <button className="admin-tools-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-                <path d="M22 12A10 10 0 0 0 12 2v10z" />
-              </svg>
-              Generate Reports
-            </button>
-            <button className="admin-tools-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-              Manage Documents
-            </button>
-            <button className="admin-tools-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
-              Site Settings
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

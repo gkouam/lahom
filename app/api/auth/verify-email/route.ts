@@ -2,21 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyEmailToken } from '@/lib/security/email-verification'
 import { auditLog } from '@/lib/security/account-security'
 
+// Every outcome lands on a page. Errors go to /auth/verify-email with a short
+// code the page turns into a message and a "send a new link" form; the page
+// never prints text taken from the URL.
 export async function GET(request: NextRequest) {
+  const fail = (code: 'missing' | 'invalid' | 'expired' | 'failed') =>
+    NextResponse.redirect(new URL(`/auth/verify-email?error=${code}`, request.url))
+
   try {
     const token = request.nextUrl.searchParams.get('token')
-
-    if (!token) {
-      return NextResponse.json({ error: 'Verification token is required' }, { status: 400 })
-    }
+    if (!token) return fail('missing')
 
     const result = await verifyEmailToken(token)
+    if (!result.success) return fail(result.error === 'expired' ? 'expired' : 'invalid')
 
-    if (!result.success) {
-      return NextResponse.json({ error: result.error }, { status: 400 })
-    }
-
-    // Audit log
     const { prisma } = await import('@/lib/db')
     const user = await prisma.user.findUnique({
       where: { email: result.email! },
@@ -35,10 +34,9 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Redirect to sign-in with success message
     return NextResponse.redirect(new URL('/auth/signin?verified=true', request.url))
   } catch (error) {
     console.error('Email verification error:', error)
-    return NextResponse.json({ error: 'Failed to verify email' }, { status: 500 })
+    return fail('failed')
   }
 }

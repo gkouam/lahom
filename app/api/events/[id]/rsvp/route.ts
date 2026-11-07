@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { startOfTodayOrg } from '@/lib/dates'
 import { withRateLimit } from '@/lib/security/rate-limiter'
 
 // Tighter than the default API limit to discourage rapid RSVP toggling.
@@ -56,9 +57,7 @@ export async function POST(
         if (locked.length === 0) throw new Error('NOT_FOUND')
         const event = locked[0]
 
-        const startOfToday = new Date()
-        startOfToday.setHours(0, 0, 0, 0)
-        if (event.date < startOfToday) throw new Error('EVENT_PASSED')
+        if (event.date < startOfTodayOrg()) throw new Error('EVENT_PASSED')
 
         if (response === 'GOING' && event.capacity !== null) {
           // Count Going excluding this member's own row; after this op the member

@@ -58,6 +58,15 @@ export async function recordLoginAttempt(
   })
 }
 
+/** Failed sign-ins from one network in the lockout window (any account). */
+export async function countRecentFailuresFromIp(ipAddress: string): Promise<number> {
+  if (!ipAddress || ipAddress === '0.0.0.0') return 0
+  const threshold = new Date(Date.now() - LOCKOUT_CONFIG.ATTEMPT_WINDOW_MS)
+  return prisma.loginAttempt.count({
+    where: { ipAddress, success: false, createdAt: { gte: threshold } },
+  })
+}
+
 export async function clearFailedAttempts(email: string): Promise<void> {
   await prisma.loginAttempt.deleteMany({
     where: { email: email.toLowerCase(), success: false },

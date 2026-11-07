@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { formatCalendarDate, todayInOrgTimeZone } from '@/lib/dates'
 
 interface MemberFinance {
   id: string
@@ -43,7 +44,7 @@ export default function FinancesPage() {
 
   // New contribution form
   const [newAmount, setNewAmount] = useState('')
-  const [newDate, setNewDate] = useState(new Date().toISOString().split('T')[0])
+  const [newDate, setNewDate] = useState(todayInOrgTimeZone())
   const [newMethod, setNewMethod] = useState('')
   const [newDesc, setNewDesc] = useState('')
   const [addingSaving, setAddingSaving] = useState(false)
@@ -386,7 +387,7 @@ export default function FinancesPage() {
                           </tr>
                         ) : (
                           <tr key={c.id}>
-                            <td style={{ fontSize: '0.82rem' }}>{new Date(c.date).toLocaleDateString()}</td>
+                            <td style={{ fontSize: '0.82rem' }}>{formatCalendarDate(c.date)}</td>
                             <td style={{ fontWeight: 700, fontSize: '0.82rem' }}>${c.amount}</td>
                             <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.method || '—'}</td>
                             <td style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>{c.description || '—'}</td>

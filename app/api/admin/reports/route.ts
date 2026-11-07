@@ -68,6 +68,8 @@ export async function GET(request: NextRequest) {
     })
   }
   const monthKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  // Contribution dates are calendar dates stored at midnight UTC.
+  const calendarMonthKey = (d: Date) => `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`
 
   const membershipGrowth = months.map(m => ({
     label: m.label,
@@ -77,7 +79,7 @@ export async function GET(request: NextRequest) {
     label: m.label,
     value: Number(
       contributions
-        .filter(c => monthKey(c.date) === m.key)
+        .filter(c => calendarMonthKey(c.date) === m.key)
         .reduce((acc, c) => acc.plus(c.amount), new Prisma.Decimal(0))
         .toFixed(2),
     ),

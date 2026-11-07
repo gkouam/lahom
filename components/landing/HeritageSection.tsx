@@ -15,22 +15,22 @@ export default function HeritageSection() {
             <div className="heritage-img-main framed-photo">
               <Image
                 src="/images/baham-museum-architecture.jpg"
-                alt="Royal Museum of Baham — traditional Grassfields architecture"
+                alt={t('heritage.photo1.alt')}
                 width={600}
                 height={400}
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-              <div className="photo-tag">Royal Museum of Baham</div>
+              <div className="photo-tag">{t('heritage.photo1.tag')}</div>
             </div>
             <div className="heritage-img-accent framed-photo">
               <Image
                 src="/images/baham-museum-interior.jpg"
-                alt="Interior of the Royal Museum displaying ancestral sculptures"
+                alt={t('heritage.photo2.alt')}
                 width={300}
                 height={200}
                 sizes="(max-width: 768px) 50vw, 25vw"
               />
-              <div className="photo-tag">Sacred Artifacts</div>
+              <div className="photo-tag">{t('heritage.photo2.tag')}</div>
             </div>
             <div className="heritage-pattern-decor"></div>
           </div>

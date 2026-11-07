@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { startOfTodayOrg } from '@/lib/dates'
 
 // Curated community + personal activity feed for the member dashboard.
 // Built from focused queries against existing tables — NOT the audit log.
@@ -22,8 +23,7 @@ export async function GET() {
   }
 
   const now = new Date()
-  const startOfToday = new Date(now)
-  startOfToday.setHours(0, 0, 0, 0)
+  const startOfToday = startOfTodayOrg(now)
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
   const [

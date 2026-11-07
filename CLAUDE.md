@@ -210,7 +210,7 @@ npx tsx prisma/seed.ts     # Seed admin user + sample events
 npm run dev                # http://localhost:3000
 ```
 
-Default admin: `admin@lahomdfw.org` / `Admin123!@#`
+The seed needs `SEED_ADMIN_PASSWORD` (16+ characters) and optionally `SEED_ADMIN_EMAIL`, and refuses to run with `NODE_ENV=production`. Never put a working password in this repository: it is public on GitHub.
 
 ## Deployment
 

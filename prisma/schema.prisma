@@ -107,15 +107,17 @@ model MemberFinancialStatus {
 model Contribution {
   id           String   @id @default(cuid())
   userId       String
-  user         User     @relation("MemberContributions", fields: [userId], references: [id], onDelete: Cascade)
+  // Restrict: an account with payments on record can't be deleted (deactivate it instead).
+  user         User     @relation("MemberContributions", fields: [userId], references: [id], onDelete: Restrict)
 
   amount       Decimal  @db.Decimal(10, 2)
   date         DateTime
   method       String?
   description  String?
 
-  recordedById String
-  recordedBy   User     @relation("ContribRecordedBy", fields: [recordedById], references: [id], onDelete: Cascade)
+  // SetNull: deleting the officer who recorded a payment keeps the payment.
+  recordedById String?
+  recordedBy   User?    @relation("ContribRecordedBy", fields: [recordedById], references: [id], onDelete: SetNull)
   createdAt    DateTime @default(now())
 
   @@index([userId, date])
@@ -129,8 +131,9 @@ model MeetingNote {
   bodyFr    String?
   date      DateTime
 
-  authorId  String
-  author    User     @relation("MeetingNoteAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  // SetNull: deleting the author's account keeps the meeting note.
+  authorId  String?
+  author    User?    @relation("MeetingNoteAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -206,8 +209,8 @@ model Announcement {
   titleFr     String?
   body        String
   bodyFr      String?
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String?
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
